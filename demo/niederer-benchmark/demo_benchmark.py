@@ -93,7 +93,7 @@ def setup_model(cellmodel, mesh):
     S1_marker = 1
     L = 1.5
     S1_subdomain = CompiledSubDomain("x[0] <= L + DOLFIN_EPS && x[1] <= L + DOLFIN_EPS && x[2] <= L + DOLFIN_EPS", L=L)
-    S1_markers = CellFunction("size_t", mesh, 0)
+    S1_markers = MeshFunction("size_t", mesh, mesh.topology().dim())
     S1_subdomain.mark(S1_markers, S1_marker)
 
     # Define stimulation (NB: region of interest carried by the mesh
@@ -169,7 +169,9 @@ def run_splitting_solver(mesh, application_parameters):
     ps["CardiacODESolver"]["scheme"] = scheme
 
     # Disable adjoint annotating and recording (saves memory)
-    parameters["adjoint"]["stop_annotating"] = True
+    import cbcbeat
+    if cbcbeat.dolfin_adjoint:
+        parameters["adjoint"]["stop_annotating"] = True
     
     # Customize cell model parameters based on benchmark specifications
     cell_inits = cell_model_initial_conditions()
@@ -199,7 +201,7 @@ def run_splitting_solver(mesh, application_parameters):
     # Output some degrees of freedom
     total_dofs = vs.function_space().dim()
     pde_dofs = V.dim()
-    if MPI.rank(mpi_comm_world()) == 0:
+    if MPI.rank(MPI.comm_world) == 0:
         print("Total degrees of freedom: ", total_dofs)
         print("PDE degrees of freedom: ", pde_dofs)
 
@@ -216,7 +218,7 @@ def run_splitting_solver(mesh, application_parameters):
     solutions = solver.solve((t0, T), dt)
 
     for (i, ((t0, t1), fields)) in enumerate(solutions):
-        if ((i%20 == 0) and MPI.rank(mpi_comm_world()) == 0):
+        if ((i%20 == 0) and MPI.rank(MPI.comm_world) == 0):
             info("Reached t=%g/%g, dt=%g" % (t0, T, dt))
         if store:
             assigner.assign(v, vs.sub(0))
@@ -240,7 +242,7 @@ def create_mesh(dx, refinements=0):
     Lz = 3.  # mm
 
     N = lambda v: int(numpy.rint(v))
-    mesh = BoxMesh(mpi_comm_world(),
+    mesh = BoxMesh(MPI.comm_world,
                      Point(0.0, 0.0, 0.0),
                      Point(Lx, Ly, Lz),
                      N(Lx/dx), N(Ly/dx), N(Lz/dx))
@@ -294,7 +296,7 @@ if __name__ == "__main__":
         timer.stop()
 
         # List timings
-        list_timings(TimingClear_keep, [TimingType_wall]) 
+        list_timings(TimingClear.keep, [TimingType.wall]) 
 
     # Set this to True to also analyze outputs
     if False:

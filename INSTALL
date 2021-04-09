@@ -35,7 +35,7 @@ Dependencies:
 
 cbcbeat depends on the following software 
 
-* Python (compatible with both Python 2 and Python 3)
+* Python 2
 
 * The FEniCS Project software: www.fenicsproject.org
 

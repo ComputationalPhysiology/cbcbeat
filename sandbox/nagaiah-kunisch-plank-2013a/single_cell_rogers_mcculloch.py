@@ -54,7 +54,7 @@ def main():
     for ((t0, t1), vs) in solutions:
         print "Current time: %g" % t1
         times.append(t1)
-        values.append(vs.vector().array())
+        values.append(vs.vector().get_local())
 
     return times, values
 

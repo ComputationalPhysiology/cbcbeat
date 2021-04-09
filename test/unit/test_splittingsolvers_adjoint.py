@@ -7,10 +7,16 @@ __author__ = "Simon W. Funke (simon@simula.no) \
 __all__ = ["TestSplittingSolverAdjoint"]
 
 
-from dolfin import info_green, set_log_level, INFO
+from dolfin import set_log_level
+from ufl.log import info_green
 from cbcbeat import *
 from testutils import assert_greater, medium, slow, parametrize, adjoint
-set_log_level(INFO)
+
+try:
+    set_log_level(LogLevel.INFO)
+except:
+    set_log_level(INFO)
+    pass
 
 def generate_solver(Solver, solver_type, ics=None, enable_adjoint=True):
 
@@ -54,14 +60,25 @@ def generate_solver(Solver, solver_type, ics=None, enable_adjoint=True):
             params = Solver.default_parameters()
 
             if Solver == SplittingSolver:
-                params.enable_adjoint = enable_adjoint
-                params.BidomainSolver.linear_solver_type = solver_type
-                params.BidomainSolver.petsc_krylov_solver.relative_tolerance = 1e-12
+                params["enable_adjoint"] = enable_adjoint
+                params.update({"BidomainSolver":
+                                {"linear_solver_type": solver_type}})
+                params.update({"BidomainSolver":
+                                {"petsc_krylov_solver":
+                                 {"relative_tolerance": 1e-12}}})
             else:
-                params.BasicBidomainSolver.linear_variational_solver.linear_solver = \
-                                "gmres" if solver_type == "iterative" else "lu"
-                params.BasicBidomainSolver.linear_variational_solver.krylov_solver.relative_tolerance = 1e-12
-                params.BasicBidomainSolver.linear_variational_solver.preconditioner = 'ilu'
+                params.update({"BasicBidomainSolver":
+                                 {"linear_variational_solver":
+                                  {"linear_solver" :
+                                   "gmres" if solver_type == "iterative"
+                                   else "lu"}}})
+                params.update({"BasicBidomainSolver":
+                               {"linear_variational_solver":
+                                {"krylov_solver":
+                                 {"relative_tolerance": 1e-12}}}})
+                params.update({"BasicBidomainSolver":
+                               {"linear_variational_solver":
+                                {"preconditioner" : 'ilu'}}})
 
 
             self.solver = Solver(self.cardiac_model, params=params)

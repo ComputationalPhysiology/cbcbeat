@@ -99,7 +99,7 @@ def main_simple(N, dt, T, theta):
 
     # Compute errors
     (v, u) = vu.split(deepcopy=True)[0:2]
-    print(max(u.vector().array()))
+    print(max(u.vector().get_local()))
 
     v_error = errornorm(v_exact, v, "L2", degree_rise=2)
     u_error = errornorm(u_exact, u, "L2", degree_rise=2)

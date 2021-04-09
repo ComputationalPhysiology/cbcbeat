@@ -16,7 +16,9 @@ import pylab
 from cbcbeat import *
 
 # Disable adjointing
-parameters["adjoint"]["stop_annotating"] = True
+import cbcbeat
+if cbcbeat.dolfin_adjoint:
+    parameters["adjoint"]["stop_annotating"] = True
 
 # For easier visualization of the variables
 parameters["reorder_dofs_serial"] = False
@@ -27,21 +29,24 @@ parameters["form_compiler"]["cpp_optimize"] = True
 flags = "-O3 -ffast-math -march=native"
 parameters["form_compiler"]["cpp_optimize_flags"] = flags
 
-class Stimulus(Expression):
+class Stimulus(UserExpression):
     "Some self-defined stimulus."
-    def __init__(self, **kwargs):
-        self.t = kwargs["time"]
+    def __init__(self, time, **kwargs):
+        self.t = time
+        super().__init__(**kwargs)
     def eval(self, value, x):
         if float(self.t) >= 2 and float(self.t) <= 11:
             v_amp = 125
             value[0] = 0.05*v_amp
         else:
             value[0] = 0.0
+    def value_shape(self):
+        return ()
 
 def plot_results(times, values, show=True):
     "Plot the evolution of each variable versus time."
 
-    variables = zip(*values)
+    variables = list(zip(*values))
     pylab.figure(figsize=(20, 10))
 
     rows = int(math.ceil(math.sqrt(len(variables))))
@@ -91,9 +96,9 @@ def main(scenario="default"):
     times = []
     values = []
     for ((t0, t1), vs) in solutions:
-        print("Current time: %g" % t1)
+        print(("Current time: %g" % t1))
         times.append(t1)
-        values.append(vs.vector().array())
+        values.append(vs.vector().get_local())
 
     return times, values
 
@@ -102,7 +107,7 @@ def compare_results(times, many_values, legends=(), show=True):
 
     pylab.figure(figsize=(20, 10))
     for values in many_values:
-        variables = zip(*values)
+        variables = list(zip(*values))
         rows = int(math.ceil(math.sqrt(len(variables))))
         for (i, var) in enumerate([variables[0],]):
             #pylab.subplot(rows, rows, i+1)

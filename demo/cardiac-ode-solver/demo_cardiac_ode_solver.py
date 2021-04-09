@@ -55,8 +55,10 @@ def forward():
     values = []
     for ((t0, t1), vs) in solutions:
         times.append(t1)
-        print(vs.vector().array())
-    plot(vs[0], interactive=True, title="v")
+        print(vs.vector().get_local())
+    plot(vs[0], title="v")
+    import matplotlib.pyplot as plt
+    plt.savefig("vs.png")
 
 def replay():
     info_green("Replaying forward model")
@@ -77,5 +79,7 @@ if __name__ == "__main__":
     # Run forward model
     forward()
 
-    # Replay
-    replay()
+    import cbcbeat
+    if cbcbeat.dolfin_adjoint:
+        # Replay
+        replay()

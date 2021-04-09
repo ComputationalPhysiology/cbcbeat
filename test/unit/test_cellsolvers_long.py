@@ -8,7 +8,8 @@ __all__ = ["TestCardiacODESolver"]
 import numpy as np
 import os
 
-from dolfin import info_green, dof_to_vertex_map
+from dolfin import dof_to_vertex_map
+from ufl.log import info_green
 from cbcbeat import *
 from testutils import assert_almost_equal, adjoint, slow
 
@@ -112,7 +113,7 @@ def closure_long_run(Scheme, dt_org, abs_tol, rel_tol):
 
         vs_array = np.zeros(mesh.num_vertices()*\
                             vs.function_space().dofmap().num_entity_dofs(0))
-        vs_array[dof_to_vertex_map_values] = vs.vector().array()
+        vs_array[dof_to_vertex_map_values] = vs.vector().get_local()
         output = [vs_array[ind_V]]
         time_output = [0.0]
         dt = dt_org
@@ -128,7 +129,7 @@ def closure_long_run(Scheme, dt_org, abs_tol, rel_tol):
             vs_.assign(vs)
 
             # Collect plt output data
-            vs_array[dof_to_vertex_map_values] = vs.vector().array()
+            vs_array[dof_to_vertex_map_values] = vs.vector().get_local()
             output.append(vs_array[ind_V])
             time_output.append(float(scheme.t()))
 

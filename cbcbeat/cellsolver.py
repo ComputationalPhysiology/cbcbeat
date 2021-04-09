@@ -11,7 +11,8 @@ from cbcbeat.dolfinimport import *
 from cbcbeat import CardiacCellModel, MultiCellModel
 from cbcbeat.markerwisefield import *
 from cbcbeat.utils import state_space, TimeStepper, splat, annotate_kwargs
-
+from cbcbeat import zero
+import cbcbeat
 
 def point_integral_solver_default_parameters():
 
@@ -31,10 +32,10 @@ def point_integral_solver_default_parameters():
         pn.add("kappa", 0.1, 0.05, 1.0)
         pn.add("eta_0", 1., 1e-15, 1.0)
         pn.add("max_relative_previous_residual", 1e-1, 1e-5, 1.)
-        pn.add("reset_each_step", true)
-        pn.add("report", false)
+        pn.add("reset_each_step", True)
+        pn.add("report", False)
         pn.add("report_vertex", 0, 0, 32767)
-        pn.add("verbose_report", false)
+        pn.add("verbose_report", False)
         p.add(pn)
     return p
 
@@ -499,7 +500,10 @@ class CardiacODESolver(object):
         dt = t1 - t0
 
         self._annotate_kwargs = annotate_kwargs(self.parameters)
-        self._pi_solver.step(dt, **self._annotate_kwargs)
+        if cbcbeat.dolfin_adjoint:
+            self._pi_solver.step(dt, **self._annotate_kwargs)
+        else:
+            self._pi_solver.step(dt)
         timer.stop()
 
     def solve(self, interval, dt=None):

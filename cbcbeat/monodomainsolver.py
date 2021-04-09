@@ -346,9 +346,6 @@ class MonodomainSolver(BasicMonodomainSolver):
         params.add(LUSolver.default_parameters())
         params.add(KrylovSolver.default_parameters())
 
-        # Customize default parameters for LUSolver
-        params["lu_solver"]["same_nonzero_pattern"] = True
-
         # Customize default parameters for KrylovSolver
         #params["krylov_solver"]["preconditioner"]["structure"] = "same"
 
@@ -428,23 +425,14 @@ class MonodomainSolver(BasicMonodomainSolver):
     def _update_lu_solver(self, timestep_unchanged, dt):
         """Helper function for updating an LUSolver depending on
         whether timestep has changed."""
-
-        # Update reuse of factorization parameter in accordance with
-        # changes in timestep
-        if timestep_unchanged:
-            debug("Timestep is unchanged, reusing LU factorization")
-            self.linear_solver.parameters["reuse_factorization"] = True
-        else:
-            debug("Timestep has changed, updating LU factorization")
-            self.linear_solver.parameters["reuse_factorization"] = False
-
-            # Update stored timestep
-            # FIXME: dolfin_adjoint still can't annotate constant assignment.
-            self._timestep.assign(Constant(dt))#, annotate=annotate)
-
-            # Reassemble matrix
-            assemble(self._lhs, tensor=self._lhs_matrix,
-                     **self._annotate_kwargs)
+        
+        # Update stored timestep
+        # FIXME: dolfin_adjoint still can't annotate constant assignment.
+        self._timestep.assign(Constant(dt))#, annotate=annotate)
+        
+        # Reassemble matrix
+        assemble(self._lhs, tensor=self._lhs_matrix,
+                 **self._annotate_kwargs)
 
     def _update_krylov_solver(self, timestep_unchanged, dt):
         """Helper function for updating a KrylovSolver depending on

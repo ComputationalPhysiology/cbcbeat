@@ -46,17 +46,20 @@ class TestBidomainSolversAdjoint(object):
         params = Solver.default_parameters()
 
         if Solver == BasicBidomainSolver:
-            params.linear_variational_solver.linear_solver = \
-                            "cg" if solver_type == "iterative" else "lu"
-            params.linear_variational_solver.krylov_solver.relative_tolerance = 1e-12
-            params.linear_variational_solver.preconditioner = 'ilu'
+            params.update({"linear_variational_solver": {"linear_solver" : 
+                            "cg" if solver_type == "iterative" else "lu"}})
+            params.update({"linear_variational_solver":
+                           {"krylov_solver": {"relative_tolerance": 1e-12}}})
+            params.update({"linear_variational_solver":
+                           {"preconditioner": "ilu"}})
         else:
-            params.linear_solver_type = solver_type
-            params.enable_adjoint = enable_adjoint
+            params.update({"linear_solver_type": solver_type, "enable_adjoint":
+                           enable_adjoint})
             if solver_type == "iterative":
-                params.petsc_krylov_solver.relative_tolerance = 1e-12
+                params.update({"petsc_krylov_solver": {"relative_tolerance": 1e-12}})
+                # params.petsc_krylov_solver.relative_tolerance = 1e-12
             else:
-                params.use_avg_u_constraint = True  # NOTE: In contrast to iterative
+                params.update({"use_avg_u_constraint" : True})  # NOTE: In contrast to iterative
                     # solvers, the direct solver does not handle nullspaces consistently,
                     # i.e. the solution differes from solve to solve, and hence the Taylor
                     # testes would not pass.

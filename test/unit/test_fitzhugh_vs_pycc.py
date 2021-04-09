@@ -19,13 +19,21 @@ __all__ = []
 
 import math
 
-from cbcbeat import Expression, parameters, FitzHughNagumoManual, as_tensor
+from cbcbeat import parameters, FitzHughNagumoManual, as_tensor
 from cbcbeat import UnitSquareMesh, Constant, CardiacModel
 from cbcbeat import BasicSplittingSolver, project, norm
 
+try:
+    from cbcbeat import UserExpression
+    user_expression = UserExpression
+except:
+    from cbcbeat import Expression
+    user_expression = Expression
+    pass    
+
 from testutils import assert_almost_equal, medium
 
-class InitialCondition(Expression):
+class InitialCondition(user_expression):
     def eval(self, values, x):
         r = math.sqrt(x[0]**2 + x[1]**2)
         values[1] = 0.0
@@ -63,6 +71,7 @@ def setup_model():
 
     heart = CardiacModel(domain, time, M_i, M_e, cell)
     return heart
+
 
 @medium
 def test_fitzhugh():

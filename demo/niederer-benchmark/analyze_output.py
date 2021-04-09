@@ -13,7 +13,7 @@ def plot_p1p8_line(a, casedir=None):
     x_coords = numpy.linspace(0, Lx, n)
     y_coords = numpy.linspace(0, Ly, n)
     z_coords = numpy.linspace(0, Lz, n)
-    points = zip(x_coords, y_coords, z_coords)
+    points = list(zip(x_coords, y_coords, z_coords))
 
     # Evaluate activation time at these points
     times = [a(p) for p in points]
@@ -39,7 +39,7 @@ def compute_activation_times_at_p1p8_line(casedir):
     # Open mesh
 
     # Open stored v
-    vfile = HDF5File(mpi_comm_world(), "%s/v.h5" % casedir, "r")
+    vfile = HDF5File(MPI.comm_world, "%s/v.h5" % casedir, "r")
     mesh = Mesh()
     vfile.read(mesh, "/mesh", False)
     V = FunctionSpace(mesh, "CG", 1)
@@ -57,14 +57,14 @@ def compute_activation_times_at_p1p8_line(casedir):
     threshold = 0.0
     t0 = 0.0
     
-    dofs = range(V.dim())
+    dofs = list(range(V.dim()))
 
     for n in range(0, 1000):
         try:
             vector_name = "/function/vector_%d" % n
             vfile.read(v, vector_name)
             t = vfile.attributes(vector_name)["timestamp"]
-            print "Computing activation times for t = %g" % t
+            print("Computing activation times for t = %g" % t)
             
             for i in dofs:
                 if (v.vector()[i] >= threshold and a.vector()[i] < t0):

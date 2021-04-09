@@ -16,7 +16,7 @@ def generate_conductivities():
     V = FunctionSpace(mesh, "CG", 1)
     ischemic = Function(V)
     File("data/ischemic_region.xml.gz") >> ischemic
-    ischemic_array = ischemic.vector().array()
+    ischemic_array = ischemic.vector().get_local()
 
     plot(ischemic, title="Ischemic region")
 
@@ -102,4 +102,5 @@ def generate_conductivities():
 if __name__ == "__main__":
 
     generate_conductivities()
-    interactive()
+    import matplotlib.pyplot as plt
+    plt.savefig("conductivites.png")

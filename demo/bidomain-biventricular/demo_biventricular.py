@@ -86,6 +86,7 @@ def setup_conductivities(mesh, application_parameters):
     A = as_matrix([[fiber[0], sheet[0], cross_sheet[0]],
                    [fiber[1], sheet[1], cross_sheet[1]],
                    [fiber[2], sheet[2], cross_sheet[2]]])
+    from ufl import diag
     M_e_star = diag(as_vector([g_el_field, g_et_field, g_en_field]))
     M_i_star = diag(as_vector([g_il_field, g_it_field, g_in_field]))
     M_e = A*M_e_star*A.T
@@ -139,12 +140,11 @@ def setup_cardiac_model(application_parameters):
 
     V = FunctionSpace(mesh, "DG", 0)
     from stimulation import cpp_stimulus
-    pulse = Expression(cpp_stimulus, element=V.ufl_element())
-    pulse.cell_data = stimulation_cells
     amp = application_parameters["stimulus_amplitude"]
-    pulse.amplitude = amp #
-    pulse.duration = 10.0 # ms
-    pulse.t = time        # ms
+    pulse = CompiledExpression(compile_cpp_code(cpp_stimulus).Stimulus(),
+                               element=V.ufl_element(), t=time._cpp_object,
+                               amplitude=amp, duration=10.0,
+                               cell_data=stimulation_cells)
 
     # Initialize cardiac model with the above input
     heart = CardiacModel(mesh, time, M_i, M_e, cell_model, stimulus=pulse)
@@ -152,7 +152,7 @@ def setup_cardiac_model(application_parameters):
 
 def main(store_solutions=True):
 
-    set_log_level(INFO)
+    set_log_level(LogLevel.INFO)
 
     begin("Setting up application parameters")
     application_parameters = setup_application_parameters()
@@ -182,8 +182,7 @@ def main(store_solutions=True):
     (vs_, vs, vu) = solver.solution_fields()
 
     # Extract and assign initial condition
-    vs_.assign(heart.cell_models().initial_conditions(), solver.VS)
-
+    vs_.assign(heart.cell_models().initial_conditions())
     # Store parameters
     directory = application_parameters["directory"]
     application_params_file = File("%s/application_parameters.xml" % directory)
@@ -224,9 +223,10 @@ def main(store_solutions=True):
     timer.stop()
 
     # List timings
-    list_timings(TimingClear_keep, [TimingType_wall,])
+    list_timings(TimingClear.keep, [TimingType.wall,])
     return (gs, solver)
 
 if __name__ == "__main__":
     main()
-    interactive()
+    import matplotlib.pyplot as plt
+    plt.savefig("vs.png")

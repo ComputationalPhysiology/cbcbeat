@@ -9,7 +9,8 @@ import itertools
 import pytest
 from testutils import medium, assert_almost_equal, parametrize, cell_model
 
-from dolfin import info, info_red, info_green, UnitIntervalMesh
+from dolfin import info, UnitIntervalMesh
+from ufl.log import info_red, info_green
 from cbcbeat import supported_cell_models, \
     CardiacODESolver, BasicSingleCellSolver, \
     NoCellModel, FitzHughNagumoManual, \
@@ -77,7 +78,7 @@ class TestBasicSingleCellSolver(object):
 
         if Model in self.references and theta in self.references[Model]:
             ind, ref_value = self.references[Model][theta]
-            print("vec_solve", vec_solve.array())
+            print("vec_solve", vec_solve.get_local())
             print("ind", ind, "ref", ref_value)
 
             assert_almost_equal(vec_solve[ind], ref_value, 1e-10)

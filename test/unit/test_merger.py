@@ -39,5 +39,5 @@ class TestMerger(object):
         solver.merge(vs)
 
         tol = 1e-13
-        assert np.abs(vs.sub(0, deepcopy=1).vector().array()-1.0).max() < tol
-        assert np.abs(vs.sub(1, deepcopy=1).vector().array()-2.0).max() < tol
+        assert np.abs(vs.sub(0, deepcopy=1).vector().get_local()-1.0).max() < tol
+        assert np.abs(vs.sub(1, deepcopy=1).vector().get_local()-2.0).max() < tol

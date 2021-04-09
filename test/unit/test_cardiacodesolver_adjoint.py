@@ -69,10 +69,14 @@ class TestCardiacODESolverAdjoint(object):
         dt = 0.01
         T = 4*dt
         dt = [(0.0, dt), (dt*3,dt/2)]
-        solver._pi_solver.parameters.reset_stage_solutions = True
-        solver._pi_solver.parameters.newton_solver.reset_each_step = True
-        solver._pi_solver.parameters.newton_solver.relative_tolerance = 1.0e-10
-        solver._pi_solver.parameters.newton_solver.always_recompute_jacobian = True
+        solver._pi_solver.parameters.update({"reset_stage_solutions" : True})
+        solver._pi_solver.parameters.update({"newton_solver":
+                                             {"reset_each_step": True}})
+        solver._pi_solver.parameters.update({"newton_solver":
+                                             {"relative_tolerance": 1.0e-10}})
+        solver._pi_solver.parameters.update({"newton_solver":
+                                             {"always_recompute_jacobian": True
+                                             }})
         solutions = solver.solve((0.0, T), dt)
         for ((t0, t1), vs) in solutions:
             pass
@@ -169,7 +173,7 @@ class TestCardiacODESolverAdjoint(object):
         info_green("Running forward %s with %s (replay)" % (model, Scheme))
         self._run(solver, ics)
 
-        print(solver.solution_fields()[0].vector().array())
+        print(solver.solution_fields()[0].vector().get_local())
 
         info_green("Replaying")
         success = replay_dolfin(tol=0, stop=True)

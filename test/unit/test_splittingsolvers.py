@@ -7,10 +7,15 @@ __all__ = ["TestSplittingSolver"]
 
 from testutils import assert_almost_equal, medium, parametrize
 
-from dolfin import info, set_log_level, WARNING
+from dolfin import info
+
 from cbcbeat import *
 
-set_log_level(WARNING)
+try:
+    set_log_level(LogLevel.WARNING)
+except:
+    set_log_level(WARNING)
+    pass
 
 class TestSplittingSolver(object):
     "Test functionality for the splitting solvers."

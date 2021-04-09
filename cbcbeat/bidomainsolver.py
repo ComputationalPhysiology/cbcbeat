@@ -36,6 +36,7 @@ __all__ = ["BasicBidomainSolver", "BidomainSolver"]
 from cbcbeat.dolfinimport import *
 from cbcbeat.markerwisefield import *
 from cbcbeat.utils import end_of_time, annotate_kwargs
+from cbcbeat import debug
 
 class BasicBidomainSolver(object):
     """This solver is based on a theta-scheme discretization in time
@@ -336,7 +337,6 @@ class BidomainSolver(BasicBidomainSolver):
         if solver_type == "direct":
             solver = LUSolver(self._lhs_matrix)
             solver.parameters.update(self.parameters["lu_solver"])
-            solver.parameters["reuse_factorization"] = True
             update_routine = self._update_lu_solver
 
         elif solver_type == "iterative":
@@ -351,7 +351,8 @@ class BidomainSolver(BasicBidomainSolver):
                 # Argh. DOLFIN won't let you construct a PETScKrylovSolver with fieldsplit. Sigh ..
                 solver = PETScKrylovSolver()
                 # FIXME: work around DOLFIN bug #583. Just deleted this when fixed.
-                solver.parameters.convergence_norm_type = "preconditioned"
+                solver.parameters.update({"convergence_norm_type":
+                                          "preconditioned"})
                 #solver.parameters["preconditioner"]["structure"] = "same" # MER this should be set by user, and is below
                 solver.parameters.update(self.parameters["petsc_krylov_solver"])
                 solver.set_operator(self._lhs_matrix)
@@ -386,7 +387,8 @@ class BidomainSolver(BasicBidomainSolver):
                 solver = PETScKrylovSolver(alg, prec)
                 solver.set_operator(self._lhs_matrix)
                 # Still waiting for that bug fix:
-                solver.parameters.convergence_norm_type = "preconditioned"
+                solver.parameters.update({"convergence_norm_type":
+                                         "preconditioned"})
                 solver.parameters.update(self.parameters["petsc_krylov_solver"])
 
             # Set nullspace if present. We happen to know that the
@@ -433,7 +435,6 @@ class BidomainSolver(BasicBidomainSolver):
 
           info(BidomainSolver.default_parameters(), True)
         """
-
         params = Parameters("BidomainSolver")
         params.add("enable_adjoint", True)
         params.add("theta", 0.5)
@@ -453,11 +454,8 @@ class BidomainSolver(BasicBidomainSolver):
         params.add(LUSolver.default_parameters())
         petsc_params = PETScKrylovSolver.default_parameters()
         # FIXME: work around DOLFIN bug #583. Just deleted this when fixed.
-        petsc_params.convergence_norm_type = "preconditioned"
+        petsc_params.update({"convergence_norm_type": "preconditioned"})
         params.add(petsc_params)
-
-        # Customize default parameters for LUSolver
-        params["lu_solver"]["same_nonzero_pattern"] = True
 
         # Customize default parameters for PETScKrylovSolver
         #params["petsc_krylov_solver"]["preconditioner"]["structure"] = "same"

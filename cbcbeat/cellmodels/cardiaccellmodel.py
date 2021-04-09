@@ -96,11 +96,13 @@ class CardiacCellModel:
         for param_name, param_value in params.items():
             if param_name not in self._parameters:
                 error("'%s' is not a parameter in %s" %(param_name, self))
-            if not isinstance(param_value, (float, int, GenericFunction)):
+            if (not isinstance(param_value, (float, int))
+                and not isinstance(param_value._cpp_object, GenericFunction)):
                 error("'%s' is not a scalar or a GenericFunction" % param_name)
-            if isinstance(param_value, GenericFunction) and \
-               param_value.value_size() != 1:
-                error("expected the value_size of '%s' to be 1" % param_name)
+                if hasattr(param_value, "_cpp_object") and\
+                   isinstance(param_value._cpp_object, GenericFunction) and \
+                   param_value._cpp_object.value_size() != 1:
+                    error("expected the value_size of '%s' to be 1" % param_name)
 
             self._parameters[param_name] = param_value
 
@@ -109,10 +111,10 @@ class CardiacCellModel:
         for init_name, init_value in init.items():
             if init_name not in self._initial_conditions:
                 error("'%s' is not a parameter in %s" %(init_name, self))
-            if not isinstance(init_value, (float, int, GenericFunction)):
+            if not isinstance(init_value, (float, int)) and not isinstance(init_value._cpp_object, GenericFunction):
                 error("'%s' is not a scalar or a GenericFunction" % init_name)
-            if isinstance(init_value, GenericFunction) and \
-               init_value.value_size() != 1:
+            if hasattr(init_value, "_cpp_object") and isinstance(init_value._cpp_object, GenericFunction) and \
+               init_value._cpp_object.value_size() != 1:
                 error("expected the value_size of '%s' to be 1" % init_name)
             self._initial_conditions[init_name] = init_value
 

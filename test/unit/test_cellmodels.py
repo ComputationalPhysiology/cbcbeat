@@ -104,3 +104,4 @@ class TestCompilationCorrectness:
 
         # Reset parameters
         parameters["form_compiler"]["representation"] = "auto"
+        parameters["form_compiler"]["quadrature_degree"] = -1

@@ -9,7 +9,8 @@ import itertools
 import pytest
 from testutils import slow, assert_almost_equal, parametrize, cell_model
 
-from dolfin import info, info_red, info_green, UnitIntervalMesh
+from dolfin import info, UnitIntervalMesh
+from ufl.log import info_red, info_green
 from cbcbeat import supported_cell_models, \
     CardiacODESolver, BasicSingleCellSolver, \
     Constant, Expression

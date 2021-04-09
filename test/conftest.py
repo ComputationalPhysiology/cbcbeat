@@ -3,7 +3,8 @@ import os
 import random
 import pytest
 import cbcbeat
-import dolfin_adjoint
+if cbcbeat.dolfin_adjoint:
+    import dolfin_adjoint
 
 default_params = cbcbeat.parameters.copy()
 def pytest_runtest_setup(item):

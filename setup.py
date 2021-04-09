@@ -5,13 +5,13 @@ import sys
 from os.path import join as pjoin
 
 # Version number
-major = 2017
-minor = 2.0
+major = 2019
+minor = 1.0
 
 requirements = []
 extras_require={
     "gotran": ["gotran"],
-    "test": ["pytest"]
+    "test": ["pytest", "pylab"]
 }
 extras_require.update(
     {"all": [val for values in extras_require.values() for val in values]}

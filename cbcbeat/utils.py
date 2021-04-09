@@ -234,8 +234,6 @@ class Projecter(object):
             dolfin.debug("Setting up direct solver for projecter")
             # Customize LU solver (reuse everything)
             solver = LUSolver(self.M)
-            solver.parameters["same_nonzero_pattern"] = True
-            solver.parameters["reuse_factorization"] = True
         else:
             dolfin.debug("Setting up iterative solver for projecter")
             # Customize Krylov solver (reuse everything)

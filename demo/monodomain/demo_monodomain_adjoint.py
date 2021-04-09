@@ -61,7 +61,7 @@ solver = SplittingSolver(cardiac_model, params=ps)
 
 # Extract the solution fields and set the initial conditions
 (vs_, vs, vur) = solver.solution_fields()
-vs_.assign(cell_model.initial_conditions(), solver.VS)
+vs_.assign(cell_model.initial_conditions())
 
 # Time stepping parameters
 k = 0.01

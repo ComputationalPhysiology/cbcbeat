@@ -13,6 +13,14 @@ import pytest
 from cbcbeat import Expression, Constant, Parameters, dolfin_adjoint
 from cbcbeat import FitzHughNagumoManual, CardiacCellModel
 from cbcbeat import BasicSingleCellSolver
+import cbcbeat
+
+try:
+    from cbcbeat import UserExpression
+    user_expression = UserExpression
+except:
+    user_expression = Expression
+    pass
 
 from testutils import slow
 
@@ -24,9 +32,12 @@ class TestBasicSingleCellSolver:
         comparable results to a given reference from Sundnes et al,
         2006."""
 
-        class Stimulus(Expression):
-            def __init__(self, **kwargs):
-                self.t = kwargs["t"]
+        class Stimulus(user_expression):
+            
+            def __init__(self, t, **kwargs):
+                self.t = t
+                super().__init__(**kwargs)
+                
             def eval(self, value, x):
                 if float(self.t) >= 50 and float(self.t) < 60:
                     v_amp = 125
@@ -34,7 +45,7 @@ class TestBasicSingleCellSolver:
                 else:
                     value[0] = 0.0
 
-        if dolfin_adjoint:
+        if cbcbeat.dolfin_adjoint:
             from dolfin_adjoint import adj_reset
             adj_reset()
 

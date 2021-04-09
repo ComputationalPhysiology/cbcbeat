@@ -105,7 +105,7 @@ def basic_single_cell_closure(theta, Model):
         info_green("Computing gradient")
         dJdics = compute_gradient(J, Control(vs_))
         assert (dJdics is not None), "Gradient is None (#fail)."
-        print(dJdics.vector().array())
+        print(dJdics.vector().get_local())
 
     @adjoint
     @slow

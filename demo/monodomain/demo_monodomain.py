@@ -28,7 +28,9 @@ parameters["form_compiler"]["cpp_optimize_flags"] = " ".join(flags)
 parameters["form_compiler"]["quadrature_degree"] = 3
 
 # Turn off adjoint functionality
-parameters["adjoint"]["stop_annotating"] = True
+import cbcbeat
+if cbcbeat.dolfin_adjoint:
+    parameters["adjoint"]["stop_annotating"] = True
 
 # Define the computational domain
 mesh = UnitSquareMesh(100, 100)
@@ -77,20 +79,18 @@ for (timestep, fields) in solver.solve(interval, dt):
     # current vs, current vur)
     (vs_, vs, vur) = fields
 
-    # Print memory usage (just for the fun of it)
-    print(memory_usage())
-
 timer.stop()
 
 # Visualize some results
 plt.figure()
 plot(vs[0], title="Transmembrane potential (v) at end time")
+plt.savefig("TransmembranePot.png")
 plt.figure()
 plot(vs[-1], title="1st state variable (s_0) at end time")
-
+plt.savefig("s_0(T).png")
 # List times spent
 list_timings(TimingClear_keep, [TimingType_user])
 
 print("Success!")
 
-plt.show()
+
