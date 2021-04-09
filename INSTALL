@@ -1,0 +1,97 @@
+Installation:
+-------------
+
+cbcbeat can be installed as any other Python module using
+distutils:
+
+For system-wise install do:
+
+  sudo python setup.py install
+
+Or specify a local path:
+
+  python setup.py install --prefix=/home/me/favorite-path
+
+Tests and demos can be run without installation by adding the top
+level directory to your PYTHONPATH:
+
+  export PYTHONPATH=`pwd`:$PYTHONPATH
+
+Verifying the installation:
+---------------------------
+
+The tests are based on pytest (pytest.org). The installation can be
+verified by running the collection of tests located under test/.
+
+For quick testing, run
+
+  cd test
+  py.test -m "fast" -v
+
+See test/README for more details on running the test suite.
+
+Dependencies: 
+-------------
+
+cbcbeat depends on the following software 
+
+* Python (compatible with both Python 2 and Python 3)
+
+* The FEniCS Project software: www.fenicsproject.org
+
+  The FEniCS Project is a collection of software for automated
+  solution of partial differential equations using finite element
+  methods. 
+
+  cbcbeat is compatible with FEniCS version 2017.1.0 and 2017.2.0 (and
+  possibly 2016.1.0, 2016.2.0) or development versions in between
+  these releases of FEniCS.
+
+  Docker images are available for these versions of FEniCS, see
+  https://bitbucket.org/fenics-project/docker and
+  https://quay.io/organization/fenicsproject. For instance, to run the
+  2017.1.0 image:
+
+    docker run -ti -v $(pwd):/home/fenics/shared quay.io/fenicsproject/stable:2017.1.0
+    cd shared
+
+* [Optional] dolfin-adjoint: www.dolfin-adjoint.org (compatible with
+  FEniCS version)
+
+  dolfin-adjoint provides tools for automatically deriving the
+  discrete adjoint and tangent linear models from a DOLFIN forward
+  model. NB: cbcbeat depends on dolfin-adjoint/libadjoint
+
+* [Optional] gotran: https://bitbucket.org/johanhake/gotran 
+
+  Gotran is a general ODE translator.
+
+  cbcbeat uses Gotran for generating cbcbeat-compatible cell model
+  implementations from cellML.
+
+* [Optional] Sphinx: sphinx-doc.org
+
+  Sphinx is a tool for generating documentation for Python module
+
+* [Optional] Model Parameters: https://bitbucket.org/johanhake/modelparameters
+
+  Model Parameters is a Python library for easy use of parameters in
+  Python models, written by Johan Hake. Obtain by
+
+    bzr branch lp:modelparameters
+
+  This module is only required for running some of the tests (and this
+  dependency will be removed).
+
+* [Optional] py.test (pytest.org)
+
+  This testing tools is used for, well: the tests.   
+
+Installation with docker
+------------------------
+1. Install docker: https://docs.docker.com/engine/installation/
+2. Build docker container with
+       `docker build -t cbcbeat docker/
+3. Start docker container with
+       `docker run -i -t cbcbeat`
+

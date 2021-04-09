@@ -1,0 +1,30 @@
+image: quay.io/dolfinadjoint/dolfin-adjoint:dolfin-adjoint-2017.2.0
+
+pipelines:
+  default:
+    - step:
+        script:
+          - export HOME=/home/fenics
+          - export FENICS_PREFIX=$HOME/local
+          - export PATH=$HOME/bin:$HOME/.local/bin:$PATH
+          # Test python 2
+          - pip2 install --no-cache-dir --upgrade pytest
+          - export FENICS_PYTHON_MAJOR_VERSION=2
+          - export FENICS_PYTHON_MINOR_VERSION=7
+          - source $HOME/fenics.env.conf
+          - source /home/fenics/dolfin-adjoint.conf
+          - update_dolfin-adjoint && update_libadjoint
+          - cd $BITBUCKET_CLONE_DIR
+          - pip2 install --no-cache-dir --upgrade --prefix=$FENICS_PREFIX .
+          - python2 -m pytest -v test
+          - cd -
+          # Test python 3
+          - pip3 install --no-cache-dir --upgrade pytest
+          - export FENICS_PYTHON_MAJOR_VERSION=3
+          - export FENICS_PYTHON_MINOR_VERSION=6
+          - source $HOME/fenics.env.conf
+          - source /home/fenics/dolfin-adjoint.conf
+          - update_dolfin-adjoint && update_libadjoint
+          - cd $BITBUCKET_CLONE_DIR
+          - pip3 install --no-cache-dir --upgrade --prefix=$FENICS_PREFIX .
+          - python3 -m pytest -v test

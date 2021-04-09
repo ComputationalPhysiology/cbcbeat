@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+
+from cbcbeat.gotran2cellmodel import CellModelGenerator
+
+from gotran.model import load_ode
+
+
+def main(filename, params):
+    """
+    Create a beat cell model from a gotran model
+    """
+
+    # Load Gotran model
+    ode = load_ode(filename)
+
+    # Create a Beat Cell model code generator
+    cell_gen = CellModelGenerator(ode, params.membrane_potential)
+
+    output = params.output
+
+    if output:
+        if not(len(output)>3 and output[-3:] == ".py"):
+            output += ".py"
+    else:
+        output = filename.replace(".ode", "")+".py"
+
+    f = open(output, "w")
+    
+    f.write(cell_gen.generate())
+
+if __name__ == "__main__":
+    import sys, os
+    from modelparameters.parameterdict import ParameterDict, OptionParam, Param
+    
+    params = ParameterDict(\
+        output = Param("", description="Specify the basename of the output file"),\
+        membrane_potential = Param("V", description="The name of the "\
+                                   "membrane potential state."))
+    params.parse_args(usage="usage: %prog FILE [options]")#sys.argv[2:])
+    
+    if len(sys.argv) < 2:
+        raise RuntimeError("Expected a single gotran file argument")
+
+    if not os.path.isfile(sys.argv[1]):
+        raise IOError("Expected the argument to be a file")
+	 
+    file_name = sys.argv[1]
+    main(file_name, params)

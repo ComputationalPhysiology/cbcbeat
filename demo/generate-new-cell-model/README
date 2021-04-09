@@ -1,0 +1,11 @@
+
+Compiling/Generating new cell models from cellML requires that you
+have Gotran installed. Gotran is a Python module available here:
+
+  https://bitbucket.org/johanhake/gotran
+
+You can get Gotran via:
+
+  git clone git@bitbucket.org:johanhake/gotran.git
+
+See Gotran installation instructions for how to install Gotran.
