@@ -5,25 +5,24 @@ import sys
 from os.path import join as pjoin
 
 # Version number
-major = 1
-minor = 0
+major = 2017
+minor = 2.0
 
+requirements = []
+extras_require={
+    "gotran": ["gotran"],
+    "test": ["pytest"]
+}
+extras_require.update(
+    {"all": [val for values in extras_require.values() for val in values]}
+)
 scripts = [pjoin("scripts", "gotran2beat"),
            pjoin("scripts", "gotran2dolfin"),
            ]
 
-if platform.system() == "Windows" or "bdist_wininst" in sys.argv:
-    # In the Windows command prompt we can't execute Python scripts
-    # without a .py extension. A solution is to create batch files
-    # that runs the different scripts.
-    batch_files = []
-    for script in scripts:
-        batch_file = script + ".bat"
-        f = open(batch_file, "w")
-        f.write('python "%%~dp0\%s" %%*\n' % split(script)[1])
-        f.close()
-        batch_files.append(batch_file)
-    scripts.extend(batch_files)
+with open("README.rst") as readme_file:
+  readme = readme_file.read()
+
 
 setup(name = "cbcbeat",
       version = "{0}.{1}".format(major, minor),
@@ -35,4 +34,13 @@ setup(name = "cbcbeat",
       packages = ["cbcbeat", "cbcbeat.cellmodels",],
       package_dir = {"cbcbeat": "cbcbeat"},
       scripts = scripts,
-      )
+      long_description=readme,
+      include_package_data=True,
+      install_requires=requirements,
+      url="https://github.com/ComputationalPhysiology/cbcbeat",
+      extras_require=extras_require,
+      project_urls={
+          "Source": "https://github.com/ComputationalPhysiology/cbcbeat",
+      },
+      zip_safe=False,
+    )
