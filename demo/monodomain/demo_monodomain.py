@@ -89,7 +89,7 @@ plt.figure()
 plot(vs[-1], title="1st state variable (s_0) at end time")
 plt.savefig("s_0(T).png")
 # List times spent
-list_timings(TimingClear_keep, [TimingType_user])
+list_timings(TimingClear.keep, [TimingType.user])
 
 print("Success!")
 
