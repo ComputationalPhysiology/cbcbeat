@@ -32,7 +32,7 @@ jobs:
       - run:
           name: install package
           command: |
-            python3 -m pip install ".[all]""
+            python3 -m pip install ".[all]"
 
       - restore_cache:
           keys:
