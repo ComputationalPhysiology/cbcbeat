@@ -42,7 +42,7 @@ jobs:
       - run:
           name: run tests
           command: |
-            python3 -m pytest -v test --cov=cbcbeat --cov-report html -v
+            python3 -m pytest -m "not adjoint" -v test --cov=cbcbeat --cov-report html -v
 
       - save_cache:
           key: v2-dolfin-jit-cache
@@ -65,4 +65,4 @@ workflows:
       - test:
           matrix:
             parameters:
-              fenics: [fenics-latest, fenics-adjoint-latest] # fenics-2017,
+              fenics: [fenics-latest] # , fenics-adjoint-latest] # fenics-2017,
