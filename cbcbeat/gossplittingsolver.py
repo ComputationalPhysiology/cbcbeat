@@ -15,6 +15,8 @@ from dolfin import *
 import goss
 import gotran
 
+from goss.dolfinutils import DOLFINODESystemSolver
+
 #if "DOLFINODESystemSolver" not in goss.__dict__:
 #    raise ImportError("goss could not import DOLFINODESystemSolver")
 
@@ -77,10 +79,15 @@ class GOSSplittingSolver:
         params.add("apply_stimulus_current_to_pde", False)
         params.add("enable_adjoint", False)
         params.add("theta", 0.5, 0, 1)
-        params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
+        try:
+            params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
+        except:
+            params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
+            pass
+
 
         # Add default parameters from ODE solver
-        ode_solver_params = goss.DOLFINODESystemSolver.default_parameters()
+        ode_solver_params = DOLFINODESystemSolver.default_parameters()
         ode_solver_params.rename("ode_solver")
         #ode_solver_params.add("membrane_potential", "V")
         params.add(ode_solver_params)
@@ -154,9 +161,10 @@ class GOSSplittingSolver:
             #        self.parameters["ode_solver"]["membrane_potential"]
 
         # Create DOLFINODESystemSolver
-        solver = goss.DOLFINODESystemSolver(self._model.domain, cell_models, \
-                                            self._model.cell_model_domains,
-                                            self.parameters["ode_solver"])
+        solver = DOLFINODESystemSolver(self._model.domain, cell_models, \
+                                       self._model.cell_model_domains,
+                                       self.parameters["ode_solver"])
+
 
         return solver
 
