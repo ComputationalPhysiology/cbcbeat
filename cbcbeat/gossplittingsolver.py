@@ -42,8 +42,8 @@ class GOSSplittingSolver:
             self.parameters.update(params)
 
         # Extract solution domain and time
-        self._domain = self._model.domain
-        self._time = self._model.time
+        self._domain = self._model.domain()
+        self._time = self._model.time()
 
         # Create PDE solver and extract solution fields
         self.pde_solver = self._create_pde_solver()
@@ -113,8 +113,8 @@ class GOSSplittingSolver:
         # invoked in the ODE step)
         applied_current = self._model.applied_current
         # Extract stimulus from the cardiac model(!)
-        if self.parameters.apply_stimulus_current_to_pde:
-            stimulus = self._model.stimulus
+        if self.parameters["apply_stimulus_current_to_pde"]:
+            stimulus = self._model.stimulus()
         else:
             stimulus = None
 
@@ -133,7 +133,7 @@ class GOSSplittingSolver:
             kwargs = dict(I_s=stimulus, params=params)
 
         # Propagate enable_adjoint to Bidomain solver
-        if params.has_key("enable_adjoint"):
+        if params.has_parameter("enable_adjoint"):
             params["enable_adjoint"] = self.parameters["enable_adjoint"]
 
         solver = PDESolver(*args, **kwargs)
