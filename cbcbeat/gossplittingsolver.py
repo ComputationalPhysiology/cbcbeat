@@ -10,6 +10,7 @@ import numpy as np
 import types
 
 from dolfin import *
+from dolfin.cpp.log import log, LogLevel
 
 # Goss and Gotran imports
 import goss
@@ -112,6 +113,7 @@ class GOSSplittingSolver:
         # Extract applied current from the cardiac model (stimulus
         # invoked in the ODE step)
         applied_current = self._model.applied_current
+
         # Extract stimulus from the cardiac model(!)
         if self.parameters["apply_stimulus_current_to_pde"]:
             stimulus = self._model.stimulus()
@@ -145,26 +147,13 @@ class GOSSplittingSolver:
         the cardiac model."""
 
         # Extract cardiac cell model from cardiac model
-        cell_models = self._model.cell_models
-
-        # Expects a goss.ODE model
-        assert(isinstance(cell_models, dict))
-        assert(all(isinstance(cell_model, goss.ODE)
-                   for cell_model in cell_models.values()))
-
-        for cell_model in cell_models.values():
-            assert cell_model.num_field_states()==1, \
-                   "Expected only one field state in the cell model"
-            # assert cell_model.get_field_state_names()[0] == \
-            #        self.parameters["ode_solver"]["membrane_potential"], \
-            #        "Expected field state of cell model to be %s" % \
-            #        self.parameters["ode_solver"]["membrane_potential"]
+        cell_models = self._model.cell_models()
 
         # Create DOLFINODESystemSolver
-        solver = DOLFINODESystemSolver(self._model.domain, cell_models, \
-                                       self._model.cell_model_domains,
-                                       self.parameters["ode_solver"])
-
+        solver = DOLFINODESystemSolver(self._domain, \
+                                       dict(zip(cell_models.keys(), cell_models.models())),
+                                       domains=cell_models.markers(), \
+                                       params=self.parameters["ode_solver"])
 
         return solver
 
@@ -212,7 +201,7 @@ class GOSSplittingSolver:
 
         for t0, t1 in time_stepper:
 
-            info_blue("Solving on t = (%g, %g)" % (t0, t1))
+            log(LogLevel.INFO, "Solving on t = (%g, %g)" % (t0, t1))
             self.step((t0, t1))
 
             # Yield solutions
