@@ -88,7 +88,7 @@ class GOSSplittingSolver:
 
 
         # Add default parameters from ODE solver
-        ode_solver_params = DOLFINODESystemSolver.default_parameters()
+        ode_solver_params = DOLFINODESystemSolver.default_parameters_dolfin()
         ode_solver_params.rename("ode_solver")
         #ode_solver_params.add("membrane_potential", "V")
         params.add(ode_solver_params)
