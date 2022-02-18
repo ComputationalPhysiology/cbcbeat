@@ -1,0 +1,372 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cbcbeat: an adjoint-enabled framework for computational cardiac electrophysiology &#8212; cbcbeat 1.0 documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. cbcbeat package" href="cbcbeat.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="#">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">cbcbeat 1.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="cbcbeat.html">
+   1. cbcbeat package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="cbcbeat.cellmodels.html">
+     1.1.1. cbcbeat.cellmodels package
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/index.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installation-and-dependencies">
+   Installation and dependencies:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main-authors">
+   Main authors:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#license">
+   License:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#testing-and-verification">
+   Testing and verification:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#contributions">
+   Contributions:
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#documentation">
+   Documentation:
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#examples-and-demos">
+     Examples and demos:
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#api-documentation">
+     API documentation:
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#indices-and-tables">
+   Indices and tables
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="cbcbeat-an-adjoint-enabled-framework-for-computational-cardiac-electrophysiology">
+<h1>cbcbeat: an adjoint-enabled framework for computational cardiac electrophysiology<a class="headerlink" href="#cbcbeat-an-adjoint-enabled-framework-for-computational-cardiac-electrophysiology" title="Permalink to this headline">¶</a></h1>
+<p>cbcbeat is a Python-based software collection targeting computational
+cardiac electrophysiology problems. cbcbeat contains solvers of
+varying complexity and performance for the classical monodomain and
+bidomain equations coupled with cardiac cell models. The cbcbeat
+solvers are based on algorithms described in Sundnes et al (2006) and
+the core FEniCS Project software (Logg et al, 2012). All cbcbeat
+solvers allow for automated derivation and computation of adjoint and
+tangent linear solutions, functional derivatives and Hessians via the
+dolfin-adjoint software (Farrell et al, 2013). The computation of
+functional derivatives in turn allows for automated and efficient
+solution of optimization problems such as those encountered in data
+assimillation or other inverse problems.</p>
+<p>cbcbeat is based on the finite element functionality provided by the
+FEniCS Project software, the automated derivation and computation of
+adjoints offered by the dolfin-adjoint software and cardiac cell
+models from the CellML repository.</p>
+<p>cbcbeat originates from the <a class="reference external" href="http://cbc.simula.no">Center for Biomedical Computing</a>, a Norwegian Centre of Excellence, hosted by
+<a class="reference external" href="http://www.simula.no">Simula Research Laboratory</a>, Oslo, Norway.</p>
+<div class="section" id="installation-and-dependencies">
+<h2>Installation and dependencies:<a class="headerlink" href="#installation-and-dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The cbcbeat source code is hosted on GitHub:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/ComputationalPhysiology/cbcbeat">https://github.com/ComputationalPhysiology/cbcbeat</a></p>
+</div></blockquote>
+<p>The cbcbeat solvers are based on the <a class="reference external" href="http://www.fenicsproject.org">FEniCS Project</a> finite element library and its
+extension <a class="reference external" href="http://www.dolfin-adjoint.org">dolfin-adjoint</a>. Any type
+of build of FEniCS and dolfin-adjoint should work, but cbcbeat has
+mainly been developed using native source builds and is mainly tested
+via Docker images.</p>
+<p>See the separate file INSTALL in the root directory of the cbcbeat
+source for a complete list of dependencies and installation
+instructions.</p>
+</div>
+<div class="section" id="main-authors">
+<h2>Main authors:<a class="headerlink" href="#main-authors" title="Permalink to this headline">¶</a></h2>
+<p>See the separate file AUTHORS in the root directory of the cbcbeat
+source for the list of authors and contributors.</p>
+</div>
+<div class="section" id="license">
+<h2>License:<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>cbcbeat is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.</p>
+<p>cbcbeat is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public
+License for more details.</p>
+<p>You should have received a copy of the GNU Lesser General Public
+License along with cbcbeat. If not, see
+&lt;<a class="reference external" href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.</p>
+</div>
+<div class="section" id="testing-and-verification">
+<h2>Testing and verification:<a class="headerlink" href="#testing-and-verification" title="Permalink to this headline">¶</a></h2>
+<p>The cbcbeat test suite is based on <a class="reference external" href="http://pytest.org">pytest</a> and
+available in the test/ directory of the cbcbeat source. See the
+INSTALL file in the root directory of the cbcbeat source for how to
+run the tests.</p>
+<p>cbcbeat uses GitHub issues for automated and continuous testing,
+see the current test status of cbcbeat here:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://github.com/ComputationalPhysiology/cbcbeat/issues">https://github.com/ComputationalPhysiology/cbcbeat/issues</a></p>
+</div></blockquote>
+</div>
+<div class="section" id="contributions">
+<h2>Contributions:<a class="headerlink" href="#contributions" title="Permalink to this headline">¶</a></h2>
+<p>Contributions to cbcbeat are very welcome. If you are interested in
+improving or extending the software please <a class="reference external" href="https://github.com/ComputationalPhysiology/cbcbeat">contact us</a> via the issues or pull requests
+on GitHub. Similarly, please <a class="reference external" href="https://github.com/ComputationalPhysiology/cbcbeat/issues">report</a> issues via GitHub.</p>
+</div>
+<div class="section" id="documentation">
+<h2>Documentation:<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<p>The cbcbeat solvers are based on the Python interface of the <a class="reference external" href="http://www.fenicsproject.org">FEniCS
+Project</a> finite element library and
+its extension <a class="reference external" href="http://www.dolfin-adjoint.org">dolfin-adjoint</a>. We
+recommend users of cbcbeat to first familiarize with these
+libraries. The <a class="reference external" href="https://fenicsproject.org/tutorial/">FEniCS tutorial</a> and the <a class="reference external" href="https://www.dolfin-adjoint.org/en/latest/documentation/index.html">dolfin-adjoint
+documentation</a>
+are good starting points for new users.</p>
+<div class="section" id="examples-and-demos">
+<h3>Examples and demos:<a class="headerlink" href="#examples-and-demos" title="Permalink to this headline">¶</a></h3>
+<p>A collection of examples on how to use cbcbeat is available in the
+demo/ directory of the cbcbeat source. We also recommend looking at
+the test suite for examples of how to use the cbcbeat solvers.</p>
+</div>
+<div class="section" id="api-documentation">
+<h3>API documentation:<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cbcbeat.html">1. cbcbeat package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#subpackages">1.1. Subpackages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#submodules">1.2. Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.bidomainsolver">1.3. cbcbeat.bidomainsolver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.cardiacmodels">1.4. cbcbeat.cardiacmodels module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.cellsolver">1.5. cbcbeat.cellsolver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.dolfinimport">1.6. cbcbeat.dolfinimport module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#cbcbeat-gossplittingsolver-module">1.7. cbcbeat.gossplittingsolver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#cbcbeat-gotran2cellmodel-module">1.8. cbcbeat.gotran2cellmodel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#cbcbeat-gotran2dolfin-module">1.9. cbcbeat.gotran2dolfin module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.markerwisefield">1.10. cbcbeat.markerwisefield module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.monodomainsolver">1.11. cbcbeat.monodomainsolver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.splittingsolver">1.12. cbcbeat.splittingsolver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.utils">1.13. cbcbeat.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat">1.14. Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='right-next' id="next-link" href="cbcbeat.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>cbcbeat package</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+            &copy; Copyright 2014--2017, ME Rognes, J Hake, PE Farrell, SW Funke.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

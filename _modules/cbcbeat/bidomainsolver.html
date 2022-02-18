@@ -1,0 +1,784 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cbcbeat.bidomainsolver &#8212; cbcbeat 1.0 documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">cbcbeat 1.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../cbcbeat.html">
+   1. cbcbeat package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../cbcbeat.cellmodels.html">
+     1.1.1. cbcbeat.cellmodels package
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <h1>Source code for cbcbeat.bidomainsolver</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">These solvers solve the (pure) bidomain equations on the form: find</span>
+<span class="sd">the transmembrane potential :math:`v = v(x, t)` and the extracellular</span>
+<span class="sd">potential :math:`u = u(x, t)` such that</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">   v_t - \mathrm{div} ( G_i v + G_i u) = I_s</span>
+
+<span class="sd">   \mathrm{div} (G_i v + (G_i + G_e) u) = I_a</span>
+
+<span class="sd">where the subscript :math:`t` denotes the time derivative; :math:`G_x`</span>
+<span class="sd">denotes a weighted gradient: :math:`G_x = M_x \mathrm{grad}(v)` for</span>
+<span class="sd">:math:`x \in \{i, e\}`, where :math:`M_i` and :math:`M_e` are the</span>
+<span class="sd">intracellular and extracellular cardiac conductivity tensors,</span>
+<span class="sd">respectively; :math:`I_s` and :math:`I_a` are prescribed input. In</span>
+<span class="sd">addition, initial conditions are given for :math:`v`:</span>
+
+<span class="sd">.. math::</span>
+
+<span class="sd">   v(x, 0) = v_0</span>
+
+<span class="sd">Finally, boundary conditions must be prescribed. For now, this solver</span>
+<span class="sd">assumes pure homogeneous Neumann boundary conditions for :math:`v` and</span>
+<span class="sd">:math:`u` and enforces the additional average value zero constraint</span>
+<span class="sd">for u.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Copyright (C) 2013 Marie E. Rognes (meg@simula.no)</span>
+<span class="c1"># Use and modify at will</span>
+<span class="c1"># Last changed: 2013-04-18</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BasicBidomainSolver&quot;</span><span class="p">,</span> <span class="s2">&quot;BidomainSolver&quot;</span><span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.markerwisefield</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.utils</span> <span class="kn">import</span> <span class="n">end_of_time</span><span class="p">,</span> <span class="n">annotate_kwargs</span>
+<span class="kn">from</span> <span class="nn">cbcbeat</span> <span class="kn">import</span> <span class="n">debug</span>
+
+<div class="viewcode-block" id="BasicBidomainSolver"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver">[docs]</a><span class="k">class</span> <span class="nc">BasicBidomainSolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This solver is based on a theta-scheme discretization in time</span>
+<span class="sd">    and CG_1 x CG_1 (x R) elements in space.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       For the sake of simplicity and consistency with other solver</span>
+<span class="sd">       objects, this solver operates on its solution fields (as state</span>
+<span class="sd">       variables) directly internally. More precisely, solve (and</span>
+<span class="sd">       step) calls will act by updating the internal solution</span>
+<span class="sd">       fields. It implies that initial conditions can be set (and are</span>
+<span class="sd">       intended to be set) by modifying the solution fields prior to</span>
+<span class="sd">       simulation.</span>
+
+<span class="sd">    *Arguments*</span>
+<span class="sd">      mesh (:py:class:`dolfin.Mesh`)</span>
+<span class="sd">        The spatial domain (mesh)</span>
+
+<span class="sd">      time (:py:class:`dolfin.Constant` or None)</span>
+<span class="sd">        A constant holding the current time. If None is given, time is</span>
+<span class="sd">        created for you, initialized to zero.</span>
+
+<span class="sd">      M_i (:py:class:`ufl.Expr`)</span>
+<span class="sd">        The intracellular conductivity tensor (as an UFL expression)</span>
+
+<span class="sd">      M_e (:py:class:`ufl.Expr`)</span>
+<span class="sd">        The extracellular conductivity tensor (as an UFL expression)</span>
+
+<span class="sd">      I_s (:py:class:`dict`, optional)</span>
+<span class="sd">        A typically time-dependent external stimulus given as a dict,</span>
+<span class="sd">        with domain markers as the key and a</span>
+<span class="sd">        :py:class:`dolfin.Expression` as values. NB: it is assumed</span>
+<span class="sd">        that the time dependence of I_s is encoded via the &#39;time&#39;</span>
+<span class="sd">        Constant.</span>
+
+<span class="sd">      I_a (:py:class:`dolfin.Expression`, optional)</span>
+<span class="sd">        A (typically time-dependent) external applied current</span>
+
+<span class="sd">      v\_ (:py:class:`ufl.Expr`, optional)</span>
+<span class="sd">        Initial condition for v. A new :py:class:`dolfin.Function`</span>
+<span class="sd">        will be created if none is given.</span>
+
+<span class="sd">      params (:py:class:`dolfin.Parameters`, optional)</span>
+<span class="sd">        Solver parameters</span>
+
+<span class="sd">      &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">I_s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">I_a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># Check some input</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">),</span> \
+            <span class="s2">&quot;Expecting mesh to be a Mesh instance, not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">mesh</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">Constant</span><span class="p">)</span> <span class="ow">or</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> \
+            <span class="s2">&quot;Expecting time to be a Constant instance (or None).&quot;</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span> <span class="ow">or</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> \
+            <span class="s2">&quot;Expecting params to be a Parameters instance (or None)&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nullspace_basis</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Store input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span> <span class="o">=</span> <span class="n">mesh</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_M_i</span> <span class="o">=</span> <span class="n">M_i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_M_e</span> <span class="o">=</span> <span class="n">M_e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span> <span class="o">=</span> <span class="n">I_s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_I_a</span> <span class="o">=</span> <span class="n">I_a</span>
+
+        <span class="c1"># Initialize and update parameters if given</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">params</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="c1"># Set-up function spaces</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;polynomial_degree&quot;</span><span class="p">]</span>
+        <span class="n">Ve</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">(),</span> <span class="n">k</span><span class="p">)</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+        <span class="n">Ue</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">(),</span> <span class="n">k</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+
+        <span class="n">use_R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;use_avg_u_constraint&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">use_R</span><span class="p">:</span>
+            <span class="n">Re</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">ufl_cell</span><span class="p">(),</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="s2">&quot;R&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VUR</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">MixedElement</span><span class="p">((</span><span class="n">Ve</span><span class="p">,</span> <span class="n">Ue</span><span class="p">,</span> <span class="n">Re</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VUR</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">MixedElement</span><span class="p">((</span><span class="n">Ve</span><span class="p">,</span> <span class="n">Ue</span><span class="p">)))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">V</span>
+
+        <span class="c1"># Set-up solution fields:</span>
+        <span class="k">if</span> <span class="n">v_</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">merger</span> <span class="o">=</span> <span class="n">FunctionAssigner</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v_</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;v_&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Experimental: v_ shipped from elsewhere.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">merger</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">v_</span> <span class="o">=</span> <span class="n">v_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vur</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vur&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Figure out whether we should annotate or not</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span> <span class="o">=</span> <span class="n">annotate_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;The internal time of the solver.&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span>
+
+<div class="viewcode-block" id="BasicBidomainSolver.solution_fields"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.solution_fields">[docs]</a>    <span class="k">def</span> <span class="nf">solution_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return tuple of previous and current solution objects.</span>
+
+<span class="sd">        Modifying these will modify the solution objects of the solver</span>
+<span class="sd">        and thus provides a way for setting initial conditions for</span>
+<span class="sd">        instance.</span>
+
+<span class="sd">        *Returns*</span>
+<span class="sd">          (previous v, current vur) (:py:class:`tuple` of :py:class:`dolfin.Function`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vur</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BasicBidomainSolver.solve"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.solve">[docs]</a>    <span class="k">def</span> <span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">dt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve the discretization on a given time interval (t0, t1)</span>
+<span class="sd">        with a given timestep dt and return generator for a tuple of</span>
+<span class="sd">        the interval and the current solution.</span>
+
+<span class="sd">        *Arguments*</span>
+<span class="sd">          interval (:py:class:`tuple`)</span>
+<span class="sd">            The time interval for the solve given by (t0, t1)</span>
+<span class="sd">          dt (int, optional)</span>
+<span class="sd">            The timestep for the solve. Defaults to length of interval</span>
+
+<span class="sd">        *Returns*</span>
+<span class="sd">          (timestep, solution_fields) via (:py:class:`genexpr`)</span>
+
+<span class="sd">        *Example of usage*::</span>
+
+<span class="sd">          # Create generator</span>
+<span class="sd">          solutions = solver.solve((0.0, 1.0), 0.1)</span>
+
+<span class="sd">          # Iterate over generator (computes solutions as you go)</span>
+<span class="sd">          for (interval, solution_fields) in solutions:</span>
+<span class="sd">            (t0, t1) = interval</span>
+<span class="sd">            v_, vur = solution_fields</span>
+<span class="sd">            # do something with the solutions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;PDE step&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Initial set-up</span>
+        <span class="c1"># Solve on entire interval if no interval is given.</span>
+        <span class="p">(</span><span class="n">T0</span><span class="p">,</span> <span class="n">T</span><span class="p">)</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="k">if</span> <span class="n">dt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="n">T0</span><span class="p">)</span>
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">T0</span>
+        <span class="n">t1</span> <span class="o">=</span> <span class="n">T0</span> <span class="o">+</span> <span class="n">dt</span>
+
+       <span class="c1"># Step through time steps until at end time</span>
+        <span class="k">while</span> <span class="p">(</span><span class="kc">True</span><span class="p">)</span> <span class="p">:</span>
+            <span class="n">info</span><span class="p">(</span><span class="s2">&quot;Solving on t = (</span><span class="si">%g</span><span class="s2">, </span><span class="si">%g</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
+
+            <span class="c1"># Yield solutions</span>
+            <span class="k">yield</span> <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution_fields</span><span class="p">()</span>
+
+            <span class="c1"># Break if this is the last step</span>
+            <span class="k">if</span> <span class="n">end_of_time</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+                <span class="k">break</span>
+
+            <span class="c1"># If not: update members and move to next time</span>
+            <span class="c1"># Subfunction assignment would be good here.</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v_</span><span class="p">,</span> <span class="n">Function</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">merger</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">v_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vur</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Assuming that v_ is updated elsewhere. Experimental.&quot;</span><span class="p">)</span>
+            <span class="n">t0</span> <span class="o">=</span> <span class="n">t1</span>
+            <span class="n">t1</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">dt</span></div>
+
+<div class="viewcode-block" id="BasicBidomainSolver.step"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve on the given time interval (t0, t1).</span>
+
+<span class="sd">        *Arguments*</span>
+<span class="sd">          interval (:py:class:`tuple`)</span>
+<span class="sd">            The time interval (t0, t1) for the step</span>
+
+<span class="sd">        *Invariants*</span>
+<span class="sd">          Assuming that v\_ is in the correct state for t0, gives</span>
+<span class="sd">          self.vur in correct state at t1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;PDE step&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Extract interval and thus time-step</span>
+        <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="n">k_n</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;theta&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Extract conductivities</span>
+        <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_M_i</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_M_e</span>
+
+        <span class="c1"># Define variational formulation</span>
+        <span class="n">use_R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;use_avg_u_constraint&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">use_R</span><span class="p">:</span>
+             <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="o">=</span> <span class="n">TrialFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">)</span>
+             <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">lamda</span><span class="p">)</span> <span class="o">=</span> <span class="n">TestFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+             <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">=</span> <span class="n">TrialFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">)</span>
+             <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="o">=</span> <span class="n">TestFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">)</span>
+
+        <span class="n">Dt_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_</span><span class="p">)</span><span class="o">/</span><span class="n">k_n</span>
+        <span class="n">v_mid</span> <span class="o">=</span> <span class="n">theta</span><span class="o">*</span><span class="n">v</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v_</span>
+
+        <span class="c1"># Set time</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">theta</span><span class="o">*</span><span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c1"># Define spatial integration domains:</span>
+        <span class="p">(</span><span class="n">dz</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhs_with_markerwise_field</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+        <span class="n">theta_parabolic</span> <span class="o">=</span> <span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">M_i</span><span class="o">*</span><span class="n">grad</span><span class="p">(</span><span class="n">v_mid</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="n">w</span><span class="p">))</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span>
+                           <span class="o">+</span> <span class="n">inner</span><span class="p">(</span><span class="n">M_i</span><span class="o">*</span><span class="n">grad</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="n">w</span><span class="p">))</span><span class="o">*</span><span class="n">dz</span><span class="p">())</span>
+        <span class="n">theta_elliptic</span> <span class="o">=</span> <span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">M_i</span><span class="o">*</span><span class="n">grad</span><span class="p">(</span><span class="n">v_mid</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="n">q</span><span class="p">))</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span>
+                          <span class="o">+</span> <span class="n">inner</span><span class="p">((</span><span class="n">M_i</span> <span class="o">+</span> <span class="n">M_e</span><span class="p">)</span><span class="o">*</span><span class="n">grad</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="n">q</span><span class="p">))</span><span class="o">*</span><span class="n">dz</span><span class="p">())</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">Dt_v</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span> <span class="o">+</span> <span class="n">theta_parabolic</span> <span class="o">+</span> <span class="n">theta_elliptic</span>
+
+        <span class="k">if</span> <span class="n">use_R</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">+=</span> <span class="p">(</span><span class="n">lamda</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">l</span><span class="o">*</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span>
+
+        <span class="c1"># Add applied current as source in elliptic equation if</span>
+        <span class="c1"># applicable</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_a</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_a</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span>
+
+        <span class="c1"># Add applied stimulus as source in parabolic equation if</span>
+        <span class="c1"># applicable</span>
+        <span class="n">G</span> <span class="o">-=</span> <span class="n">rhs</span>
+
+        <span class="c1"># Define variational problem</span>
+        <span class="n">a</span><span class="p">,</span> <span class="n">L</span> <span class="o">=</span> <span class="n">system</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="n">pde</span> <span class="o">=</span> <span class="n">LinearVariationalProblem</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vur</span><span class="p">)</span>
+
+        <span class="c1"># Set-up solver</span>
+        <span class="n">solver</span> <span class="o">=</span> <span class="n">LinearVariationalSolver</span><span class="p">(</span><span class="n">pde</span><span class="p">)</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;linear_variational_solver&quot;</span><span class="p">])</span>
+        <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="BasicBidomainSolver.default_parameters"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.default_parameters">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">default_parameters</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Initialize and return a set of default parameters</span>
+
+<span class="sd">        *Returns*</span>
+<span class="sd">          A set of parameters (:py:class:`dolfin.Parameters`)</span>
+
+<span class="sd">        To inspect all the default parameters, do::</span>
+
+<span class="sd">          info(BasicBidomainSolver.default_parameters(), True)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;BasicBidomainSolver&quot;</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;theta&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;polynomial_degree&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;use_avg_u_constraint&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LinearVariationalSolver</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">params</span></div></div>
+
+<div class="viewcode-block" id="BidomainSolver"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver">[docs]</a><span class="k">class</span> <span class="nc">BidomainSolver</span><span class="p">(</span><span class="n">BasicBidomainSolver</span><span class="p">):</span>
+    <span class="vm">__doc__</span> <span class="o">=</span> <span class="n">BasicBidomainSolver</span><span class="o">.</span><span class="vm">__doc__</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">I_s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">I_a</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># Call super-class</span>
+        <span class="n">BasicBidomainSolver</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span>
+                                     <span class="n">I_s</span><span class="o">=</span><span class="n">I_s</span><span class="p">,</span> <span class="n">I_a</span><span class="o">=</span><span class="n">I_a</span><span class="p">,</span> <span class="n">v_</span><span class="o">=</span><span class="n">v_</span><span class="p">,</span>
+                                     <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="c1"># Check consistency of parameters first</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dolfin_adjoint</span><span class="p">:</span>
+            <span class="n">warning</span><span class="p">(</span><span class="s2">&quot;&#39;enable_adjoint&#39; is set to True, but no &quot;</span>\
+                    <span class="s2">&quot;dolfin_adjoint installed.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Mark the timestep as unset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timestep</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">linear_solver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The linear solver (:py:class:`dolfin.LUSolver` or</span>
+<span class="sd">        :py:class:`dolfin.PETScKrylovSolver`).&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_linear_solver</span>
+
+    <span class="k">def</span> <span class="nf">_create_linear_solver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Helper function for creating linear solver based on parameters.&quot;</span>
+        <span class="n">solver_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;linear_solver_type&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">solver_type</span> <span class="o">==</span> <span class="s2">&quot;direct&quot;</span><span class="p">:</span>
+            <span class="n">solver</span> <span class="o">=</span> <span class="n">LUSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span><span class="p">)</span>
+            <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;lu_solver&quot;</span><span class="p">])</span>
+            <span class="n">update_routine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_lu_solver</span>
+
+        <span class="k">elif</span> <span class="n">solver_type</span> <span class="o">==</span> <span class="s2">&quot;iterative&quot;</span><span class="p">:</span>
+
+            <span class="c1"># Initialize KrylovSolver with matrix</span>
+            <span class="n">alg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">]</span>
+            <span class="n">prec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;preconditioner&quot;</span><span class="p">]</span>
+
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Creating PETSCKrylovSolver with </span><span class="si">%s</span><span class="s2"> and </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">alg</span><span class="p">,</span> <span class="n">prec</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">prec</span> <span class="o">==</span> <span class="s2">&quot;fieldsplit&quot;</span><span class="p">:</span>
+
+                <span class="c1"># Argh. DOLFIN won&#39;t let you construct a PETScKrylovSolver with fieldsplit. Sigh ..</span>
+                <span class="n">solver</span> <span class="o">=</span> <span class="n">PETScKrylovSolver</span><span class="p">()</span>
+                <span class="c1"># FIXME: work around DOLFIN bug #583. Just deleted this when fixed.</span>
+                <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;convergence_norm_type&quot;</span><span class="p">:</span>
+                                          <span class="s2">&quot;preconditioned&quot;</span><span class="p">})</span>
+                <span class="c1">#solver.parameters[&quot;preconditioner&quot;][&quot;structure&quot;] = &quot;same&quot; # MER this should be set by user, and is below</span>
+                <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;petsc_krylov_solver&quot;</span><span class="p">])</span>
+                <span class="n">solver</span><span class="o">.</span><span class="n">set_operator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span><span class="p">)</span>
+
+                <span class="c1"># Initialize the KSP directly:</span>
+                <span class="n">ksp</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">ksp</span><span class="p">()</span>
+                <span class="n">ksp</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">alg</span><span class="p">)</span>
+                <span class="n">ksp</span><span class="o">.</span><span class="n">pc</span><span class="o">.</span><span class="n">setType</span><span class="p">(</span><span class="n">prec</span><span class="p">)</span>
+                <span class="n">ksp</span><span class="o">.</span><span class="n">setOptionsPrefix</span><span class="p">(</span><span class="s2">&quot;bidomain_&quot;</span><span class="p">)</span> <span class="c1"># it&#39;s really stupid, solver.set_options_prefix() doesn&#39;t work</span>
+
+                <span class="c1"># Set various options (by default) for the fieldsplit</span>
+                <span class="c1"># approach to solving the bidomain equations.</span>
+
+                <span class="c1"># FIXME: This needs a try</span>
+                <span class="kn">from</span> <span class="nn">petsc4py</span> <span class="kn">import</span> <span class="n">PETSc</span>
+
+                <span class="c1"># Patrick believes that the fieldsplit index sets</span>
+                <span class="c1"># should already be set from the assembled matrix.</span>
+
+                <span class="c1"># Now let&#39;s set some default options for the solver.</span>
+                <span class="n">opts</span> <span class="o">=</span> <span class="n">PETSc</span><span class="o">.</span><span class="n">Options</span><span class="p">(</span><span class="s2">&quot;bidomain_&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="s2">&quot;pc_fieldsplit_type&quot;</span>    <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;pc_fieldsplit_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;symmetric_multiplicative&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;fieldsplit_0_ksp_type&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;fieldsplit_0_ksp_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;preonly&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;fieldsplit_1_ksp_type&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;fieldsplit_1_ksp_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;preonly&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;fieldsplit_0_pc_type&quot;</span>  <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;fieldsplit_0_pc_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;hypre&quot;</span>
+                <span class="k">if</span> <span class="s2">&quot;fieldsplit_1_pc_type&quot;</span>  <span class="ow">not</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span> <span class="n">opts</span><span class="p">[</span><span class="s2">&quot;fieldsplit_1_pc_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;hypre&quot;</span>
+
+                <span class="n">ksp</span><span class="o">.</span><span class="n">setFromOptions</span><span class="p">()</span>
+                <span class="n">ksp</span><span class="o">.</span><span class="n">setUp</span><span class="p">()</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">solver</span> <span class="o">=</span> <span class="n">PETScKrylovSolver</span><span class="p">(</span><span class="n">alg</span><span class="p">,</span> <span class="n">prec</span><span class="p">)</span>
+                <span class="n">solver</span><span class="o">.</span><span class="n">set_operator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span><span class="p">)</span>
+                <span class="c1"># Still waiting for that bug fix:</span>
+                <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;convergence_norm_type&quot;</span><span class="p">:</span>
+                                         <span class="s2">&quot;preconditioned&quot;</span><span class="p">})</span>
+                <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;petsc_krylov_solver&quot;</span><span class="p">])</span>
+
+            <span class="c1"># Set nullspace if present. We happen to know that the</span>
+            <span class="c1"># transpose nullspace is the same as the nullspace (easy</span>
+            <span class="c1"># to prove from matrix structure).</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;use_avg_u_constraint&quot;</span><span class="p">]:</span>
+                <span class="c1"># Nothing to do, no null space</span>
+                <span class="k">pass</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># If dolfin-adjoint is enabled and installled: set the solver nullspace</span>
+                <span class="k">if</span> <span class="n">dolfin_adjoint</span><span class="p">:</span>
+                    <span class="n">solver</span><span class="o">.</span><span class="n">set_nullspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nullspace</span><span class="p">)</span>
+                    <span class="n">solver</span><span class="o">.</span><span class="n">set_transpose_nullspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nullspace</span><span class="p">)</span>
+                <span class="c1"># Otherwise, set the nullspace in the operator</span>
+                <span class="c1"># directly.</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">A</span> <span class="o">=</span> <span class="n">as_backend_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span><span class="p">)</span>
+                    <span class="n">A</span><span class="o">.</span><span class="n">set_nullspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nullspace</span><span class="p">)</span>
+
+            <span class="n">update_routine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_krylov_solver</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unknown linear_solver_type given: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">solver_type</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">solver</span><span class="p">,</span> <span class="n">update_routine</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nullspace</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nullspace_basis</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">null_vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vur</span><span class="o">.</span><span class="n">vector</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dofmap</span><span class="p">()</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">null_vector</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">null_vector</span> <span class="o">*=</span> <span class="mf">1.0</span><span class="o">/</span><span class="n">null_vector</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="s2">&quot;l2&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nullspace_basis</span> <span class="o">=</span> <span class="n">VectorSpaceBasis</span><span class="p">([</span><span class="n">null_vector</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nullspace_basis</span>
+
+<div class="viewcode-block" id="BidomainSolver.default_parameters"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver.default_parameters">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">default_parameters</span><span class="p">():</span>
+        <span class="sd">&quot;&quot;&quot;Initialize and return a set of default parameters</span>
+
+<span class="sd">        *Returns*</span>
+<span class="sd">          A set of parameters (:py:class:`dolfin.Parameters`)</span>
+
+<span class="sd">        To inspect all the default parameters, do::</span>
+
+<span class="sd">          info(BidomainSolver.default_parameters(), True)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;BidomainSolver&quot;</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;theta&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;polynomial_degree&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Set default solver type to be iterative</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linear_solver_type&quot;</span><span class="p">,</span> <span class="s2">&quot;iterative&quot;</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;use_avg_u_constraint&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Set default iterative solver choices (used if iterative</span>
+        <span class="c1"># solver is invoked)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;algorithm&quot;</span><span class="p">,</span> <span class="s2">&quot;cg&quot;</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;preconditioner&quot;</span><span class="p">,</span> <span class="s2">&quot;petsc_amg&quot;</span><span class="p">)</span>
+        <span class="c1">#params.add(&quot;preconditioner&quot;, &quot;fieldsplit&quot;) # This seg faults</span>
+
+        <span class="c1"># Add default parameters from both LU and Krylov solvers</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">LUSolver</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">())</span>
+        <span class="n">petsc_params</span> <span class="o">=</span> <span class="n">PETScKrylovSolver</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">()</span>
+        <span class="c1"># FIXME: work around DOLFIN bug #583. Just deleted this when fixed.</span>
+        <span class="n">petsc_params</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;convergence_norm_type&quot;</span><span class="p">:</span> <span class="s2">&quot;preconditioned&quot;</span><span class="p">})</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">petsc_params</span><span class="p">)</span>
+
+        <span class="c1"># Customize default parameters for PETScKrylovSolver</span>
+        <span class="c1">#params[&quot;petsc_krylov_solver&quot;][&quot;preconditioner&quot;][&quot;structure&quot;] = &quot;same&quot;</span>
+
+        <span class="k">return</span> <span class="n">params</span></div>
+
+<div class="viewcode-block" id="BidomainSolver.variational_forms"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver.variational_forms">[docs]</a>    <span class="k">def</span> <span class="nf">variational_forms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k_n</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the variational forms corresponding to the given</span>
+<span class="sd">        discretization of the given system of equations.</span>
+
+<span class="sd">        *Arguments*</span>
+<span class="sd">          k_n (:py:class:`ufl.Expr` or float)</span>
+<span class="sd">            The time step</span>
+
+<span class="sd">        *Returns*</span>
+<span class="sd">          (lhs, rhs) (:py:class:`tuple` of :py:class:`ufl.Form`)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Extract theta parameter and conductivities</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;theta&quot;</span><span class="p">]</span>
+        <span class="n">M_i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_M_i</span>
+        <span class="n">M_e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_M_e</span>
+
+        <span class="c1"># Define variational formulation</span>
+        <span class="n">use_R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;use_avg_u_constraint&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">use_R</span><span class="p">:</span>
+             <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="o">=</span> <span class="n">TrialFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">)</span>
+             <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">lamda</span><span class="p">)</span> <span class="o">=</span> <span class="n">TestFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+             <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span> <span class="o">=</span> <span class="n">TrialFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">)</span>
+             <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="o">=</span> <span class="n">TestFunctions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VUR</span><span class="p">)</span>
+
+        <span class="c1"># Set-up measure and rhs from stimulus</span>
+        <span class="p">(</span><span class="n">dz</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span> <span class="o">=</span> <span class="n">rhs_with_markerwise_field</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+        <span class="c1"># Set-up variational problem</span>
+        <span class="n">Dt_v_k_n</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">v_</span><span class="p">)</span>
+        <span class="n">v_mid</span> <span class="o">=</span> <span class="n">theta</span><span class="o">*</span><span class="n">v</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">v_</span>
+        <span class="n">theta_parabolic</span> <span class="o">=</span> <span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">M_i</span><span class="o">*</span><span class="n">grad</span><span class="p">(</span><span class="n">v_mid</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="n">w</span><span class="p">))</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span>
+                           <span class="o">+</span> <span class="n">inner</span><span class="p">(</span><span class="n">M_i</span><span class="o">*</span><span class="n">grad</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="n">w</span><span class="p">))</span><span class="o">*</span><span class="n">dz</span><span class="p">())</span>
+        <span class="n">theta_elliptic</span> <span class="o">=</span> <span class="p">(</span><span class="n">inner</span><span class="p">(</span><span class="n">M_i</span><span class="o">*</span><span class="n">grad</span><span class="p">(</span><span class="n">v_mid</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="n">q</span><span class="p">))</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span>
+                          <span class="o">+</span> <span class="n">inner</span><span class="p">((</span><span class="n">M_i</span> <span class="o">+</span> <span class="n">M_e</span><span class="p">)</span><span class="o">*</span><span class="n">grad</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">grad</span><span class="p">(</span><span class="n">q</span><span class="p">))</span><span class="o">*</span><span class="n">dz</span><span class="p">())</span>
+
+        <span class="n">G</span> <span class="o">=</span> <span class="p">(</span><span class="n">Dt_v_k_n</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span> <span class="o">+</span> <span class="n">k_n</span><span class="o">*</span><span class="n">theta_parabolic</span> <span class="o">+</span> <span class="n">k_n</span><span class="o">*</span><span class="n">theta_elliptic</span>
+             <span class="o">-</span> <span class="n">k_n</span><span class="o">*</span><span class="n">rhs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">use_R</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">+=</span> <span class="n">k_n</span><span class="o">*</span><span class="p">(</span><span class="n">lamda</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">l</span><span class="o">*</span><span class="n">q</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span>
+
+        <span class="c1"># Add applied current as source in elliptic equation if</span>
+        <span class="c1"># applicable</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_a</span><span class="p">:</span>
+            <span class="n">G</span> <span class="o">-=</span> <span class="n">k_n</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_I_a</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">dz</span><span class="p">()</span>
+
+        <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span> <span class="o">=</span> <span class="n">system</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">L</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="BidomainSolver.step"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Solve on the given time step (t0, t1).</span>
+
+<span class="sd">        *Arguments*</span>
+<span class="sd">          interval (:py:class:`tuple`)</span>
+<span class="sd">            The time interval (t0, t1) for the step</span>
+
+<span class="sd">        *Invariants*</span>
+<span class="sd">          Assuming that v\_ is in the correct state for t0, gives</span>
+<span class="sd">          self.vur in correct state at t1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;PDE step&quot;</span><span class="p">)</span>
+        <span class="n">solver_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;linear_solver_type&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Extract interval and thus time-step</span>
+        <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="o">=</span> <span class="n">interval</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;theta&quot;</span><span class="p">]</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">theta</span><span class="o">*</span><span class="n">dt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="c1"># Update matrix and linear solvers etc as needed</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timestep</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timestep</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rhs</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variational_forms</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timestep</span><span class="p">)</span>
+
+            <span class="c1"># Preassemble left-hand side and initialize right-hand side vector</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Preassembling bidomain matrix (and initializing vector)&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rhs_vector</span> <span class="o">=</span> <span class="n">Vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">mpi_comm</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span><span class="o">.</span><span class="n">init_vector</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rhs_vector</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+            <span class="c1"># Create linear solver (based on parameter choices)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_linear_solver</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_solver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_linear_solver</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">timestep_unchanged</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">dt</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_timestep</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">1.e-12</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_solver</span><span class="p">(</span><span class="n">timestep_unchanged</span><span class="p">,</span> <span class="n">dt</span><span class="p">)</span>
+
+        <span class="c1"># Assemble right-hand-side</span>
+        <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rhs</span><span class="p">,</span> <span class="n">tensor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_rhs_vector</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span><span class="p">)</span>
+
+        <span class="c1"># Solve problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">linear_solver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vur</span><span class="o">.</span><span class="n">vector</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rhs_vector</span><span class="p">,</span>
+                                 <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_update_lu_solver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestep_unchanged</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper function for updating an LUSolver depending on</span>
+<span class="sd">        whether timestep has changed.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Update reuse of factorization parameter in accordance with</span>
+        <span class="c1"># changes in timestep</span>
+        <span class="k">if</span> <span class="n">timestep_unchanged</span><span class="p">:</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Timestep is unchanged, reusing LU factorization&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Timestep has changed, updating LU factorization&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dolfin_adjoint</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dolfin-adjoint doesn&#39;t support changing timestep (yet)&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Update stored timestep</span>
+            <span class="c1"># FIXME: dolfin_adjoint still can&#39;t annotate constant assignment.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timestep</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span><span class="c1">#, annotate=annotate)</span>
+
+            <span class="c1"># Reassemble matrix</span>
+            <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs</span><span class="p">,</span> <span class="n">tensor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span><span class="p">,</span>
+                     <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span><span class="p">)</span>
+
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_solver</span><span class="p">,</span> <span class="n">dummy</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_linear_solver</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_update_krylov_solver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestep_unchanged</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Helper function for updating a KrylovSolver depending on</span>
+<span class="sd">        whether timestep has changed.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Update reuse of preconditioner parameter in accordance with</span>
+        <span class="c1"># changes in timestep</span>
+        <span class="k">if</span> <span class="n">timestep_unchanged</span><span class="p">:</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Timestep is unchanged, reusing preconditioner&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Timestep has changed, updating preconditioner&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dolfin_adjoint</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;dolfin-adjoint doesn&#39;t support changing timestep (yet)&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Update stored timestep</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timestep</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">Constant</span><span class="p">(</span><span class="n">dt</span><span class="p">))</span><span class="c1">#, annotate=annotate)</span>
+
+            <span class="c1"># Reassemble matrix</span>
+            <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs</span><span class="p">,</span> <span class="n">tensor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_lhs_matrix</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span><span class="p">)</span>
+
+            <span class="c1"># Make new Krylov solver</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_linear_solver</span><span class="p">,</span> <span class="n">dummy</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_linear_solver</span><span class="p">()</span>
+
+        <span class="c1"># Set nonzero initial guess if it indeed is nonzero</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vur</span><span class="o">.</span><span class="n">vector</span><span class="p">()</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="s2">&quot;l2&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1.e-12</span><span class="p">):</span>
+            <span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Initial guess is non-zero.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">linear_solver</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nonzero_initial_guess&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span></div>
+</pre></div>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+            &copy; Copyright 2014--2017, ME Rognes, J Hake, PE Farrell, SW Funke.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

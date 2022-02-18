@@ -1,0 +1,1046 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1.1.1. cbcbeat.cellmodels package &#8212; cbcbeat 1.0 documentation</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet">
+  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    
+  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="1. cbcbeat package" href="cbcbeat.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">cbcbeat 1.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="cbcbeat.html">
+   1. cbcbeat package
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     1.1.1. cbcbeat.cellmodels package
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/cbcbeat.cellmodels.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#submodules">
+   1.1.1.1. Submodules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.beeler_reuter_1977">
+   1.1.1.2. cbcbeat.cellmodels.beeler_reuter_1977 module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.cardiaccellmodel">
+   1.1.1.3. cbcbeat.cellmodels.cardiaccellmodel module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.fenton_karma_1998_BR_altered">
+   1.1.1.4. cbcbeat.cellmodels.fenton_karma_1998_BR_altered module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered">
+   1.1.1.5. cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.fitzhughnagumo">
+   1.1.1.6. cbcbeat.cellmodels.fitzhughnagumo module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.fitzhughnagumo_manual">
+   1.1.1.7. cbcbeat.cellmodels.fitzhughnagumo_manual module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.grandi_pasqualini_bers_2010">
+   1.1.1.8. cbcbeat.cellmodels.grandi_pasqualini_bers_2010 module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.nocellmodel">
+   1.1.1.9. cbcbeat.cellmodels.nocellmodel module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.rogers_mcculloch_manual">
+   1.1.1.10. cbcbeat.cellmodels.rogers_mcculloch_manual module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.tentusscher_2004_mcell">
+   1.1.1.11. cbcbeat.cellmodels.tentusscher_2004_mcell module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.tentusscher_2004_mcell_cont">
+   1.1.1.12. cbcbeat.cellmodels.tentusscher_2004_mcell_cont module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.tentusscher_2004_mcell_disc">
+   1.1.1.13. cbcbeat.cellmodels.tentusscher_2004_mcell_disc module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell">
+   1.1.1.14. cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell">
+   1.1.1.15. cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-cbcbeat.cellmodels">
+   1.1.1.16. Module contents
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="cbcbeat-cellmodels-package">
+<h1><span class="section-number">1.1.1. </span>cbcbeat.cellmodels package<a class="headerlink" href="#cbcbeat-cellmodels-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2><span class="section-number">1.1.1.1. </span>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.beeler_reuter_1977">
+<span id="cbcbeat-cellmodels-beeler-reuter-1977-module"></span><h2><span class="section-number">1.1.1.2. </span>cbcbeat.cellmodels.beeler_reuter_1977 module<a class="headerlink" href="#module-cbcbeat.cellmodels.beeler_reuter_1977" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Beeler_reuter_1977 cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.beeler_reuter_1977.</span></span><span class="sig-name descname"><span class="pre">Beeler_reuter_1977</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/beeler_reuter_1977.html#Beeler_reuter_1977"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/beeler_reuter_1977.html#Beeler_reuter_1977.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/beeler_reuter_1977.html#Beeler_reuter_1977.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/beeler_reuter_1977.html#Beeler_reuter_1977.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/beeler_reuter_1977.html#Beeler_reuter_1977.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/beeler_reuter_1977.html#Beeler_reuter_1977.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.beeler_reuter_1977.Beeler_reuter_1977.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.cardiaccellmodel">
+<span id="cbcbeat-cellmodels-cardiaccellmodel-module"></span><h2><span class="section-number">1.1.1.3. </span>cbcbeat.cellmodels.cardiaccellmodel module<a class="headerlink" href="#module-cbcbeat.cellmodels.cardiaccellmodel" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a base class for cardiac cell models.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.</span></span><span class="sig-name descname"><span class="pre">CardiacCellModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for cardiac cell models. Specialized cell models should
+subclass this class.</p>
+<p>Essentially, a cell model represents a system of ordinary
+differential equations. A cell model is here described by two
+(Python) functions, named F and I. The model describes the
+behaviour of the transmembrane potential ‘v’ and a number of state
+variables ‘s’</p>
+<p>The function F gives the right-hand side for the evolution of the
+state variables:</p>
+<blockquote>
+<div><p>d/dt s = F(v, s)</p>
+</div></blockquote>
+<p>The function I gives the ionic current. If a single cell is
+considered, I gives the (negative) right-hand side for the
+evolution of the transmembrane potential</p>
+<p>(*)  d/dt v = - I(v, s)</p>
+<p>If used in a bidomain setting, the ionic current I enters into the
+parabolic partial differential equation of the bidomain equations.</p>
+<p>If a stimulus is provided via</p>
+<blockquote>
+<div><p>cell = CardiacCellModel()
+cell.stimulus = Expression(“I_s(t)”, degree=1)</p>
+</div></blockquote>
+<p>then I_s is added to the right-hand side of (*), which thus reads</p>
+<blockquote>
+<div><p>d/dt v = - I(v, s) + I_s</p>
+</div></blockquote>
+<p>Note that the cardiac cell model stimulus is ignored when the cell
+model is used a spatially-varying setting (for instance in the
+bidomain setting). In this case, the user is expected to specify a
+stimulus for the cardiac model instead.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return right-hand side for state variable evolution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ionic current.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.initial_conditions">
+<span class="sig-name descname"><span class="pre">initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return initial conditions for v and s as an Expression.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.parameters">
+<span class="sig-name descname"><span class="pre">parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.set_initial_conditions">
+<span class="sig-name descname"><span class="pre">set_initial_conditions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">init</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.set_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.set_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update initial_conditions in model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.set_parameters">
+<span class="sig-name descname"><span class="pre">set_parameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#CardiacCellModel.set_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update parameters in model</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.</span></span><span class="sig-name descname"><span class="pre">MultiCellModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">models</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">markers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return right-hand side for state variable evolution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ionic current.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.initial_conditions">
+<span class="sig-name descname"><span class="pre">initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return initial conditions for v and s as a dolfin.GenericFunction.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.keys"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.markers">
+<span class="sig-name descname"><span class="pre">markers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.markers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.markers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.mesh">
+<span class="sig-name descname"><span class="pre">mesh</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.mesh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.mesh" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.models">
+<span class="sig-name descname"><span class="pre">models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.models" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.num_models">
+<span class="sig-name descname"><span class="pre">num_models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.num_models"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.num_models" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/cardiaccellmodel.html#MultiCellModel.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.fenton_karma_1998_BR_altered">
+<span id="cbcbeat-cellmodels-fenton-karma-1998-br-altered-module"></span><h2><span class="section-number">1.1.1.4. </span>cbcbeat.cellmodels.fenton_karma_1998_BR_altered module<a class="headerlink" href="#module-cbcbeat.cellmodels.fenton_karma_1998_BR_altered" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Fenton_karma_1998_BR_altered cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.fenton_karma_1998_BR_altered.</span></span><span class="sig-name descname"><span class="pre">Fenton_karma_1998_BR_altered</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_BR_altered.html#Fenton_karma_1998_BR_altered"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_BR_altered.html#Fenton_karma_1998_BR_altered.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_BR_altered.html#Fenton_karma_1998_BR_altered.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_BR_altered.html#Fenton_karma_1998_BR_altered.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_BR_altered.html#Fenton_karma_1998_BR_altered.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_BR_altered.html#Fenton_karma_1998_BR_altered.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_BR_altered.Fenton_karma_1998_BR_altered.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered">
+<span id="cbcbeat-cellmodels-fenton-karma-1998-mlr1-altered-module"></span><h2><span class="section-number">1.1.1.5. </span>cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered module<a class="headerlink" href="#module-cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Fenton_karma_1998_MLR-1_altered cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.</span></span><span class="sig-name descname"><span class="pre">Fenton_karma_1998_MLR1_altered</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_MLR1_altered.html#Fenton_karma_1998_MLR1_altered"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_MLR1_altered.html#Fenton_karma_1998_MLR1_altered.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_MLR1_altered.html#Fenton_karma_1998_MLR1_altered.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_MLR1_altered.html#Fenton_karma_1998_MLR1_altered.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_MLR1_altered.html#Fenton_karma_1998_MLR1_altered.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fenton_karma_1998_MLR1_altered.html#Fenton_karma_1998_MLR1_altered.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered.Fenton_karma_1998_MLR1_altered.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.fitzhughnagumo">
+<span id="cbcbeat-cellmodels-fitzhughnagumo-module"></span><h2><span class="section-number">1.1.1.6. </span>cbcbeat.cellmodels.fitzhughnagumo module<a class="headerlink" href="#module-cbcbeat.cellmodels.fitzhughnagumo" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Fitzhughnagumo cardiac cell model</p>
+<p>The module was autogenerated from a gotran form file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.fitzhughnagumo.</span></span><span class="sig-name descname"><span class="pre">Fitzhughnagumo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo.html#Fitzhughnagumo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<p>NOT_IMPLEMENTED</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo.html#Fitzhughnagumo.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo.html#Fitzhughnagumo.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo.html#Fitzhughnagumo.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo.html#Fitzhughnagumo.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo.html#Fitzhughnagumo.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo.Fitzhughnagumo.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.fitzhughnagumo_manual">
+<span id="cbcbeat-cellmodels-fitzhughnagumo-manual-module"></span><h2><span class="section-number">1.1.1.7. </span>cbcbeat.cellmodels.fitzhughnagumo_manual module<a class="headerlink" href="#module-cbcbeat.cellmodels.fitzhughnagumo_manual" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a FitzHugh-Nagumo cardiac cell model</p>
+<p>The module was written by hand, in particular it was not
+autogenerated.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.fitzhughnagumo_manual.</span></span><span class="sig-name descname"><span class="pre">FitzHughNagumoManual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo_manual.html#FitzHughNagumoManual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<p>A reparametrized FitzHughNagumo model, based on Section 2.4.1 in
+“Computing the electrical activity in the heart” by Sundnes et al,
+2006.</p>
+<p>This is a model containing two nonlinear, ODEs for the evolution
+of the transmembrane potential v and one additional state variable
+s.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo_manual.html#FitzHughNagumoManual.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return right-hand side for state variable evolution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo_manual.html#FitzHughNagumoManual.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ionic current.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo_manual.html#FitzHughNagumoManual.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo_manual.html#FitzHughNagumoManual.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/fitzhughnagumo_manual.html#FitzHughNagumoManual.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.fitzhughnagumo_manual.FitzHughNagumoManual.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.grandi_pasqualini_bers_2010">
+<span id="cbcbeat-cellmodels-grandi-pasqualini-bers-2010-module"></span><h2><span class="section-number">1.1.1.8. </span>cbcbeat.cellmodels.grandi_pasqualini_bers_2010 module<a class="headerlink" href="#module-cbcbeat.cellmodels.grandi_pasqualini_bers_2010" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Grandi_pasqualini_bers_2010 cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.grandi_pasqualini_bers_2010.</span></span><span class="sig-name descname"><span class="pre">Grandi_pasqualini_bers_2010</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/grandi_pasqualini_bers_2010.html#Grandi_pasqualini_bers_2010"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/grandi_pasqualini_bers_2010.html#Grandi_pasqualini_bers_2010.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/grandi_pasqualini_bers_2010.html#Grandi_pasqualini_bers_2010.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/grandi_pasqualini_bers_2010.html#Grandi_pasqualini_bers_2010.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/grandi_pasqualini_bers_2010.html#Grandi_pasqualini_bers_2010.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/grandi_pasqualini_bers_2010.html#Grandi_pasqualini_bers_2010.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.grandi_pasqualini_bers_2010.Grandi_pasqualini_bers_2010.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.nocellmodel">
+<span id="cbcbeat-cellmodels-nocellmodel-module"></span><h2><span class="section-number">1.1.1.9. </span>cbcbeat.cellmodels.nocellmodel module<a class="headerlink" href="#module-cbcbeat.cellmodels.nocellmodel" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a dummy cardiac cell model.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.nocellmodel.NoCellModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.nocellmodel.</span></span><span class="sig-name descname"><span class="pre">NoCellModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/nocellmodel.html#NoCellModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.nocellmodel.NoCellModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<p>Class representing no cell model (only bidomain equations). It
+actually just represents a single completely decoupled ODE.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.nocellmodel.NoCellModel.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/nocellmodel.html#NoCellModel.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.nocellmodel.NoCellModel.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return right-hand side for state variable evolution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.nocellmodel.NoCellModel.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/nocellmodel.html#NoCellModel.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.nocellmodel.NoCellModel.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ionic current.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.nocellmodel.NoCellModel.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/nocellmodel.html#NoCellModel.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.nocellmodel.NoCellModel.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.nocellmodel.NoCellModel.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/nocellmodel.html#NoCellModel.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.nocellmodel.NoCellModel.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.rogers_mcculloch_manual">
+<span id="cbcbeat-cellmodels-rogers-mcculloch-manual-module"></span><h2><span class="section-number">1.1.1.10. </span>cbcbeat.cellmodels.rogers_mcculloch_manual module<a class="headerlink" href="#module-cbcbeat.cellmodels.rogers_mcculloch_manual" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Rogers-McCulloch cardiac cell model which is
+a modified version of the FitzHughNagumo model.</p>
+<p>This formulation is based on the description on page 2 of “Optimal
+control approach …” by Nagaiah, Kunisch and Plank, 2013, J Math
+Biol.</p>
+<p>The module was written by hand, in particular it was not
+autogenerated.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.rogers_mcculloch_manual.</span></span><span class="sig-name descname"><span class="pre">RogersMcCulloch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/rogers_mcculloch_manual.html#RogersMcCulloch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl>
+<dt>The Rogers-McCulloch model is a modified FitzHughNagumo model. This</dt><dd><p>formulation follows the description on page 2 of “Optimal control
+approach …” by Nagaiah, Kunisch and Plank, 2013, J Math Biol
+with w replaced by s. Note that this model introduces one
+additional parameter compared to the original 1994
+Rogers-McCulloch model.</p>
+<p>This is a model containing two nonlinear, ODEs for the evolution
+of the transmembrane potential v and one additional state variable
+s:</p>
+<div class="math notranslate nohighlight">
+\[\]</div>
+</dd>
+</dl>
+<p>rac{dv}{dt} = - I_{ion}(v, s)</p>
+<p>rac{ds}{dt} = F(v, s)</p>
+<blockquote>
+<div><p>where</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}I_{ion}(v, s) = g v (1 - v/v_th)(1 - v/v_p) + \eta_1 v s\\    F(v, s) = \eta_2  (v/vp - \eta_3 s)\end{aligned}\end{align} \]</div>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/rogers_mcculloch_manual.html#RogersMcCulloch.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return right-hand side for state variable evolution.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/rogers_mcculloch_manual.html#RogersMcCulloch.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ionic current.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/rogers_mcculloch_manual.html#RogersMcCulloch.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/rogers_mcculloch_manual.html#RogersMcCulloch.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/rogers_mcculloch_manual.html#RogersMcCulloch.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.tentusscher_2004_mcell">
+<span id="cbcbeat-cellmodels-tentusscher-2004-mcell-module"></span><h2><span class="section-number">1.1.1.11. </span>cbcbeat.cellmodels.tentusscher_2004_mcell module<a class="headerlink" href="#module-cbcbeat.cellmodels.tentusscher_2004_mcell" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Tentusscher_2004_mcell cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.tentusscher_2004_mcell.</span></span><span class="sig-name descname"><span class="pre">Tentusscher_2004_mcell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell.html#Tentusscher_2004_mcell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<p>NOT_IMPLEMENTED</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell.html#Tentusscher_2004_mcell.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell.html#Tentusscher_2004_mcell.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell.html#Tentusscher_2004_mcell.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell.html#Tentusscher_2004_mcell.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell.html#Tentusscher_2004_mcell.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell.Tentusscher_2004_mcell.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.tentusscher_2004_mcell_cont">
+<span id="cbcbeat-cellmodels-tentusscher-2004-mcell-cont-module"></span><h2><span class="section-number">1.1.1.12. </span>cbcbeat.cellmodels.tentusscher_2004_mcell_cont module<a class="headerlink" href="#module-cbcbeat.cellmodels.tentusscher_2004_mcell_cont" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Tentusscher_2004_mcell_cont cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.tentusscher_2004_mcell_cont.</span></span><span class="sig-name descname"><span class="pre">Tentusscher_2004_mcell_cont</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_cont.html#Tentusscher_2004_mcell_cont"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_cont.html#Tentusscher_2004_mcell_cont.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_cont.html#Tentusscher_2004_mcell_cont.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_cont.html#Tentusscher_2004_mcell_cont.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_cont.html#Tentusscher_2004_mcell_cont.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_cont.html#Tentusscher_2004_mcell_cont.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_cont.Tentusscher_2004_mcell_cont.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.tentusscher_2004_mcell_disc">
+<span id="cbcbeat-cellmodels-tentusscher-2004-mcell-disc-module"></span><h2><span class="section-number">1.1.1.13. </span>cbcbeat.cellmodels.tentusscher_2004_mcell_disc module<a class="headerlink" href="#module-cbcbeat.cellmodels.tentusscher_2004_mcell_disc" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Tentusscher_2004_mcell_disc cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.tentusscher_2004_mcell_disc.</span></span><span class="sig-name descname"><span class="pre">Tentusscher_2004_mcell_disc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_disc.html#Tentusscher_2004_mcell_disc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_disc.html#Tentusscher_2004_mcell_disc.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_disc.html#Tentusscher_2004_mcell_disc.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_disc.html#Tentusscher_2004_mcell_disc.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_disc.html#Tentusscher_2004_mcell_disc.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_2004_mcell_disc.html#Tentusscher_2004_mcell_disc.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_2004_mcell_disc.Tentusscher_2004_mcell_disc.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell">
+<span id="cbcbeat-cellmodels-tentusscher-panfilov-2006-m-cell-module"></span><h2><span class="section-number">1.1.1.14. </span>cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell module<a class="headerlink" href="#module-cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Tentusscher_panfilov_2006_M_cell cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.</span></span><span class="sig-name descname"><span class="pre">Tentusscher_panfilov_2006_M_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_M_cell.html#Tentusscher_panfilov_2006_M_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_M_cell.html#Tentusscher_panfilov_2006_M_cell.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_M_cell.html#Tentusscher_panfilov_2006_M_cell.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_M_cell.html#Tentusscher_panfilov_2006_M_cell.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_M_cell.html#Tentusscher_panfilov_2006_M_cell.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_M_cell.html#Tentusscher_panfilov_2006_M_cell.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell.Tentusscher_panfilov_2006_M_cell.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell">
+<span id="cbcbeat-cellmodels-tentusscher-panfilov-2006-epi-cell-module"></span><h2><span class="section-number">1.1.1.15. </span>cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell module<a class="headerlink" href="#module-cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a Tentusscher_panfilov_2006_epi_cell cardiac cell model</p>
+<p>The module was autogenerated from a gotran ode file</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.</span></span><span class="sig-name descname"><span class="pre">Tentusscher_panfilov_2006_epi_cell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_conditions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_epi_cell.html#Tentusscher_panfilov_2006_epi_cell"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel" title="cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.F">
+<span class="sig-name descname"><span class="pre">F</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_epi_cell.html#Tentusscher_panfilov_2006_epi_cell.F"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>Right hand side for ODE system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.I">
+<span class="sig-name descname"><span class="pre">I</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_epi_cell.html#Tentusscher_panfilov_2006_epi_cell.I"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.I" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transmembrane current</p>
+<blockquote>
+<div><p>I = -dV/dt</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.default_initial_conditions">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_initial_conditions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_epi_cell.html#Tentusscher_panfilov_2006_epi_cell.default_initial_conditions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.default_initial_conditions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default initial conditions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.default_parameters">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_parameters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_epi_cell.html#Tentusscher_panfilov_2006_epi_cell.default_parameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.default_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set-up and return default parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.num_states">
+<span class="sig-name descname"><span class="pre">num_states</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cbcbeat/cellmodels/tentusscher_panfilov_2006_epi_cell.html#Tentusscher_panfilov_2006_epi_cell.num_states"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell.Tentusscher_panfilov_2006_epi_cell.num_states" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of state variables (in addition to the
+membrane potential).</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cbcbeat.cellmodels">
+<span id="module-contents"></span><h2><span class="section-number">1.1.1.16. </span>Module contents<a class="headerlink" href="#module-cbcbeat.cellmodels" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="cbcbeat.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><span class="section-number">1. </span>cbcbeat package</p>
+        </div>
+    </a>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+            &copy; Copyright 2014--2017, ME Rognes, J Hake, PE Farrell, SW Funke.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

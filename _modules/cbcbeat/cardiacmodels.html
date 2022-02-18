@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cbcbeat.cardiacmodels &#8212; cbcbeat 1.0 documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">cbcbeat 1.0 documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../cbcbeat.html">
+   1. cbcbeat package
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../cbcbeat.cellmodels.html">
+     1.1.1. cbcbeat.cellmodels package
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+            <!-- Source interaction buttons -->
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <h1>Source code for cbcbeat.cardiacmodels</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module contains a container class for cardiac models:</span>
+<span class="sd">:py:class:`~cbcbeat.cardiacmodels.CardiacModel`.  This class</span>
+<span class="sd">should be instantiated for setting up specific cardiac simulation</span>
+<span class="sd">scenarios.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Copyright (C) 2012 Marie E. Rognes (meg@simula.no)</span>
+<span class="c1"># Use and modify at will</span>
+<span class="c1"># Last changed: 2016-04-21</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CardiacModel&quot;</span><span class="p">]</span>
+
+<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">,</span> <span class="n">error</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.markerwisefield</span> <span class="kn">import</span> <span class="n">Markerwise</span><span class="p">,</span> <span class="n">handle_markerwise</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.cellmodels</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># ------------------------------------------------------------------------------</span>
+<span class="c1"># Cardiac models</span>
+<span class="c1"># ------------------------------------------------------------------------------</span>
+
+<div class="viewcode-block" id="CardiacModel"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel">[docs]</a><span class="k">class</span> <span class="nc">CardiacModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A container class for cardiac models. Objects of this class</span>
+<span class="sd">    represent a specific cardiac simulation set-up and should provide</span>
+
+<span class="sd">    * A computational domain</span>
+<span class="sd">    * A cardiac cell model</span>
+<span class="sd">    * Intra-cellular and extra-cellular conductivities</span>
+<span class="sd">    * Various forms of stimulus (optional).</span>
+
+<span class="sd">    This container class is designed for use with the splitting</span>
+<span class="sd">    solvers (:py:mod:`cbcbeat.splittingsolver`), see their</span>
+<span class="sd">    documentation for more information on how the attributes are</span>
+<span class="sd">    interpreted in that context.</span>
+
+<span class="sd">    *Arguments*</span>
+<span class="sd">      domain (:py:class:`dolfin.Mesh`)</span>
+<span class="sd">        the computational domain in space</span>
+<span class="sd">      time (:py:class:`dolfin.Constant` or None )</span>
+<span class="sd">        A constant holding the current time.</span>
+<span class="sd">      M_i (:py:class:`ufl.Expr`)</span>
+<span class="sd">        the intra-cellular conductivity as an ufl Expression</span>
+<span class="sd">      M_e (:py:class:`ufl.Expr`)</span>
+<span class="sd">        the extra-cellular conductivity as an ufl Expression</span>
+<span class="sd">      cell_models (:py:class:`~cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel`)</span>
+<span class="sd">        a cell model or a dict with cell models associated with a cell model domain</span>
+<span class="sd">      stimulus (:py:class:`dict`, optional)</span>
+<span class="sd">        A typically time-dependent external stimulus given as a dict,</span>
+<span class="sd">        with domain markers as the key and a</span>
+<span class="sd">        :py:class:`dolfin.Expression` as values. NB: it is assumed</span>
+<span class="sd">        that the time dependence of I_s is encoded via the &#39;time&#39;</span>
+<span class="sd">        Constant.</span>
+<span class="sd">      applied_current (:py:class:`ufl.Expr`, optional)</span>
+<span class="sd">        an applied current as an ufl Expression</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span>
+                 <span class="n">stimulus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">applied_current</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="s2">&quot;Create CardiacModel from given input.&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle_input</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span>
+                           <span class="n">stimulus</span><span class="p">,</span> <span class="n">applied_current</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span>
+                      <span class="n">stimulus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">applied_current</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># Check input and store attributes</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Expecting domain to be a Mesh instance, not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">domain</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">),</span> <span class="n">msg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_domain</span> <span class="o">=</span> <span class="n">domain</span>
+
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Expecting time to be a Constant instance, not </span><span class="si">%r</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">time</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">Constant</span><span class="p">)</span> <span class="ow">or</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="n">msg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_intracellular_conductivity</span> <span class="o">=</span> <span class="n">M_i</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extracellular_conductivity</span> <span class="o">=</span> <span class="n">M_e</span>
+
+        <span class="c1"># Handle cell_models</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cell_models</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">cell_models</span><span class="p">,</span> <span class="n">CardiacCellModel</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cell_models</span><span class="p">,</span> <span class="n">Markerwise</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Different cell_models are currently not supported.&quot;</span>
+            <span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Handle stimulus</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stimulus</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">stimulus</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)</span>
+
+        <span class="c1"># Handle applied current</span>
+        <span class="n">ac</span> <span class="o">=</span> <span class="n">applied_current</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_applied_current</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CardiacModel.applied_current"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.applied_current">[docs]</a>    <span class="k">def</span> <span class="nf">applied_current</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;An applied current: used as a source in the elliptic bidomain equation&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_applied_current</span></div>
+
+<div class="viewcode-block" id="CardiacModel.stimulus"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.stimulus">[docs]</a>    <span class="k">def</span> <span class="nf">stimulus</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;A stimulus: used as a source in the parabolic bidomain equation&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stimulus</span></div>
+
+<div class="viewcode-block" id="CardiacModel.conductivities"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.conductivities">[docs]</a>    <span class="k">def</span> <span class="nf">conductivities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the intracellular and extracellular conductivities</span>
+<span class="sd">        as a tuple of UFL Expressions.</span>
+
+<span class="sd">        *Returns*</span>
+<span class="sd">        (M_i, M_e) (:py:class:`tuple` of :py:class:`ufl.Expr`)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intracellular_conductivity</span><span class="p">(),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">extracellular_conductivity</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="CardiacModel.intracellular_conductivity"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.intracellular_conductivity">[docs]</a>    <span class="k">def</span> <span class="nf">intracellular_conductivity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;The intracellular conductivity (:py:class:`ufl.Expr`).&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_intracellular_conductivity</span></div>
+
+<div class="viewcode-block" id="CardiacModel.extracellular_conductivity"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.extracellular_conductivity">[docs]</a>    <span class="k">def</span> <span class="nf">extracellular_conductivity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;The intracellular conductivity (:py:class:`ufl.Expr`).&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extracellular_conductivity</span></div>
+
+<div class="viewcode-block" id="CardiacModel.time"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.time">[docs]</a>    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;The current time (:py:class:`dolfin.Constant` or None).&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span></div>
+
+<div class="viewcode-block" id="CardiacModel.domain"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.domain">[docs]</a>    <span class="k">def</span> <span class="nf">domain</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;The spatial domain (:py:class:`dolfin.Mesh`).&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_domain</span></div>
+
+<div class="viewcode-block" id="CardiacModel.cell_models"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.cell_models">[docs]</a>    <span class="k">def</span> <span class="nf">cell_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Return the cell models&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cell_models</span></div></div>
+</pre></div>
+
+              </div>
+              
+        
+            <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+        
+        </div>
+    </div>
+    <footer class="footer">
+    <div class="container">
+      <p>
+        
+            &copy; Copyright 2014--2017, ME Rognes, J Hake, PE Farrell, SW Funke.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>
