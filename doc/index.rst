@@ -32,9 +32,9 @@ cbcbeat originates from the `Center for Biomedical Computing
 Installation and dependencies:
 ==============================
 
-The cbcbeat source code is hosted on Bitbucket:
+The cbcbeat source code is hosted on GitHub:
 
-  https://bitbucket.org/meg/cbcbeat
+  https://github.com/ComputationalPhysiology/cbcbeat
 
 The cbcbeat solvers are based on the `FEniCS Project
 <http://www.fenicsproject.org>`__ finite element library and its
@@ -79,20 +79,19 @@ available in the test/ directory of the cbcbeat source. See the
 INSTALL file in the root directory of the cbcbeat source for how to
 run the tests.
 
-cbcbeat uses Bitbucket Pipelines for automated and continuous testing,
+cbcbeat uses GitHub issues for automated and continuous testing,
 see the current test status of cbcbeat here:
  
-  https://bitbucket.org/meg/cbcbeat/addon/pipelines/home
-
+  https://github.com/ComputationalPhysiology/cbcbeat/issues
   
 Contributions:
 ==============
 
 Contributions to cbcbeat are very welcome. If you are interested in
 improving or extending the software please `contact us
-<https://bitbucket.org/meg/cbcbeat>`__ via the issues or pull requests
-on Bitbucket. Similarly, please `report
-<https://bitbucket.org/meg/cbcbeat/issues>`__ issues via Bitbucket.
+<https://github.com/ComputationalPhysiology/cbcbeat>`__ via the issues or pull requests
+on GitHub. Similarly, please `report
+<https://github.com/ComputationalPhysiology/cbcbeat/issues>`__ issues via GitHub.
 
 Documentation:
 ==============
