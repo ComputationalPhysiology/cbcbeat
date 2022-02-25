@@ -7,6 +7,8 @@ __all__ = ["state_space", "end_of_time", "convergence_rate",
 
 import math
 from cbcbeat.dolfinimport import dolfin, dolfin_adjoint
+from dolfin.cpp.log import log, LogLevel
+
 if dolfin_adjoint:
     from dolfin_adjoint import assemble, LUSolver, KrylovSolver
     from dolfin import parameters
@@ -231,15 +233,17 @@ class Projecter(object):
         assert(solver_type == "lu" or solver_type == "cg"),  \
             "Expecting 'linear_solver_type' to be 'lu' or 'cg'"
         if solver_type == "lu":
-            dolfin.debug("Setting up direct solver for projecter")
+            log(LogLevel.TRACE, "Setting up direct solver for projecter")
+
             # Customize LU solver (reuse everything)
             solver = LUSolver(self.M)
         else:
-            dolfin.debug("Setting up iterative solver for projecter")
+            log(LogLevel.TRACE, "Setting up iterative solver for projecter")
             # Customize Krylov solver (reuse everything)
             solver = KrylovSolver("cg", "ilu")
             solver.set_operator(self.M)
-            solver.parameters["preconditioner"]["structure"] = "same"
+            if solver.parameters.has_parameter("preconditioner"):
+                solver.parameters["preconditioner"]["structure"] = "same"
             # solver.parameters["nonzero_initial_guess"] = True
         self.solver = solver
 

@@ -166,6 +166,9 @@ class MultiCellModel(CardiacCellModel):
 
         self._num_states = max(c.num_states() for c in self._cell_models)
 
+    def __getitem__(self, key):
+        return self.models()[self._key_to_cell_model[key]]
+
     def models(self):
         return self._cell_models
 

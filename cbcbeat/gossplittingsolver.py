@@ -10,10 +10,13 @@ import numpy as np
 import types
 
 from dolfin import *
+from dolfin.cpp.log import log, LogLevel
 
 # Goss and Gotran imports
 import goss
 import gotran
+
+from goss.dolfinutils import DOLFINODESystemSolver
 
 #if "DOLFINODESystemSolver" not in goss.__dict__:
 #    raise ImportError("goss could not import DOLFINODESystemSolver")
@@ -40,8 +43,8 @@ class GOSSplittingSolver:
             self.parameters.update(params)
 
         # Extract solution domain and time
-        self._domain = self._model.domain
-        self._time = self._model.time
+        self._domain = self._model.domain()
+        self._time = self._model.time()
 
         # Create PDE solver and extract solution fields
         self.pde_solver = self._create_pde_solver()
@@ -77,10 +80,15 @@ class GOSSplittingSolver:
         params.add("apply_stimulus_current_to_pde", False)
         params.add("enable_adjoint", False)
         params.add("theta", 0.5, 0, 1)
-        params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
+        try:
+            params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
+        except:
+            params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
+            pass
+
 
         # Add default parameters from ODE solver
-        ode_solver_params = goss.DOLFINODESystemSolver.default_parameters()
+        ode_solver_params = DOLFINODESystemSolver.default_parameters_dolfin()
         ode_solver_params.rename("ode_solver")
         #ode_solver_params.add("membrane_potential", "V")
         params.add(ode_solver_params)
@@ -105,9 +113,10 @@ class GOSSplittingSolver:
         # Extract applied current from the cardiac model (stimulus
         # invoked in the ODE step)
         applied_current = self._model.applied_current
+
         # Extract stimulus from the cardiac model(!)
-        if self.parameters.apply_stimulus_current_to_pde:
-            stimulus = self._model.stimulus
+        if self.parameters["apply_stimulus_current_to_pde"]:
+            stimulus = self._model.stimulus()
         else:
             stimulus = None
 
@@ -126,7 +135,7 @@ class GOSSplittingSolver:
             kwargs = dict(I_s=stimulus, params=params)
 
         # Propagate enable_adjoint to Bidomain solver
-        if params.has_key("enable_adjoint"):
+        if params.has_parameter("enable_adjoint"):
             params["enable_adjoint"] = self.parameters["enable_adjoint"]
 
         solver = PDESolver(*args, **kwargs)
@@ -138,25 +147,13 @@ class GOSSplittingSolver:
         the cardiac model."""
 
         # Extract cardiac cell model from cardiac model
-        cell_models = self._model.cell_models
-
-        # Expects a goss.ODE model
-        assert(isinstance(cell_models, dict))
-        assert(all(isinstance(cell_model, goss.ODE)
-                   for cell_model in cell_models.values()))
-
-        for cell_model in cell_models.values():
-            assert cell_model.num_field_states()==1, \
-                   "Expected only one field state in the cell model"
-            # assert cell_model.get_field_state_names()[0] == \
-            #        self.parameters["ode_solver"]["membrane_potential"], \
-            #        "Expected field state of cell model to be %s" % \
-            #        self.parameters["ode_solver"]["membrane_potential"]
+        cell_models = self._model.cell_models()
 
         # Create DOLFINODESystemSolver
-        solver = goss.DOLFINODESystemSolver(self._model.domain, cell_models, \
-                                            self._model.cell_model_domains,
-                                            self.parameters["ode_solver"])
+        solver = DOLFINODESystemSolver(self._domain, \
+                                       dict(zip(cell_models.keys(), cell_models.models())),
+                                       domains=cell_models.markers(), \
+                                       params=self.parameters["ode_solver"])
 
         return solver
 
@@ -204,7 +201,7 @@ class GOSSplittingSolver:
 
         for t0, t1 in time_stepper:
 
-            info_blue("Solving on t = (%g, %g)" % (t0, t1))
+            log(LogLevel.INFO, "Solving on t = (%g, %g)" % (t0, t1))
             self.step((t0, t1))
 
             # Yield solutions
