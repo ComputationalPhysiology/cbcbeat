@@ -107,12 +107,15 @@ class BasicSplittingSolver:
         a CardiacModel object describing the simulation set-up
       params (:py:class:`dolfin.Parameters`, optional)
         a Parameters object controlling solver parameters
+      V_index (int)
+        Index for the membrane potential among the state
+        variables, by default 0
 
     *Assumptions*
       * The cardiac conductivities do not vary in time
 
     """
-    def __init__(self, model, params=None):
+    def __init__(self, model, params=None, V_index=0):
         "Create solver from given Cardiac Model and (optional) parameters."
 
         assert isinstance(model, CardiacModel), \
@@ -120,6 +123,7 @@ class BasicSplittingSolver:
 
         # Set model and parameters
         self._model = model
+        self._V_index = V_index
         self.parameters = self.default_parameters()
         if params is not None:
             self.parameters.update(params)
@@ -143,7 +147,7 @@ class BasicSplittingSolver:
         else:
             V = self.vur.function_space()
 
-        self.merger = FunctionAssigner(self.VS.sub(0), V)
+        self.merger = FunctionAssigner(self.VS.sub(self._V_index), V)
 
         self._annotate_kwargs = annotate_kwargs(self.parameters)
 
@@ -194,12 +198,12 @@ class BasicSplittingSolver:
             params = self.parameters["BasicBidomainSolver"]
             args = (self._domain, self._time, M_i, M_e)
             kwargs = dict(I_s=stimulus, I_a=applied_current,
-                          v_=self.vs[0], params=params)
+                          v_=self.vs[self._V_index], params=params)
         else:
             PDESolver = BasicMonodomainSolver
             params = self.parameters["BasicMonodomainSolver"]
             args = (self._domain, self._time, M_i)
-            kwargs = dict(I_s=stimulus, v_=self.vs[0], params=params)
+            kwargs = dict(I_s=stimulus, v_=self.vs[self._V_index], params=params)
 
         # Propagate enable_adjoint to Bidomain solver
         if params.has_parameter("enable_adjoint"):
@@ -386,7 +390,7 @@ class BasicSplittingSolver:
             v = self.vur.sub(0)
         else:
             v = self.vur
-        self.merger.assign(solution.sub(0), v, **self._annotate_kwargs)
+        self.merger.assign(solution.sub(self._V_index), v, **self._annotate_kwargs)
         end()
 
         timer.stop()
@@ -463,9 +467,6 @@ class SplittingSolver(BasicSplittingSolver):
       * The cardiac conductivities do not vary in time
 
     """
-
-    def __init__(self, model, params=None):
-        BasicSplittingSolver.__init__(self, model, params)
 
     @staticmethod
     def default_parameters():
@@ -560,12 +561,12 @@ class SplittingSolver(BasicSplittingSolver):
             params = self.parameters["BidomainSolver"]
             args = (self._domain, self._time, M_i, M_e)
             kwargs = dict(I_s=stimulus, I_a=applied_current,
-                          v_=self.vs[0], params=params)
+                          v_=self.vs[self._V_index], params=params)
         else:
             PDESolver = MonodomainSolver
             params = self.parameters["MonodomainSolver"]
             args = (self._domain, self._time, M_i)
-            kwargs = dict(I_s=stimulus, v_=self.vs[0], params=params)
+            kwargs = dict(I_s=stimulus, v_=self.vs[self._V_index], params=params)
 
         # Propagate enable_adjoint to Bidomain solver
         if params.has_parameter("enable_adjoint"):
