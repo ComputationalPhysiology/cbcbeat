@@ -7,7 +7,7 @@ version: 2.1
 executors:
   fenics-latest:
     docker:
-      - image: quay.io/fenicsproject/stable:latest
+      - image: finsberg/fenics:latest
   fenics-adjoint-latest:
     docker:
       - image: quay.io/dolfinadjoint/pyadjoint:latest
