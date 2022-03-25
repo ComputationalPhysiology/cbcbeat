@@ -11,6 +11,7 @@ minor = 1.1
 requirements = []
 extras_require={
     "gotran": ["gotran"],
+    "goss": ["pygoss"],
     "test": ["pytest", "matplotlib", "pytest-cov"],
     "docs": ["sphinx", "sphinx_book_theme"]
 }
