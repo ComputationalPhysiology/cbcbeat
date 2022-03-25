@@ -8,6 +8,18 @@ import pytest
 from cbcbeat.cellmodels import *
 from cbcbeat.utils import state_space
 
+try:
+    import goss
+
+    has_goss = True
+except ImportError:
+    has_goss = False
+
+require_goss = pytest.mark.skipif(
+    not has_goss,
+    reason="goss is required to run the test",
+)
+
 # Marks
 fast = pytest.mark.fast
 medium = pytest.mark.medium
@@ -26,23 +38,28 @@ def assert_almost_equal(a, b, tolerance):
         c_inf = numpy.linalg.norm(c, numpy.inf)
         assert c_inf < tolerance
 
+
 def assert_equal(a, b):
     assert a == b
+
 
 def assert_true(a):
     assert a is True
 
+
 def assert_greater(a, b):
     assert a > b
 
+
 # Fixtures
-supported_cell_models_str = [Model.__name__
-                             for Model in supported_cell_models]
+supported_cell_models_str = [Model.__name__ for Model in supported_cell_models]
+
 
 @pytest.fixture(params=supported_cell_models_str)
 def cell_model(request):
     Model = eval(request.param)
     return Model()
+
 
 @pytest.fixture(params=supported_cell_models_str)
 def ode_test_form(request):
@@ -57,6 +74,6 @@ def ode_test_form(request):
     vs.assign(project(model.initial_conditions(), VS))
     (v, s) = split(vs)
     (w, r) = TestFunctions(VS)
-    rhs = inner(model.F(v, s), r) + inner(- model.I(v, s), w)
-    form = rhs*dP
+    rhs = inner(model.F(v, s), r) + inner(-model.I(v, s), w)
+    form = rhs * dP
     return form

@@ -8,7 +8,7 @@ import cbcbeat
 from pathlib import Path
 
 
-from testutils import medium
+from testutils import medium, require_goss
 from cbcbeat.gossplittingsolver import GOSSplittingSolver
 from cbcbeat.dolfinimport import (
     Expression,
@@ -18,17 +18,6 @@ from cbcbeat.dolfinimport import (
 from cbcbeat import errornorm
 from cbcbeat.utils import convergence_rate
 
-try:
-    import goss
-
-    has_goss = True
-except ImportError:
-    has_goss = False
-
-require_goss = pytest.mark.skipif(
-    not has_goss,
-    reason="goss is required to run the test",
-)
 
 here = Path(__file__).parent.absolute()
 
@@ -49,7 +38,7 @@ def main(N, dt, T, theta=0.5):
     # Create data
     mesh = UnitSquareMesh(N, N)
     time = Constant(0.0)
-    # V = FunctionSpace(mesh, "CG", 1)
+    import goss
 
     # We choose the FHN parameters such that s=1 and I_s=v
     model = goss.dolfinutils.DOLFINParameterizedODE(
