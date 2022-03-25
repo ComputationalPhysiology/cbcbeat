@@ -6,7 +6,7 @@ from os.path import join as pjoin
 
 # Version number
 major = 2019
-minor = 1.1
+minor = 1.2
 
 requirements = []
 extras_require={
