@@ -1,0 +1,68 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2.1
+
+executors:
+  fenics-latest:
+    docker:
+      - image: quay.io/fenicsproject/stable:latest
+  fenics-adjoint-latest:
+    docker:
+      - image: quay.io/dolfinadjoint/pyadjoint:latest
+  fenics-2017:
+    docker:
+      - image: finsberg/fenics2017
+
+jobs:
+  test:
+    parameters:
+      fenics:
+        type: executor
+    executor: << parameters.fenics >>
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m pip install --upgrade pip
+
+      - run:
+          name: install package
+          command: |
+            python3 -m pip install ".[all]"
+
+      - restore_cache:
+          keys:
+            - v2-dolfin-jit-cache
+
+      # run tests!
+      - run:
+          name: run tests
+          command: |
+            python3 -m pytest -m "not adjoint" -v test --cov=cbcbeat --cov-report html -v
+
+      - save_cache:
+          key: v2-dolfin-jit-cache
+          paths:
+            - ~/.cache/instant
+            - ~/.cache/dijitso
+
+      - store_artifacts:
+          path: htmlcov
+          destination: htmlcov
+
+      - run:
+          name: codecov
+          command: |
+            bash <(curl -s https://codecov.io/bash)
+
+workflows:
+  all-tests:
+    jobs:
+      - test:
+          matrix:
+            parameters:
+              fenics: [fenics-latest] # , fenics-adjoint-latest] # fenics-2017,

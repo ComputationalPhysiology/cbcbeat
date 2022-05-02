@@ -11,7 +11,7 @@ minor = 1.0
 requirements = []
 extras_require={
     "gotran": ["gotran"],
-    "test": ["pytest", "pylab"]
+    "test": ["pytest", "matplotlib", "pytest-cov"]
 }
 extras_require.update(
     {"all": [val for values in extras_require.values() for val in values]}
