@@ -16,6 +16,7 @@ from cbcbeat.dolfinimport import *
 
 # Model imports
 from cbcbeat.cardiacmodels import CardiacModel
+from cbcbeat.torsomodels import TorsoModel
 from cbcbeat.cellmodels import *
 from cbcbeat.markerwisefield import *
 

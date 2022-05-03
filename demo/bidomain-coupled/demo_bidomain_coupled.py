@@ -8,7 +8,6 @@
 # * Use a cardiac cell model from supported cell models
 # * Define a cardiac model based on a mesh and other input
 # * Take into account the coupling with the surrounding torso
-# * Use and customize the main solver (CoupledSplittingSolver)
 
 # Import the cbcbeat module
 from cbcbeat import *
@@ -21,10 +20,8 @@ parameters["form_compiler"]["cpp_optimize_flags"] = " ".join(flags)
 parameters["form_compiler"]["quadrature_degree"] = 3
 
 # Turn off adjoint functionality
-import cbcbeat
 if cbcbeat.dolfin_adjoint:
     parameters["adjoint"]["stop_annotating"] = True
-
 
 # Define the shape of the subdomain - Used to mark the cells of the mesh
 # This function returns 1 if the point (x,y) is in our subdomain and 0 otherwise
@@ -35,7 +32,7 @@ def beutel_heart(x,y):
     return (xshift*xshift + yshift*yshift - a)*(xshift*xshift + yshift*yshift - a)*(xshift*xshift + yshift*yshift - a) < xshift*xshift*yshift*yshift*yshift
 
 # Define the computational domain
-mesh = UnitSquareMesh(150, 150)
+mesh = UnitSquareMesh(50, 50)
 marker = MeshFunction("size_t", mesh, 2, 0)
 for c in cells(mesh):
     marker[c] = beutel_heart(c.midpoint().x(), c.midpoint().y())
@@ -63,16 +60,17 @@ stimulus = Expression("5*exp(-(pow(x[0] - 0.5, 2) + pow(x[1] - 0.55, 2)) / 0.02)
 cardiac_model = CardiacModel(submesh, time, M_i, M_e, cell_model, stimulus)
 torso_model = TorsoModel(mesh, M_T)
 
-# Customize and create a splitting solver
-ps = CoupledSplittingSolver.default_parameters()
+# Customize and create a splitting solve
+ps = SplittingSolver.default_parameters()
 ps["theta"] = 0.5                        # Second order splitting scheme
 ps["pde_solver"] = "bidomain"          # Use Monodomain model for the PDEs
 ps["CardiacODESolver"]["scheme"] = "RL1" # 1st order Rush-Larsen for the ODEs
+
 ps["CoupledBidomainSolver"]["linear_solver_type"] = "iterative"
 ps["CoupledBidomainSolver"]["algorithm"] = "cg"
 ps["CoupledBidomainSolver"]["preconditioner"] = "petsc_amg"
 
-solver = CoupledSplittingSolver(cardiac_model, torso_model, params=ps)
+solver = SplittingSolver(cardiac_model, torso_model=torso_model, params=ps)
 
 # Time stepping parameters
 dt = 0.25
@@ -81,9 +79,9 @@ interval = (0.0, T)
 
 timer = Timer("XXX Forward solve") # Time the total solve
 
-# Save solution in vtk format
-out_v = File("cardiac-2D-v.pvd")
-out_u = File("cardiac-2D-u.pvd")
+# Save solution in xdmf format
+vfile = XDMFFile(MPI.comm_world, "./XDMF/v.xdmf")
+ufile = XDMFFile(MPI.comm_world, "./XDMF/u.xdmf")
 
 # Solve!
 for (timestep, fields) in solver.solve(interval, dt):
@@ -93,8 +91,10 @@ for (timestep, fields) in solver.solve(interval, dt):
     # current vs, current vur)
     (vs_, vs, vur) = fields
 
-    out_v << vur.sub(0) # transmembrane potential
-    out_u << vur.sub(1) # potential in the whole domain
+    vur.sub(0).rename("v", "v")
+    vfile.write(vur.sub(0),timestep[0]) # transmembrane potential
+    vur.sub(1).rename("u", "u")
+    ufile.write(vur.sub(1),timestep[0]) # potential in the whole domain
 
 timer.stop()
 

@@ -62,10 +62,12 @@ testing or debugging purposes primarily.
 __all__ = ["SplittingSolver", "BasicSplittingSolver",]
 
 from cbcbeat.dolfinimport import *
-from cbcbeat import CardiacModel
+from cbcbeat.cardiacmodels import CardiacModel
+from cbcbeat.torsomodels import TorsoModel
 from cbcbeat.cellsolver import BasicCardiacODESolver, CardiacODESolver
 from cbcbeat.bidomainsolver import BasicBidomainSolver, BidomainSolver
 from cbcbeat.monodomainsolver import BasicMonodomainSolver, MonodomainSolver
+from cbcbeat.coupledbidomainsolver import CoupledBasicBidomainSolver, CoupledBidomainSolver
 from cbcbeat.utils import state_space, TimeStepper, annotate_kwargs
 
 try:
@@ -112,21 +114,30 @@ class BasicSplittingSolver:
       * The cardiac conductivities do not vary in time
 
     """
-    def __init__(self, model, params=None):
-        "Create solver from given Cardiac Model and (optional) parameters."
+    def __init__(self, cardiac_model, torso_model=None, params=None):
+        "Create solver from given Cardiac Model, (optional) Torso Model, \
+        and (optional) parameters."
 
-        assert isinstance(model, CardiacModel), \
+        # Set cardiac model and parameters
+        assert isinstance(cardiac_model, CardiacModel), \
             "Expecting CardiacModel as first argument"
+        self._model = cardiac_model
+        self._domain = self._model.domain()
 
-        # Set model and parameters
-        self._model = model
         self.parameters = self.default_parameters()
         if params is not None:
             self.parameters.update(params)
 
-        # Extract solution domain
-        self._domain = self._model.domain()
         self._time = self._model.time()
+
+        # Set (optional) torso model
+        self._torso_model = None
+        self._torso_domain = None
+        if torso_model is not None:
+            assert isinstance(torso_model, TorsoModel), \
+            "Expecting TorsoModel as torso model (optional)"
+            self._torso_model = torso_model
+            self._torso_domain = self._torso_model.domain() #Embed the cardiac domain
 
         # Create ODE solver and extract solution fields
         self.ode_solver = self._create_ode_solver()
@@ -138,8 +149,10 @@ class BasicSplittingSolver:
         (self.v_, self.vur) = self.pde_solver.solution_fields()
 
         # Create function assigner for merging v from self.vur into self.vs[0]
-        if self.parameters["pde_solver"] == "bidomain":
-            V = self.vur.function_space().sub(0)
+        #self.VUR = self.pde_solver.function_space()
+        self.VUR = self.pde_solver.VUR
+        if self.parameters["pde_solver"] == "bidomain" or torso_model is not None:
+            V = self.VUR.sub_space(0)
         else:
             V = self.vur.function_space()
 
@@ -186,10 +199,20 @@ class BasicSplittingSolver:
         else:
             stimulus = None
 
-        # Extract conductivities from the cardiac model
+        # Extract conductivities from the cardiac  and (optional) torso model
         (M_i, M_e) = self._model.conductivities()
 
-        if self.parameters["pde_solver"] == "bidomain":
+        if self._torso_model is not None:
+            M_T = self._torso_model.conductivity()
+            assert self.parameters["pde_solver"] == "bidomain",\
+            "Coupling heart/torso is only available with bidomain model"
+
+            PDESolver = CoupledBasicBidomainSolver
+            params = self.parameters["CoupledBasicBidomainSolver"]
+            args = (self._domain, self._torso_domain, self._time, M_i, M_e, M_T)
+            kwargs = dict(I_s=stimulus, I_a=applied_current,
+                          v_=self.vs[0], params=params)
+        elif self.parameters["pde_solver"] == "bidomain":
             PDESolver = BasicBidomainSolver
             params = self.parameters["BasicBidomainSolver"]
             args = (self._domain, self._time, M_i, M_e)
@@ -228,9 +251,15 @@ class BasicSplittingSolver:
         params.add("theta", 0.5, 0., 1.)
         params.add("apply_stimulus_current_to_pde", False)
         try:
-            params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
+            if self._torso_model is not None:
+                params.add("pde_solver", "coupled_bidomain", set(["coupled_bidomain"]))
+            else:
+                params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
         except:
-            params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
+            if self._torso_model is not None:
+                params.add("pde_solver", "coupled_bidomain", ["coupled_bidomain"])
+            else:
+                params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
             pass
 
         # Add default parameters from ODE solver, but update for V
@@ -239,6 +268,11 @@ class BasicSplittingSolver:
         ode_solver_params["V_polynomial_degree"] = 1
         ode_solver_params["V_polynomial_family"] = "CG"
         params.add(ode_solver_params)
+
+        pde_solver_params = CoupledBasicBidomainSolver.default_parameters()
+        pde_solver_params["cardiac_polynomial_degree"] = 1
+        pde_solver_params["torso_polynomial_degree"] = 1
+        params.add(pde_solver_params)
 
         pde_solver_params = BasicBidomainSolver.default_parameters()
         pde_solver_params["polynomial_degree"] = 1
@@ -382,7 +416,7 @@ class BasicSplittingSolver:
         timer = Timer("Merge step")
 
         begin(progress, "Merging")
-        if self.parameters["pde_solver"] == "bidomain":
+        if self.parameters["pde_solver"] == "bidomain" or self._torso_model is not None:
             v = self.vur.sub(0)
         else:
             v = self.vur
@@ -464,8 +498,8 @@ class SplittingSolver(BasicSplittingSolver):
 
     """
 
-    def __init__(self, model, params=None):
-        BasicSplittingSolver.__init__(self, model, params)
+    def __init__(self, cardiac_model, torso_model=None, params=None):
+        BasicSplittingSolver.__init__(self, cardiac_model, torso_model, params)
 
     @staticmethod
     def default_parameters():
@@ -485,11 +519,11 @@ class SplittingSolver(BasicSplittingSolver):
         params.add("theta", 0.5, 0, 1)
         params.add("apply_stimulus_current_to_pde", False)
         try:
-            params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
+            params.add("pde_solver", "bidomain", set(["coupled_bidomain", "bidomain", "monodomain"]))
             params.add("ode_solver_choice", "CardiacODESolver",
                        set(["BasicCardiacODESolver", "CardiacODESolver"]))
         except:
-            params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
+            params.add("pde_solver", "bidomain", ["coupled_bidomain", "bidomain", "monodomain"])
             params.add("ode_solver_choice", "CardiacODESolver",
                        ["BasicCardiacODESolver", "CardiacODESolver"])
             pass
@@ -505,6 +539,9 @@ class SplittingSolver(BasicSplittingSolver):
         basic_ode_solver_params["V_polynomial_family"] = "CG"
         params.add(basic_ode_solver_params)
 
+        pde_solver_params = CoupledBidomainSolver.default_parameters()
+        params.add(pde_solver_params)
+        
         pde_solver_params = BidomainSolver.default_parameters()
         pde_solver_params["polynomial_degree"] = 1
         params.add(pde_solver_params)
@@ -555,7 +592,18 @@ class SplittingSolver(BasicSplittingSolver):
         # Extract conductivities from the cardiac model
         (M_i, M_e) = self._model.conductivities()
 
-        if self.parameters["pde_solver"] == "bidomain":
+        if self._torso_model is not None:
+            M_T = self._torso_model.conductivity()
+            assert self.parameters["pde_solver"] == "bidomain",\
+            "Coupling heart/torso is only available with bidomain model"
+
+            PDESolver = CoupledBasicBidomainSolver
+            #params = self.parameters["CoupledBasicBidomainSolver"]
+            params = self.parameters["BidomainSolver"]
+            args = (self._domain, self._torso_domain, self._time, M_i, M_e, M_T)
+            kwargs = dict(I_s=stimulus, I_a=applied_current,
+                          v_=self.vs[0], params=params)
+        elif self.parameters["pde_solver"] == "bidomain":
             PDESolver = BidomainSolver
             params = self.parameters["BidomainSolver"]
             args = (self._domain, self._time, M_i, M_e)

@@ -37,7 +37,7 @@ for u.
 
 __all__ = ["CoupledBasicBidomainSolver", "CoupledBidomainSolver"]
 
-from dolfinimport import *
+from cbcbeat.dolfinimport import *
 from cbcbeat.markerwisefield import *
 from cbcbeat.utils import end_of_time, annotate_kwargs
 from cbcbeat import debug
@@ -109,7 +109,7 @@ class CoupledBasicBidomainSolver(object):
 
         self._nullspace_basis = None
 
-                # Store input
+        # Store input
         self._cardiac_mesh = cardiac_mesh
         self._mesh = torso_mesh        
         self._time = time
@@ -125,7 +125,7 @@ class CoupledBasicBidomainSolver(object):
         assert mapping and mapping.mesh().id() == self._mesh.id(), \
             "The CardiacModel mesh should be built from TorsoModel mesh (MeshView)"
 
-        # Cells related to heart domain are marked with 1, other cells (torso) are marked with 0
+        # Marking heart domain cells in the torso mesh
         self._heart_cells = MeshFunction("size_t", self._mesh, self._mesh.topology().dim(), 0)
         for c in cells(self._cardiac_mesh):
             idx = int(cell_map[c.index()])
@@ -133,8 +133,9 @@ class CoupledBasicBidomainSolver(object):
         
         # Initialize and update parameters if given
         self.parameters = self.default_parameters()
-        if params is not None:
-            self.parameters.update(params)
+        # FIXME
+        # if params is not None:
+        #     self.parameters.update(params)
 
         # Set-up function spaces
         kc = self.parameters["cardiac_polynomial_degree"]
@@ -277,32 +278,35 @@ class CoupledBasicBidomainSolver(object):
         t = t0 + theta*(t1 - t0)
         self.time.assign(t)
 
+        # Set-up measure and rhs from stimulus
+        (dz, rhs) = rhs_with_markerwise_field(self._I_s, self._cardiac_mesh, w)
+
         # Define spatial integration domains:
         dV = Measure("dx", domain=self.VUR.sub_space(0).mesh())
         dU = Measure("dx", domain=self.VUR.sub_space(1).mesh(), subdomain_data=self._heart_cells)
 
-        a = (v/k_n)*w*dV \
-            + theta*inner(M_i*grad(v), grad(w))*dV \
-            + inner((M_i + M_e)*grad(u), grad(q))*dU(1) \
-            + inner(M_T*grad(u), grad(q))*dU(0) \
-            + inner(M_i*grad(u), grad(w))*dV \
-            + theta*inner(M_i*grad(v), grad(q))*dV
-                
-        L = (self.v_/k_n)*w*dV \
-            - (1.0 - theta)*inner(M_i*grad(self.v_), grad(w))*dV \
-            - (1.0 - theta)*inner(M_i*grad(self.v_), grad(q))*dV
+        a = v * w * dV \
+            + theta * k_n * inner(M_i * grad(v), grad(w)) * dV \
+            + (k_n/theta) * inner((M_i + M_e) * grad(u), grad(q)) * dU(1) \
+            + (k_n/theta) * inner(M_T * grad(u), grad(q)) * dU(0) \
+            + k_n * inner(M_i * grad(u), grad(w)) * dV \
+            + k_n * inner(M_i * grad(v), grad(q)) * dV
+
+        L = self.v_ * w * dV \
+            - (1. - theta) * k_n * inner(M_i * grad(self.v_), grad(w)) * dV \
+            - ((1. - theta)/theta) * k_n * inner(M_i * grad(self.v_), grad(q)) * dU(1)
+
+        # Add applied stimulus as source in parabolic equation if
+        # applicable
+        L += k_n * rhs
 
         if use_R:
-            a += (lamda*u + l*q)*dV
+            a += k_n*(lamda*u + l*q)*dV
 
         # Add applied current as source in elliptic equation if
         # applicable
         if self._I_a:
-            L += self._I_a*q*dV
-
-        # Add applied stimulus as source in parabolic equation if
-        # applicable
-        L += rhs
+            L += k_n*self._I_a*q*dV
 
         solve(a == L, self.vur)
 
@@ -326,7 +330,8 @@ class CoupledBasicBidomainSolver(object):
         params.add("torso_polynomial_degree", 1)
         params.add("use_avg_u_constraint", True)
 
-        params.add(MixedLinearVariationalSolver.default_parameters())
+        #params.add(MixedLinearVariationalSolver.default_parameters())
+        params.add(LinearVariationalSolver.default_parameters())
         return params        
 
 class CoupledBidomainSolver(CoupledBasicBidomainSolver):
@@ -429,14 +434,14 @@ class CoupledBidomainSolver(CoupledBasicBidomainSolver):
         # Set-up variational problem
         a = v*w*dV \
             + k_n*theta*inner(M_i*grad(v), grad(w))*dV \
-            + k_n*inner((M_i + M_e)*grad(u), grad(q))*dU(1) \
-            + k_n*inner(M_T*grad(u), grad(q))*dU(0) \
+            + (k_n/theta)*inner((M_i + M_e)*grad(u), grad(q))*dU(1) \
+            + (k_n/theta)*inner(M_T*grad(u), grad(q))*dU(0) \
             + k_n*inner(M_i*grad(u), grad(w))*dV \
-            + k_n*theta*inner(M_i*grad(v), grad(q))*dV 
+            + k_n*inner(M_i*grad(v), grad(q))*dV
         
         L = self.v_*w*dV \
             - k_n*(1.0 - theta)*inner(M_i*grad(self.v_), grad(w))*dV \
-            - k_n*(1.0 - theta)*inner(M_i*grad(self.v_), grad(q))*dV \
+            - k_n*((1.0 - theta)/theta)*inner(M_i*grad(self.v_), grad(q))*dU(1) \
             + k_n*rhs
 
         if use_R:

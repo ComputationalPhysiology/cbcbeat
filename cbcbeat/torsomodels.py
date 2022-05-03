@@ -10,8 +10,8 @@ scenarios.
 
 __all__ = ["TorsoModel"]
 
-from dolfinimport import Parameters, Mesh, Constant, GenericFunction, log
-from markerwisefield import Markerwise, handle_markerwise
+from cbcbeat.dolfinimport import Parameters, Mesh, Constant, GenericFunction, log
+from cbcbeat.markerwisefield import Markerwise, handle_markerwise
 
 # ------------------------------------------------------------------------------
 # Torso models
