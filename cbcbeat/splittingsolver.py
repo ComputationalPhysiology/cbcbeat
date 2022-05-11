@@ -513,11 +513,11 @@ class SplittingSolver(BasicSplittingSolver):
         params.add("theta", 0.5, 0, 1)
         params.add("apply_stimulus_current_to_pde", False)
         try:
-            params.add("pde_solver", "bidomain", set(["coupled_bidomain", "bidomain", "monodomain"]))
+            params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
             params.add("ode_solver_choice", "CardiacODESolver",
                        set(["BasicCardiacODESolver", "CardiacODESolver"]))
         except:
-            params.add("pde_solver", "bidomain", ["coupled_bidomain", "bidomain", "monodomain"])
+            params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
             params.add("ode_solver_choice", "CardiacODESolver",
                        ["BasicCardiacODESolver", "CardiacODESolver"])
             pass
@@ -537,7 +537,6 @@ class SplittingSolver(BasicSplittingSolver):
         params.add(pde_solver_params)
         
         pde_solver_params = BidomainSolver.default_parameters()
-        pde_solver_params["polynomial_degree"] = 1
         params.add(pde_solver_params)
 
         pde_solver_params = MonodomainSolver.default_parameters()
@@ -591,9 +590,8 @@ class SplittingSolver(BasicSplittingSolver):
             assert self.parameters["pde_solver"] == "bidomain",\
             "Coupling heart/torso is only available with bidomain model"
 
-            PDESolver = CoupledBasicBidomainSolver
-            #params = self.parameters["CoupledBasicBidomainSolver"]
-            params = self.parameters["BidomainSolver"]
+            PDESolver = CoupledBidomainSolver
+            params = self.parameters["CoupledBidomainSolver"]
             args = (self._domain, self._torso_domain, self._time, M_i, M_e, M_T)
             kwargs = dict(I_s=stimulus, I_a=applied_current,
                           v_=self.vs[0], params=params)

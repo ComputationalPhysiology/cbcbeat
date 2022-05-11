@@ -133,9 +133,8 @@ class CoupledBasicBidomainSolver(object):
         
         # Initialize and update parameters if given
         self.parameters = self.default_parameters()
-        # FIXME
-        # if params is not None:
-        #     self.parameters.update(params)
+        if params is not None:
+            self.parameters.update(params)
 
         # Set-up function spaces
         kc = self.parameters["cardiac_polynomial_degree"]
@@ -330,9 +329,8 @@ class CoupledBasicBidomainSolver(object):
         params.add("torso_polynomial_degree", 1)
         params.add("use_avg_u_constraint", True)
 
-        #params.add(MixedLinearVariationalSolver.default_parameters())
         params.add(LinearVariationalSolver.default_parameters())
-        return params        
+        return params
 
 class CoupledBidomainSolver(CoupledBasicBidomainSolver):
     __doc__ = CoupledBasicBidomainSolver.__doc__
@@ -383,8 +381,7 @@ class CoupledBidomainSolver(CoupledBasicBidomainSolver):
         # Add default parameters from both LU and Krylov solvers
         params.add(LUSolver.default_parameters())
         petsc_params = PETScKrylovSolver.default_parameters()
-        # FIXME: work around DOLFIN bug #583. Just deleted this when fixed.
-        # petsc_params.convergence_norm_type = "preconditioned"
+        petsc_params.update({"convergence_norm_type": "preconditioned"})
         params.add(petsc_params)
 
         # Customize default parameters for LUSolver
