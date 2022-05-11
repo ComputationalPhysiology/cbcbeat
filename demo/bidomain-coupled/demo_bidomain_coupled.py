@@ -80,8 +80,8 @@ interval = (0.0, T)
 timer = Timer("XXX Forward solve") # Time the total solve
 
 # Save solution in xdmf format
-vfile = XDMFFile(MPI.comm_world, "./XDMF/v.xdmf")
-ufile = XDMFFile(MPI.comm_world, "./XDMF/u.xdmf")
+vfile = XDMFFile(MPI.comm_world, "./XDMF/demo_bidomain_coupled/v.xdmf")
+ufile = XDMFFile(MPI.comm_world, "./XDMF/demo_bidomain_coupled/u.xdmf")
 
 # Solve!
 for (timestep, fields) in solver.solve(interval, dt):
