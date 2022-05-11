@@ -92,7 +92,7 @@ def test_fitzhugh():
     ps["BasicCardiacODESolver"]["S_polynomial_degree"] = 1
     ps["BasicCardiacODESolver"]["V_polynomial_family"] = "CG"
     ps["BasicCardiacODESolver"]["V_polynomial_degree"] = 1
-    solver = BasicSplittingSolver(heart, ps)
+    solver = BasicSplittingSolver(heart, params=ps)
 
     # Define end-time and (constant) timesteps
     dt = 0.25 # mS

@@ -149,10 +149,10 @@ class BasicSplittingSolver:
         (self.v_, self.vur) = self.pde_solver.solution_fields()
 
         # Create function assigner for merging v from self.vur into self.vs[0]
-        #self.VUR = self.pde_solver.function_space()
-        self.VUR = self.pde_solver.VUR
-        if self.parameters["pde_solver"] == "bidomain" or torso_model is not None:
-            V = self.VUR.sub_space(0)
+        if isinstance(self.pde_solver, CoupledBasicBidomainSolver):
+            V = self.pde_solver.VUR.sub_space(0)
+        elif isinstance(self.pde_solver, BasicBidomainSolver):
+            V = self.vur.function_space().sub(0)
         else:
             V = self.vur.function_space()
 
@@ -251,15 +251,9 @@ class BasicSplittingSolver:
         params.add("theta", 0.5, 0., 1.)
         params.add("apply_stimulus_current_to_pde", False)
         try:
-            if self._torso_model is not None:
-                params.add("pde_solver", "coupled_bidomain", set(["coupled_bidomain"]))
-            else:
-                params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
+            params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
         except:
-            if self._torso_model is not None:
-                params.add("pde_solver", "coupled_bidomain", ["coupled_bidomain"])
-            else:
-                params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
+            params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
             pass
 
         # Add default parameters from ODE solver, but update for V
