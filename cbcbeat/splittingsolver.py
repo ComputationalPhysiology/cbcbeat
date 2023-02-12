@@ -59,9 +59,13 @@ testing or debugging purposes primarily.
 # Use and modify at will
 # Last changed: 2013-04-15
 
-__all__ = ["SplittingSolver", "BasicSplittingSolver",]
+__all__ = [
+    "SplittingSolver",
+    "BasicSplittingSolver",
+]
 
 from cbcbeat.dolfinimport import *
+
 from cbcbeat import CardiacModel
 from cbcbeat.cellsolver import BasicCardiacODESolver, CardiacODESolver
 from cbcbeat.bidomainsolver import BasicBidomainSolver, BidomainSolver
@@ -73,6 +77,25 @@ try:
 except:
     progress = PROGRESS
     pass
+
+
+class Merger:
+    def __init__(self, ode_space, vur_space):
+        self.ode_space = ode_space
+        self.vur_space = vur_space
+
+    def assign(self, v_ode, v, **kwargs):
+        breakpoint()
+
+
+def setup_merger(ode_space, vur_space):
+    ode_el = ode_space.ufl_element()
+    vur_el = vur_space.ufl_element()
+    if ode_el.family() == vur_el.family():
+        print("JAJAJAJAJ")
+        return FunctionAssigner(ode_space, vur_space)
+    print("ENIEENIEN")
+    return Merger(ode_space=ode_space, vur_space=vur_space)
 
 
 class BasicSplittingSolver:
@@ -115,11 +138,13 @@ class BasicSplittingSolver:
       * The cardiac conductivities do not vary in time
 
     """
+
     def __init__(self, model, params=None, V_index=0):
         "Create solver from given Cardiac Model and (optional) parameters."
 
-        assert isinstance(model, CardiacModel), \
-            "Expecting CardiacModel as first argument"
+        assert isinstance(
+            model, CardiacModel
+        ), "Expecting CardiacModel as first argument"
 
         # Set model and parameters
         self._model = model
@@ -147,7 +172,7 @@ class BasicSplittingSolver:
         else:
             V = self.vur.function_space()
 
-        self.merger = FunctionAssigner(self._ode_membrane_potential_space, V)
+        self.merger = setup_merger(self._ode_membrane_potential_space, V)
 
         self._annotate_kwargs = annotate_kwargs(self.parameters)
 
@@ -159,7 +184,7 @@ class BasicSplittingSolver:
         cell_model = self._model.cell_models()
 
         # Extract stimulus from the cardiac model(!)
-        if self.parameters['apply_stimulus_current_to_pde']:
+        if self.parameters["apply_stimulus_current_to_pde"]:
             stimulus = None
         else:
             stimulus = self._model.stimulus()
@@ -170,9 +195,9 @@ class BasicSplittingSolver:
         if params.has_parameter("enable_adjoint"):
             params["enable_adjoint"] = self.parameters["enable_adjoint"]
 
-        solver = BasicCardiacODESolver(self._domain, self._time, cell_model,
-                                       I_s=stimulus,
-                                       params=params)
+        solver = BasicCardiacODESolver(
+            self._domain, self._time, cell_model, I_s=stimulus, params=params
+        )
         return solver
 
     def _create_pde_solver(self):
@@ -185,25 +210,31 @@ class BasicSplittingSolver:
         # Extract stimulus from the cardiac model if we should apply
         # it to the PDEs (in the other case, it is handled by the ODE
         # solver)
-        if self.parameters['apply_stimulus_current_to_pde']:
+        if self.parameters["apply_stimulus_current_to_pde"]:
             stimulus = self._model.stimulus()
         else:
             stimulus = None
 
         # Extract conductivities from the cardiac model
         (M_i, M_e) = self._model.conductivities()
-            
+
         if self.parameters["pde_solver"] == "bidomain":
             PDESolver = BasicBidomainSolver
             params = self.parameters["BasicBidomainSolver"]
             args = (self._domain, self._time, M_i, M_e)
-            kwargs = dict(I_s=stimulus, I_a=applied_current,
-                          v_=self._ode_membrane_potential_func, params=params)
+            kwargs = dict(
+                I_s=stimulus,
+                I_a=applied_current,
+                v_=self._ode_membrane_potential_func,
+                params=params,
+            )
         else:
             PDESolver = BasicMonodomainSolver
             params = self.parameters["BasicMonodomainSolver"]
             args = (self._domain, self._time, M_i)
-            kwargs = dict(I_s=stimulus, v_=self._ode_membrane_potential_func, params=params)
+            kwargs = dict(
+                I_s=stimulus, v_=self._ode_membrane_potential_func, params=params
+            )
 
         # Propagate enable_adjoint to Bidomain solver
         if params.has_parameter("enable_adjoint"):
@@ -223,16 +254,14 @@ class BasicSplittingSolver:
         return self.VS.sub(self._V_index)
 
     def _extract_V(self, solution):
-        """Extract the membrane potential from the solution
-        """
+        """Extract the membrane potential from the solution"""
         if self.VS.num_sub_spaces() == 0:
             return solution
         return solution.sub(self._V_index)
 
     @property
     def _ode_membrane_potential_func(self):
-        """Get the membrane potential from the ODE
-        """
+        """Get the membrane potential from the ODE"""
         if self.vs.value_rank() == 0:
             # The solution from the ODE does not come from a
             # VectorFunctionSpace. Assme that this is the membrane
@@ -259,7 +288,7 @@ class BasicSplittingSolver:
 
         params = Parameters("BasicSplittingSolver")
         params.add("enable_adjoint", True)
-        params.add("theta", 0.5, 0., 1.)
+        params.add("theta", 0.5, 0.0, 1.0)
         params.add("apply_stimulus_current_to_pde", False)
         try:
             params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
@@ -327,8 +356,9 @@ class BasicSplittingSolver:
         """
 
         # Create timestepper
-        time_stepper = TimeStepper(interval, dt, \
-                                   annotate=self.parameters["enable_adjoint"])
+        time_stepper = TimeStepper(
+            interval, dt, annotate=self.parameters["enable_adjoint"]
+        )
 
         for t0, t1 in time_stepper:
 
@@ -361,8 +391,8 @@ class BasicSplittingSolver:
 
         # Extract time domain
         (t0, t1) = interval
-        dt = (t1 - t0)
-        t = t0 + theta*dt
+        dt = t1 - t0
+        t = t0 + theta * dt
 
         # Compute tentative membrane potential and state (vs_star)
         begin(progress, "Tentative ODE step")
@@ -420,11 +450,12 @@ class BasicSplittingSolver:
             v = self.vur.sub(0)
         else:
             v = self.vur
-        
+
         self.merger.assign(self._extract_V(solution), v, **self._annotate_kwargs)
         end()
 
         timer.stop()
+
 
 class SplittingSolver(BasicSplittingSolver):
     """
@@ -518,12 +549,18 @@ class SplittingSolver(BasicSplittingSolver):
         params.add("apply_stimulus_current_to_pde", False)
         try:
             params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
-            params.add("ode_solver_choice", "CardiacODESolver",
-                       set(["BasicCardiacODESolver", "CardiacODESolver"]))
+            params.add(
+                "ode_solver_choice",
+                "CardiacODESolver",
+                set(["BasicCardiacODESolver", "CardiacODESolver"]),
+            )
         except:
             params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
-            params.add("ode_solver_choice", "CardiacODESolver",
-                       ["BasicCardiacODESolver", "CardiacODESolver"])
+            params.add(
+                "ode_solver_choice",
+                "CardiacODESolver",
+                ["BasicCardiacODESolver", "CardiacODESolver"],
+            )
             pass
 
         # Add default parameters from ODE solver
@@ -555,7 +592,7 @@ class SplittingSolver(BasicSplittingSolver):
         cell_model = self._model.cell_models()
 
         # Extract stimulus from the cardiac model(!)
-        if self.parameters['apply_stimulus_current_to_pde']:
+        if self.parameters["apply_stimulus_current_to_pde"]:
             stimulus = None
         else:
             stimulus = self._model.stimulus()
@@ -564,9 +601,9 @@ class SplittingSolver(BasicSplittingSolver):
         params = self.parameters[Solver.__name__]
         if params.has_parameter("enable_adjoint"):
             params["enable_adjoint"] = self.parameters["enable_adjoint"]
-        solver = Solver(self._domain, self._time, cell_model,
-                        I_s=stimulus,
-                        params=params)
+        solver = Solver(
+            self._domain, self._time, cell_model, I_s=stimulus, params=params
+        )
 
         return solver
 
@@ -579,25 +616,31 @@ class SplittingSolver(BasicSplittingSolver):
         applied_current = self._model.applied_current()
 
         # Extract stimulus from the cardiac model
-        if self.parameters['apply_stimulus_current_to_pde']:
+        if self.parameters["apply_stimulus_current_to_pde"]:
             stimulus = self._model.stimulus()
         else:
             stimulus = None
 
         # Extract conductivities from the cardiac model
         (M_i, M_e) = self._model.conductivities()
-        
+
         if self.parameters["pde_solver"] == "bidomain":
             PDESolver = BidomainSolver
             params = self.parameters["BidomainSolver"]
             args = (self._domain, self._time, M_i, M_e)
-            kwargs = dict(I_s=stimulus, I_a=applied_current,
-                          v_=self._ode_membrane_potential_func, params=params)
+            kwargs = dict(
+                I_s=stimulus,
+                I_a=applied_current,
+                v_=self._ode_membrane_potential_func,
+                params=params,
+            )
         else:
             PDESolver = MonodomainSolver
             params = self.parameters["MonodomainSolver"]
             args = (self._domain, self._time, M_i)
-            kwargs = dict(I_s=stimulus, v_=self._ode_membrane_potential_func, params=params)
+            kwargs = dict(
+                I_s=stimulus, v_=self._ode_membrane_potential_func, params=params
+            )
 
         # Propagate enable_adjoint to Bidomain solver
         if params.has_parameter("enable_adjoint"):

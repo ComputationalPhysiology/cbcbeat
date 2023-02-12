@@ -95,7 +95,19 @@ class BasicMonodomainSolver(object):
 
         # Set-up function spaces
         k = self.parameters["polynomial_degree"]
-        V = FunctionSpace(self._mesh, "CG", k)
+        family = "CG"
+        if v_ is not None:
+            el = v_.function_space().ufl_element()
+            family = el.family()
+            k = el.degree()
+            
+        element = FiniteElement(
+            family=family,
+            cell=self._mesh.ufl_cell(),
+            degree=k,
+            quad_scheme="default",
+        )
+        V = FunctionSpace(self._mesh, element)
 
         self.V = V
 
@@ -209,7 +221,7 @@ class BasicMonodomainSolver(object):
         # Set time
         t = t0 + theta*(t1 - t0)
         self.time.assign(t)
-
+        
         # Define variational formulation
         v = TrialFunction(self.V)
         w = TestFunction(self.V)
@@ -411,7 +423,7 @@ class MonodomainSolver(BasicMonodomainSolver):
         # Update matrix and linear solvers etc as needed
         timestep_unchanged = (abs(dt - float(self._timestep)) < 1.e-12)
         self._update_solver(timestep_unchanged, dt)
-
+        breakpoint()
         # Assemble right-hand-side
         timer0 = Timer("Assemble rhs")
         assemble(self._rhs, tensor=self._rhs_vector, **self._annotate_kwargs)
