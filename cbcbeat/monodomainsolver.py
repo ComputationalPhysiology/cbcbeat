@@ -95,12 +95,8 @@ class BasicMonodomainSolver(object):
 
         # Set-up function spaces
         k = self.parameters["polynomial_degree"]
-        family = "CG"
-        if v_ is not None:
-            el = v_.function_space().ufl_element()
-            family = el.family()
-            k = el.degree()
-            
+        family = self.parameters["family"]
+
         element = FiniteElement(
             family=family,
             cell=self._mesh.ufl_cell(),
@@ -256,6 +252,7 @@ class BasicMonodomainSolver(object):
         params = Parameters("BasicMonodomainSolver")
         params.add("theta", 0.5)
         params.add("polynomial_degree", 1)
+        params.add("family", "CG")
         params.add("enable_adjoint", True)
 
         params.add(LinearVariationalSolver.default_parameters())
@@ -343,6 +340,7 @@ class MonodomainSolver(BasicMonodomainSolver):
         params.add("theta", 0.5)
         params.add("polynomial_degree", 1)
         params.add("default_timestep", 1.0)
+        params.add("family", "CG")
 
         # Set default solver type to be iterative
         params.add("linear_solver_type", "iterative")
@@ -423,7 +421,7 @@ class MonodomainSolver(BasicMonodomainSolver):
         # Update matrix and linear solvers etc as needed
         timestep_unchanged = (abs(dt - float(self._timestep)) < 1.e-12)
         self._update_solver(timestep_unchanged, dt)
-        breakpoint()
+
         # Assemble right-hand-side
         timer0 = Timer("Assemble rhs")
         assemble(self._rhs, tensor=self._rhs_vector, **self._annotate_kwargs)

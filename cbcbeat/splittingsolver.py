@@ -85,16 +85,16 @@ class Merger:
         self.vur_space = vur_space
 
     def assign(self, v_ode, v, **kwargs):
-        breakpoint()
+        v_ode.interpolate(v)
 
 
 def setup_merger(ode_space, vur_space):
     ode_el = ode_space.ufl_element()
     vur_el = vur_space.ufl_element()
+
     if ode_el.family() == vur_el.family():
-        print("JAJAJAJAJ")
         return FunctionAssigner(ode_space, vur_space)
-    print("ENIEENIEN")
+
     return Merger(ode_space=ode_space, vur_space=vur_space)
 
 
