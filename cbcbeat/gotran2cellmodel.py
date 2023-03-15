@@ -12,7 +12,9 @@ except Exception as e:
 
 # Gotran imports
 from gotran.model.ode import ODE
-from gotran.common import error as gotran_error, check_arg
+from modelparameters.logger import error as gotran_error
+from modelparameters.utils import check_arg
+
 from gotran.common.options import parameters as gotran_parameters
 from gotran.codegeneration.algorithmcomponents import componentwise_derivative
 from gotran.codegeneration.codecomponent import CodeComponent
