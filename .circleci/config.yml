@@ -32,6 +32,7 @@ jobs:
       - run:
           name: install package
           command: |
+            pip install pygoss --upgrade --no-binary=pygoss
             python3 -m pip install ".[all]"
 
       - restore_cache:
