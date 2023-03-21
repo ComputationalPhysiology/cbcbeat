@@ -80,7 +80,9 @@ def test_monodomain_goss_DG():
     stimulus = dolfin.Expression("10*t*x[0]", t=time, degree=1)
     # We load the ode representing the ionic model
 
-    gotran_ode = gotran.load_ode(here / "tentusscher_panfilov_2006_M_cell.ode")
+    gotran_ode = gotran.load_ode(
+        here / "../../cbcbeat/cellmodels/tentusscher_panfilov_2006_M_cell.ode"
+    )
 
     # and create a cell model with the membrane potential as a field state
     # This will make the membrane potential being spatial dependent-
