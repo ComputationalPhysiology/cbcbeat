@@ -79,10 +79,11 @@ except:
     pass
 
 
-class Merger:
-    def __init__(self, ode_space, vur_space):
-        self.ode_space = ode_space
-        self.vur_space = vur_space
+class Interpolator:
+    """A simple helper class to mimic the API of a FunctionAssigner
+    assuming that it is possible to interpolate between the two
+    functions passed in to the `assign` method
+    """
 
     def assign(self, v_ode, v, **kwargs):
         v_ode.interpolate(v)
@@ -95,7 +96,7 @@ def setup_merger(ode_space, vur_space):
     if ode_el.family() == vur_el.family():
         return FunctionAssigner(ode_space, vur_space)
 
-    return Merger(ode_space=ode_space, vur_space=vur_space)
+    return Interpolator()
 
 
 class BasicSplittingSolver:
