@@ -1,174 +1,279 @@
 
+
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
     <title>cbcbeat &#8212; cbcbeat 1.0 documentation</title>
-    
-  <link href="_static/css/theme.css" rel="stylesheet">
-  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
-    
-  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'modules';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
 
-    <div class="container-xl">
-      <div class="row">
-          
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+  
+  <div class="sidebar-header-items sidebar-primary__section">
     
-        <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="index.html">
-      
-      
-      
-      <h1 class="site-logo" id="site-title">cbcbeat 1.0 documentation</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">cbcbeat 1.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
         <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="cbcbeat.html">
-   1. cbcbeat package
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="cbcbeat.cellmodels.html">
-     1.1.1. cbcbeat.cellmodels package
-    </a>
-   </li>
-  </ul>
- </li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="cbcbeat.html">1. cbcbeat package</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.cellmodels.html">1.1.1. cbcbeat.cellmodels package</a></li>
+</ul>
+</li>
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-</div>
-
-</div>
-
-
-          
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
+      </div>
+      
+      <main id="main-content" class="bd-main">
         
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/modules.rst.txt"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/modules.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Source interaction buttons -->
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
 
-        </div>
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>cbcbeat</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
         </div>
     </div>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>cbcbeat</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                    </div>
-                </div>
-            </div>
-            
-              <div>
+
+              
                 
-  <div class="section" id="cbcbeat">
-<h1>cbcbeat<a class="headerlink" href="#cbcbeat" title="Permalink to this headline">¶</a></h1>
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="cbcbeat">
+<h1>cbcbeat<a class="headerlink" href="#cbcbeat" title="Permalink to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cbcbeat.html">1. cbcbeat package</a><ul>
@@ -195,47 +300,182 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#submodules">1.2. Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.bidomainsolver">1.3. cbcbeat.bidomainsolver module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.cardiacmodels">1.4. cbcbeat.cardiacmodels module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.cellsolver">1.5. cbcbeat.cellsolver module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.bidomainsolver">1.3. cbcbeat.bidomainsolver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver.default_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.solution_fields"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver.solution_fields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.solve"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.step"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver.step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BasicBidomainSolver.time"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver"><code class="docutils literal notranslate"><span class="pre">BidomainSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">BidomainSolver.default_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver.linear_solver"><code class="docutils literal notranslate"><span class="pre">BidomainSolver.linear_solver</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver.nullspace"><code class="docutils literal notranslate"><span class="pre">BidomainSolver.nullspace</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver.step"><code class="docutils literal notranslate"><span class="pre">BidomainSolver.step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.bidomainsolver.BidomainSolver.variational_forms"><code class="docutils literal notranslate"><span class="pre">BidomainSolver.variational_forms()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.cardiacmodels">1.4. cbcbeat.cardiacmodels module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel"><code class="docutils literal notranslate"><span class="pre">CardiacModel</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.applied_current"><code class="docutils literal notranslate"><span class="pre">CardiacModel.applied_current()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.cell_models"><code class="docutils literal notranslate"><span class="pre">CardiacModel.cell_models()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.conductivities"><code class="docutils literal notranslate"><span class="pre">CardiacModel.conductivities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.domain"><code class="docutils literal notranslate"><span class="pre">CardiacModel.domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.extracellular_conductivity"><code class="docutils literal notranslate"><span class="pre">CardiacModel.extracellular_conductivity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.intracellular_conductivity"><code class="docutils literal notranslate"><span class="pre">CardiacModel.intracellular_conductivity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.stimulus"><code class="docutils literal notranslate"><span class="pre">CardiacModel.stimulus()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.time"><code class="docutils literal notranslate"><span class="pre">CardiacModel.time()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.cellsolver">1.5. cbcbeat.cellsolver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.BasicCardiacODESolver"><code class="docutils literal notranslate"><span class="pre">BasicCardiacODESolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.BasicCardiacODESolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">BasicCardiacODESolver.default_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.BasicCardiacODESolver.solution_fields"><code class="docutils literal notranslate"><span class="pre">BasicCardiacODESolver.solution_fields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.BasicCardiacODESolver.solve"><code class="docutils literal notranslate"><span class="pre">BasicCardiacODESolver.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.BasicCardiacODESolver.step"><code class="docutils literal notranslate"><span class="pre">BasicCardiacODESolver.step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.BasicCardiacODESolver.time"><code class="docutils literal notranslate"><span class="pre">BasicCardiacODESolver.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.BasicSingleCellSolver"><code class="docutils literal notranslate"><span class="pre">BasicSingleCellSolver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.CardiacODESolver"><code class="docutils literal notranslate"><span class="pre">CardiacODESolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.CardiacODESolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">CardiacODESolver.default_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.CardiacODESolver.solution_fields"><code class="docutils literal notranslate"><span class="pre">CardiacODESolver.solution_fields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.CardiacODESolver.solve"><code class="docutils literal notranslate"><span class="pre">CardiacODESolver.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.CardiacODESolver.step"><code class="docutils literal notranslate"><span class="pre">CardiacODESolver.step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cellsolver.SingleCellSolver"><code class="docutils literal notranslate"><span class="pre">SingleCellSolver</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.dolfinimport">1.6. cbcbeat.dolfinimport module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#cbcbeat-gossplittingsolver-module">1.7. cbcbeat.gossplittingsolver module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#cbcbeat-gotran2cellmodel-module">1.8. cbcbeat.gotran2cellmodel module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#cbcbeat-gotran2dolfin-module">1.9. cbcbeat.gotran2dolfin module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.markerwisefield">1.10. cbcbeat.markerwisefield module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.monodomainsolver">1.11. cbcbeat.monodomainsolver module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.splittingsolver">1.12. cbcbeat.splittingsolver module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.utils">1.13. cbcbeat.utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.markerwisefield">1.10. cbcbeat.markerwisefield module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.markerwisefield.Markerwise"><code class="docutils literal notranslate"><span class="pre">Markerwise</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.markerwisefield.Markerwise.keys"><code class="docutils literal notranslate"><span class="pre">Markerwise.keys()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.markerwisefield.Markerwise.markers"><code class="docutils literal notranslate"><span class="pre">Markerwise.markers()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.markerwisefield.Markerwise.values"><code class="docutils literal notranslate"><span class="pre">Markerwise.values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.markerwisefield.handle_markerwise"><code class="docutils literal notranslate"><span class="pre">handle_markerwise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.markerwisefield.rhs_with_markerwise_field"><code class="docutils literal notranslate"><span class="pre">rhs_with_markerwise_field()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.monodomainsolver">1.11. cbcbeat.monodomainsolver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.BasicMonodomainSolver"><code class="docutils literal notranslate"><span class="pre">BasicMonodomainSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.BasicMonodomainSolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">BasicMonodomainSolver.default_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.BasicMonodomainSolver.solution_fields"><code class="docutils literal notranslate"><span class="pre">BasicMonodomainSolver.solution_fields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.BasicMonodomainSolver.solve"><code class="docutils literal notranslate"><span class="pre">BasicMonodomainSolver.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.BasicMonodomainSolver.step"><code class="docutils literal notranslate"><span class="pre">BasicMonodomainSolver.step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.BasicMonodomainSolver.time"><code class="docutils literal notranslate"><span class="pre">BasicMonodomainSolver.time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.MonodomainSolver"><code class="docutils literal notranslate"><span class="pre">MonodomainSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.MonodomainSolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">MonodomainSolver.default_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.MonodomainSolver.linear_solver"><code class="docutils literal notranslate"><span class="pre">MonodomainSolver.linear_solver</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.MonodomainSolver.step"><code class="docutils literal notranslate"><span class="pre">MonodomainSolver.step()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.monodomainsolver.MonodomainSolver.variational_forms"><code class="docutils literal notranslate"><span class="pre">MonodomainSolver.variational_forms()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.splittingsolver">1.12. cbcbeat.splittingsolver module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.splittingsolver.BasicSplittingSolver"><code class="docutils literal notranslate"><span class="pre">BasicSplittingSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.splittingsolver.BasicSplittingSolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">BasicSplittingSolver.default_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.splittingsolver.BasicSplittingSolver.merge"><code class="docutils literal notranslate"><span class="pre">BasicSplittingSolver.merge()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.splittingsolver.BasicSplittingSolver.solution_fields"><code class="docutils literal notranslate"><span class="pre">BasicSplittingSolver.solution_fields()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.splittingsolver.BasicSplittingSolver.solve"><code class="docutils literal notranslate"><span class="pre">BasicSplittingSolver.solve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.splittingsolver.BasicSplittingSolver.step"><code class="docutils literal notranslate"><span class="pre">BasicSplittingSolver.step()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.splittingsolver.SplittingSolver"><code class="docutils literal notranslate"><span class="pre">SplittingSolver</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.splittingsolver.SplittingSolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">SplittingSolver.default_parameters()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat.utils">1.13. cbcbeat.utils module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.utils.Projecter"><code class="docutils literal notranslate"><span class="pre">Projecter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.utils.Projecter.default_parameters"><code class="docutils literal notranslate"><span class="pre">Projecter.default_parameters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.utils.convergence_rate"><code class="docutils literal notranslate"><span class="pre">convergence_rate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.utils.end_of_time"><code class="docutils literal notranslate"><span class="pre">end_of_time()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.utils.state_space"><code class="docutils literal notranslate"><span class="pre">state_space()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat">1.14. Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
 </div>
-
-
-              </div>
+                </footer>
+              
+            </div>
+            
+            
               
             
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'>
-</div>
-            
-        </div>
-    </div>
-    <footer class="footer">
-  <p>
-    
-        &copy; Copyright 2014--2017, ME Rognes, J Hake, PE Farrell, SW Funke.<br/>
-  </p>
-</footer>
-</main>
-
-
-      </div>
-    </div>
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner">
+<div class="bd-footer-content__inner container">
   
-  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2014--2017, ME Rognes, J Hake, PE Farrell, SW Funke.
+      <br/>
+    
+  </p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div></div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>
