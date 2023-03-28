@@ -7,7 +7,7 @@ version: 2.1
 executors:
   fenics-latest:
     docker:
-      - image: finsberg/fenics:latest
+      - image: ghcr.io/scientificcomputing/fenics:2023-03-01
   fenics-adjoint-latest:
     docker:
       - image: quay.io/dolfinadjoint/pyadjoint:latest
@@ -32,6 +32,7 @@ jobs:
       - run:
           name: install package
           command: |
+            pip install pygoss --upgrade --no-binary=pygoss
             python3 -m pip install ".[all]"
 
       - restore_cache:

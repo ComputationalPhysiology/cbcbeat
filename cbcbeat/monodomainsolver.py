@@ -95,7 +95,15 @@ class BasicMonodomainSolver(object):
 
         # Set-up function spaces
         k = self.parameters["polynomial_degree"]
-        V = FunctionSpace(self._mesh, "CG", k)
+        family = self.parameters["family"]
+
+        element = FiniteElement(
+            family=family,
+            cell=self._mesh.ufl_cell(),
+            degree=k,
+            quad_scheme="default",
+        )
+        V = FunctionSpace(self._mesh, element)
 
         self.V = V
 
@@ -209,7 +217,7 @@ class BasicMonodomainSolver(object):
         # Set time
         t = t0 + theta*(t1 - t0)
         self.time.assign(t)
-
+        
         # Define variational formulation
         v = TrialFunction(self.V)
         w = TestFunction(self.V)
@@ -244,6 +252,7 @@ class BasicMonodomainSolver(object):
         params = Parameters("BasicMonodomainSolver")
         params.add("theta", 0.5)
         params.add("polynomial_degree", 1)
+        params.add("family", "CG")
         params.add("enable_adjoint", True)
 
         params.add(LinearVariationalSolver.default_parameters())
@@ -331,6 +340,7 @@ class MonodomainSolver(BasicMonodomainSolver):
         params.add("theta", 0.5)
         params.add("polynomial_degree", 1)
         params.add("default_timestep", 1.0)
+        params.add("family", "CG")
 
         # Set default solver type to be iterative
         params.add("linear_solver_type", "iterative")

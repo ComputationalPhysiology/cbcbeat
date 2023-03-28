@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     container:
-      image: finsberg/fenics-extra
+      image: ghcr.io/scientificcomputing/fenics:2023-03-01
     steps:
       - uses: actions/checkout@v2
 

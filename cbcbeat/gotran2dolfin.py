@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import numpy as np
-import os
 
 try:
     import gotran
@@ -13,20 +12,22 @@ from modelparameters.parameterdict import ParameterDict
 
 from gotran.codegeneration.codegenerators import PythonCodeGenerator
 
-from gotran.model.ode import ODE
 from gotran.model.odeobjects import Comment
+from modelparameters.logger import error
+from modelparameters.utils import check_arg, check_kwarg
 
 from gotran.codegeneration.algorithmcomponents import *
 from gotran.codegeneration.codecomponent import CodeComponent
-from gotran.common import check_arg, check_kwarg, error
+
 from gotran.common.options import parameters
 
 __all__ = ["DOLFINCodeGenerator"]
 
+
 class DOLFINCodeGenerator(PythonCodeGenerator):
     """
     Class for generating a DOLFIN compatible declarations of an ODE from
-    a gotran file 
+    a gotran file
     """
 
     @staticmethod

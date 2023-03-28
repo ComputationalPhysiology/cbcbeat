@@ -6,28 +6,17 @@ __author__ = "Johan Hake (hake.dev@gmail.com), 2013"
 
 __all__ = ["GOSSplittingSolver"]
 
-import numpy as np
-import types
 from cbcbeat.cellmodels.cardiaccellmodel import MultiCellModel
 
-from dolfin import *
-from dolfin.cpp.log import log, LogLevel
-
-# Goss and Gotran imports
-import goss
-import gotran
+from dolfin import Parameters
 
 from goss.dolfinutils import DOLFINODESystemSolver
 
-# if "DOLFINODESystemSolver" not in goss.__dict__:
-#    raise ImportError("goss could not import DOLFINODESystemSolver")
-
-# Beatadjoint imports
+# cbcbeat imports
 from cbcbeat.bidomainsolver import BidomainSolver
 from cbcbeat.monodomainsolver import MonodomainSolver
-from cbcbeat.cardiacmodels import CardiacModel
 from cbcbeat.splittingsolver import SplittingSolver
-from cbcbeat.utils import TimeStepper, Projecter
+from cbcbeat.utils import Projecter
 
 
 class GOSSplittingSolver(SplittingSolver):
@@ -52,7 +41,7 @@ class GOSSplittingSolver(SplittingSolver):
         params.add("theta", 0.5, 0, 1)
         try:
             params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
-        except:
+        except Exception:
             params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
             pass
 
