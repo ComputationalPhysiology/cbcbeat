@@ -2,8 +2,6 @@
 # Use and modify at will
 # Last changed: 2014-09-12
 
-__all__ = ["gotran2cellmodel"]
-
 try:
     import gotran
 except Exception as e:
@@ -20,6 +18,7 @@ from gotran.codegeneration.algorithmcomponents import componentwise_derivative
 from gotran.codegeneration.codecomponent import CodeComponent
 
 from cbcbeat.gotran2dolfin import DOLFINCodeGenerator
+from modelparameters.logger import error
 
 _class_template = """
 \"\"\"This module contains a {ModelName} cardiac cell model
@@ -96,13 +95,15 @@ _class_form = dict(
 )
 
 
+__all__ = ["CellModelGenerator"]
+
+
 class CellModelGenerator(DOLFINCodeGenerator):
     """
     Convert a Gotran model to a cbcbeat compatible cell model
     """
 
     def __init__(self, ode, membrane_potential):
-
         # Init base class
         super(CellModelGenerator, self).__init__()
 
@@ -187,7 +188,6 @@ class CellModelGenerator(DOLFINCodeGenerator):
         self._class_form["initial_conditions"] = self.initial_conditions_body(ode)
 
     def _init_arguments(self, comp, default_arguments=None):
-
         check_arg(comp, CodeComponent)
         params = self.params.code
         default_arguments = default_arguments or params.default_arguments
@@ -248,7 +248,6 @@ class CellModelGenerator(DOLFINCodeGenerator):
         Generate code for the default parameter bod
         """
         if ode.num_parameters > 0:
-
             params = ode.parameters[:]
 
             param = params.pop(0)

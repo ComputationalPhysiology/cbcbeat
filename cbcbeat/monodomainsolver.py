@@ -26,13 +26,15 @@ assumes pure homogeneous Neumann boundary conditions for :math:`v`.
 # Last changed: 2013-04-18
 
 __all__ = ["BasicMonodomainSolver", "MonodomainSolver"]
-
-from cbcbeat.dolfinimport import *
-from cbcbeat.markerwisefield import *
+import ufl
+import dolfin
+from cbcbeat.dolfinimport import backend
+from cbcbeat.markerwisefield import rhs_with_markerwise_field
 from cbcbeat.utils import end_of_time, annotate_kwargs
+from modelparameters.logger import debug, info, error
 
 
-class BasicMonodomainSolver(object):
+class BasicMonodomainSolver:
     """This solver is based on a theta-scheme discretization in time
     and CG_1 elements in space.
 
@@ -74,16 +76,15 @@ class BasicMonodomainSolver(object):
     """
 
     def __init__(self, mesh, time, M_i, I_s=None, v_=None, params=None):
-
         # Check some input
-        assert isinstance(mesh, Mesh), (
+        assert isinstance(mesh, dolfin.Mesh), (
             "Expecting mesh to be a Mesh instance, not %r" % mesh
         )
         assert (
-            isinstance(time, Constant) or time is None
+            isinstance(time, backend.Constant) or time is None
         ), "Expecting time to be a Constant instance (or None)."
         assert (
-            isinstance(params, Parameters) or params is None
+            isinstance(params, dolfin.Parameters) or params is None
         ), "Expecting params to be a Parameters instance (or None)"
 
         # Store input
@@ -101,24 +102,24 @@ class BasicMonodomainSolver(object):
         k = self.parameters["polynomial_degree"]
         family = self.parameters["family"]
 
-        element = FiniteElement(
+        element = dolfin.FiniteElement(
             family=family,
             cell=self._mesh.ufl_cell(),
             degree=k,
             quad_scheme="default",
         )
-        V = FunctionSpace(self._mesh, element)
+        V = dolfin.FunctionSpace(self._mesh, element)
 
         self.V = V
 
         # Set-up solution fields:
         if v_ is None:
-            self.v_ = Function(V, name="v_")
+            self.v_ = backend.Function(V, name="v_")
         else:
             debug("Experimental: v_ shipped from elsewhere.")
             self.v_ = v_
 
-        self.v = Function(self.V, name="v")
+        self.v = backend.Function(self.V, name="v")
 
         # Figure out whether we should annotate or not
         self._annotate_kwargs = annotate_kwargs(self.parameters)
@@ -189,7 +190,7 @@ class BasicMonodomainSolver(object):
                 break
 
             # If not: update members and move to next time
-            if isinstance(self.v_, Function):
+            if isinstance(self.v_, backend.Function):
                 self.v_.assign(self.v)
             else:
                 debug("Assuming that v_ is updated elsewhere. Experimental.")
@@ -212,7 +213,7 @@ class BasicMonodomainSolver(object):
 
         # Extract interval and thus time-step
         (t0, t1) = interval
-        k_n = Constant(t1 - t0)
+        k_n = backend.Constant(t1 - t0)
         theta = self.parameters["theta"]
 
         # Extract conductivities
@@ -223,21 +224,21 @@ class BasicMonodomainSolver(object):
         self.time.assign(t)
 
         # Define variational formulation
-        v = TrialFunction(self.V)
-        w = TestFunction(self.V)
+        v = dolfin.TrialFunction(self.V)
+        w = dolfin.TestFunction(self.V)
         Dt_v = (v - self.v_) / k_n
         v_mid = theta * v + (1.0 - theta) * self.v_
 
         (dz, rhs) = rhs_with_markerwise_field(self._I_s, self._mesh, w)
-        theta_parabolic = inner(M_i * grad(v_mid), grad(w)) * dz()
+        theta_parabolic = ufl.inner(M_i * ufl.grad(v_mid), ufl.grad(w)) * dz()
         G = Dt_v * w * dz() + theta_parabolic - rhs
 
         # Define variational problem
-        a, L = system(G)
-        pde = LinearVariationalProblem(a, L, self.v)
+        a, L = dolfin.system(G)
+        pde = backend.LinearVariationalProblem(a, L, self.v)
 
         # Set-up solver
-        solver = LinearVariationalSolver(pde)
+        solver = backend.LinearVariationalSolver(pde)
         solver.parameters.update(self.parameters["linear_variational_solver"])
         solver.solve()
 
@@ -253,13 +254,13 @@ class BasicMonodomainSolver(object):
           info(BasicMonodomainSolver.default_parameters(), True)
         """
 
-        params = Parameters("BasicMonodomainSolver")
+        params = dolfin.Parameters("BasicMonodomainSolver")
         params.add("theta", 0.5)
         params.add("polynomial_degree", 1)
         params.add("family", "CG")
         params.add("enable_adjoint", True)
 
-        params.add(LinearVariationalSolver.default_parameters())
+        params.add(backend.LinearVariationalSolver.default_parameters())
         return params
 
 
@@ -267,21 +268,20 @@ class MonodomainSolver(BasicMonodomainSolver):
     __doc__ = BasicMonodomainSolver.__doc__
 
     def __init__(self, mesh, time, M_i, I_s=None, v_=None, params=None):
-
         # Call super-class
         BasicMonodomainSolver.__init__(
             self, mesh, time, M_i, I_s=I_s, v_=v_, params=params
         )
 
         # Create variational forms
-        self._timestep = Constant(self.parameters["default_timestep"])
+        self._timestep = backend.Constant(self.parameters["default_timestep"])
         (self._lhs, self._rhs, self._prec) = self.variational_forms(self._timestep)
 
         # Preassemble left-hand side (will be updated if time-step
         # changes)
         debug("Preassembling monodomain matrix (and initializing vector)")
-        self._lhs_matrix = assemble(self._lhs, **self._annotate_kwargs)
-        self._rhs_vector = Vector(mesh.mpi_comm(), self._lhs_matrix.size(0))
+        self._lhs_matrix = backend.assemble(self._lhs, **self._annotate_kwargs)
+        self._rhs_vector = dolfin.Vector(mesh.mpi_comm(), self._lhs_matrix.size(0))
         self._lhs_matrix.init_vector(self._rhs_vector, 0)
 
         # Create linear solver (based on parameter choices)
@@ -298,7 +298,7 @@ class MonodomainSolver(BasicMonodomainSolver):
         solver_type = self.parameters["linear_solver_type"]
 
         if solver_type == "direct":
-            solver = LUSolver(self._lhs_matrix, self.parameters["lu_type"])
+            solver = backend.LUSolver(self._lhs_matrix, self.parameters["lu_type"])
             solver.parameters.update(self.parameters["lu_solver"])
             update_routine = self._update_lu_solver
 
@@ -310,13 +310,15 @@ class MonodomainSolver(BasicMonodomainSolver):
             alg = self.parameters["algorithm"]
             prec = self.parameters["preconditioner"]
             if self.parameters["use_custom_preconditioner"]:
-                self._prec_matrix = assemble(self._prec, **self._annotate_kwargs)
-                solver = PETScKrylovSolver(alg, prec)
+                self._prec_matrix = backend.assemble(
+                    self._prec, **self._annotate_kwargs
+                )
+                solver = backend.PETScKrylovSolver(alg, prec)
                 solver.parameters.update(self.parameters["krylov_solver"])
                 solver.set_operators(self._lhs_matrix, self._prec_matrix)
                 solver.ksp().setFromOptions()
             else:
-                solver = PETScKrylovSolver(alg, prec)
+                solver = backend.PETScKrylovSolver(alg, prec)
                 solver.parameters.update(self.parameters["krylov_solver"])
                 solver.set_operator(self._lhs_matrix)
                 solver.ksp().setFromOptions()
@@ -339,7 +341,7 @@ class MonodomainSolver(BasicMonodomainSolver):
           info(MonodomainSolver.default_parameters(), True)
         """
 
-        params = Parameters("MonodomainSolver")
+        params = dolfin.Parameters("MonodomainSolver")
         params.add("enable_adjoint", True)
         params.add("theta", 0.5)
         params.add("polynomial_degree", 1)
@@ -357,8 +359,8 @@ class MonodomainSolver(BasicMonodomainSolver):
         params.add("use_custom_preconditioner", True)
 
         # Add default parameters from both LU and Krylov solvers
-        params.add(LUSolver.default_parameters())
-        params.add(KrylovSolver.default_parameters())
+        params.add(backend.LUSolver.default_parameters())
+        params.add(backend.KrylovSolver.default_parameters())
 
         # Customize default parameters for KrylovSolver
         # params["krylov_solver"]["preconditioner"]["structure"] = "same"
@@ -383,21 +385,21 @@ class MonodomainSolver(BasicMonodomainSolver):
         M_i = self._M_i
 
         # Define variational formulation
-        v = TrialFunction(self.V)
-        w = TestFunction(self.V)
+        v = dolfin.TrialFunction(self.V)
+        w = dolfin.TestFunction(self.V)
 
         # Set-up variational problem
         Dt_v_k_n = v - self.v_
         v_mid = theta * v + (1.0 - theta) * self.v_
 
         (dz, rhs) = rhs_with_markerwise_field(self._I_s, self._mesh, w)
-        theta_parabolic = inner(M_i * grad(v_mid), grad(w)) * dz()
+        theta_parabolic = ufl.inner(M_i * ufl.grad(v_mid), ufl.grad(w)) * dz()
         G = Dt_v_k_n * w * dz + k_n * theta_parabolic - k_n * rhs
 
         # Define preconditioner based on educated(?) guess by Marie
-        prec = (v * w + k_n / 2.0 * inner(M_i * grad(v), grad(w))) * dz
+        prec = (v * w + k_n / 2.0 * ufl.inner(M_i * ufl.grad(v), ufl.grad(w))) * dz
 
-        (a, L) = system(G)
+        (a, L) = dolfin.system(G)
         return (a, L, prec)
 
     def step(self, interval):
@@ -413,7 +415,7 @@ class MonodomainSolver(BasicMonodomainSolver):
           self.v in correct state at t1.
         """
 
-        timer = Timer("PDE Step")
+        timer = dolfin.Timer("PDE Step")
 
         # Extract interval and thus time-step
         (t0, t1) = interval
@@ -427,8 +429,8 @@ class MonodomainSolver(BasicMonodomainSolver):
         self._update_solver(timestep_unchanged, dt)
 
         # Assemble right-hand-side
-        timer0 = Timer("Assemble rhs")
-        assemble(self._rhs, tensor=self._rhs_vector, **self._annotate_kwargs)
+        timer0 = dolfin.Timer("Assemble rhs")
+        backend.assemble(self._rhs, tensor=self._rhs_vector, **self._annotate_kwargs)
         del timer0
 
         # Solve problem
@@ -443,10 +445,10 @@ class MonodomainSolver(BasicMonodomainSolver):
 
         # Update stored timestep
         # FIXME: dolfin_adjoint still can't annotate constant assignment.
-        self._timestep.assign(Constant(dt))  # , annotate=annotate)
+        self._timestep.assign(backend.Constant(dt))  # , annotate=annotate)
 
         # Reassemble matrix
-        assemble(self._lhs, tensor=self._lhs_matrix, **self._annotate_kwargs)
+        backend.assemble(self._lhs, tensor=self._lhs_matrix, **self._annotate_kwargs)
 
     def _update_krylov_solver(self, timestep_unchanged, dt):
         """Helper function for updating a KrylovSolver depending on
@@ -464,14 +466,18 @@ class MonodomainSolver(BasicMonodomainSolver):
             #                                            "same_nonzero_pattern"
 
             # Update stored timestep
-            self._timestep.assign(Constant(dt))
+            self._timestep.assign(backend.Constant(dt))
 
             # Reassemble matrix
-            assemble(self._lhs, tensor=self._lhs_matrix, **self._annotate_kwargs)
+            backend.assemble(
+                self._lhs, tensor=self._lhs_matrix, **self._annotate_kwargs
+            )
 
             # Reassemble preconditioner
             if self.parameters["use_custom_preconditioner"]:
-                assemble(self._prec, tensor=self._prec_matrix, **self._annotate_kwargs)
+                backend.assemble(
+                    self._prec, tensor=self._prec_matrix, **self._annotate_kwargs
+                )
 
         # Set nonzero initial guess if it indeed is nonzero
         # if (self.v.vector().norm("l2") > 1.e-12):

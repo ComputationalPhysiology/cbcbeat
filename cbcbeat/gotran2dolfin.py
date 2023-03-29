@@ -15,7 +15,6 @@ from gotran.model.odeobjects import Comment
 from modelparameters.logger import error
 from modelparameters.utils import check_arg, check_kwarg
 
-from gotran.codegeneration.algorithmcomponents import *
 from gotran.codegeneration.codecomponent import CodeComponent
 
 from gotran.common.options import parameters
@@ -80,7 +79,6 @@ class DOLFINCodeGenerator(PythonCodeGenerator):
         self.params = generation_params
 
     def _init_arguments(self, comp, default_arguments=None):
-
         check_arg(comp, CodeComponent)
         params = self.params.code
         default_arguments = default_arguments or params.default_arguments
@@ -98,7 +96,6 @@ class DOLFINCodeGenerator(PythonCodeGenerator):
         body_lines = ["# Imports", "import ufl", "import dolfin"]
 
         if "s" in default_arguments and states:
-
             states_name = params.states.array_name
             body_lines.append("")
             body_lines.append("# Assign states")
@@ -113,7 +110,6 @@ class DOLFINCodeGenerator(PythonCodeGenerator):
 
             # Generate state assign code
             if params.states.representation == "named":
-
                 body_lines.append(
                     ", ".join(state.name for state in states)
                     + " = dolfin.split({0})".format(states_name)
@@ -124,7 +120,6 @@ class DOLFINCodeGenerator(PythonCodeGenerator):
             "named",
             "array",
         ]:
-
             parameters_name = params.parameters.array_name
             body_lines.append("")
             body_lines.append("# Assign parameters")
@@ -155,7 +150,6 @@ class DOLFINCodeGenerator(PythonCodeGenerator):
 
             # Generate parameters assign code
             if params.parameters.representation == "named":
-
                 body_lines.append(
                     ", ".join(param.name for param in parameters)
                     + " = dolfin.split({0})".format(parameters_name)
@@ -178,7 +172,6 @@ class DOLFINCodeGenerator(PythonCodeGenerator):
     def function_code(
         self, comp, indent=0, default_arguments=None, include_signature=True
     ):
-
         default_arguments = default_arguments or self.params.code.default_arguments
 
         check_arg(comp, CodeComponent)
@@ -212,7 +205,6 @@ class DOLFINCodeGenerator(PythonCodeGenerator):
             )
 
         if include_signature:
-
             # Add function prototype
             body_lines = self.wrap_body_with_function_prototype(
                 body_lines,

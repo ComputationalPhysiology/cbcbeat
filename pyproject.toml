@@ -11,6 +11,7 @@ readme = "README.md"
 dependencies = [
     "fenics-dolfin",
     "numpy",
+    "modelparameters"
 ]
 
 [project.optional-dependencies]
@@ -72,7 +73,7 @@ testpaths = [
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
 select = ["E", "F"]
-ignore = ["E402", "E741"]
+ignore = ["E402", "E741", "E743"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["A", "B", "C", "D", "E", "F"]

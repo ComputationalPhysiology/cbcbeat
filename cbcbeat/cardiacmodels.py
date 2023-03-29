@@ -10,9 +10,11 @@ scenarios.
 
 __all__ = ["CardiacModel"]
 
-from cbcbeat.dolfinimport import Mesh, Constant, GenericFunction, error
+import dolfin
+from cbcbeat.dolfinimport import backend
 from cbcbeat.markerwisefield import Markerwise, handle_markerwise
-from cbcbeat.cellmodels import *
+from cbcbeat.cellmodels import CardiacCellModel
+from modelparameters.logger import error
 
 # ------------------------------------------------------------------------------
 # Cardiac models
@@ -68,14 +70,13 @@ class CardiacModel(object):
     def _handle_input(
         self, domain, time, M_i, M_e, cell_models, stimulus=None, applied_current=None
     ):
-
         # Check input and store attributes
         msg = "Expecting domain to be a Mesh instance, not %r" % domain
-        assert isinstance(domain, Mesh), msg
+        assert isinstance(domain, dolfin.Mesh), msg
         self._domain = domain
 
         msg = "Expecting time to be a Constant instance, not %r." % time
-        assert isinstance(time, Constant) or time is None, msg
+        assert isinstance(time, backend.Constant) or time is None, msg
         self._time = time
 
         self._intracellular_conductivity = M_i
@@ -88,11 +89,11 @@ class CardiacModel(object):
             error(msg)
 
         # Handle stimulus
-        self._stimulus = handle_markerwise(stimulus, GenericFunction)
+        self._stimulus = handle_markerwise(stimulus, dolfin.GenericFunction)
 
         # Handle applied current
         ac = applied_current
-        self._applied_current = handle_markerwise(ac, GenericFunction)
+        self._applied_current = handle_markerwise(ac, dolfin.GenericFunction)
 
     def applied_current(self):
         "An applied current: used as a source in the elliptic bidomain equation"

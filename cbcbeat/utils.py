@@ -5,29 +5,23 @@ __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["state_space", "end_of_time", "convergence_rate", "Projecter"]
 
 import math
-from cbcbeat.dolfinimport import dolfin, dolfin_adjoint
+import dolfin
+from cbcbeat.dolfinimport import backend, has_dolfin_adjoint
 from dolfin.cpp.log import log, LogLevel
-
-if dolfin_adjoint:
-    from dolfin_adjoint import assemble, LUSolver, KrylovSolver
-    from dolfin import parameters
-else:
-    from dolfin import assemble, LUSolver, KrylovSolver, parameters
 
 
 def annotate_kwargs(ba_parameters):
-    if not dolfin_adjoint:
+    if not has_dolfin_adjoint:
         return {}
     if not ba_parameters["enable_adjoint"]:
         return {"annotate": False}
-    if parameters["adjoint"]["stop_annotating"]:
+    if dolfin.parameters["adjoint"]["stop_annotating"]:
         return {"annotate": False}
 
     return {"annotate": True}
 
 
 def splat(vs, dim):
-
     if vs.function_space().ufl_element().num_sub_elements() == dim:
         v = vs[0]
         if dim == 2:
@@ -159,8 +153,8 @@ class TimeStepper:
         # self.t1 = self.T0 + self.dt
 
         # Step through time steps until at end time.
-        if self.annotate and dolfin_adjoint:
-            dolfin_adjoint.adj_start_timestep(self.T0)
+        if self.annotate and has_dolfin_adjoint:
+            backend.adj_start_timestep(self.T0)
 
     def __iter__(self):
         """
@@ -169,7 +163,6 @@ class TimeStepper:
         eps = 1e-10
 
         while True:
-
             # Get next t1
             t1 = self.next_t1()
 
@@ -178,13 +171,13 @@ class TimeStepper:
 
             # Break if this is the last step
             if abs(t1 - self.T1) < eps:
-                if self.annotate and dolfin_adjoint:
-                    dolfin_adjoint.adj_inc_timestep(time=t1, finished=True)
+                if self.annotate and has_dolfin_adjoint:
+                    backend.adj_inc_timestep(time=t1, finished=True)
                 break
 
             # Move to next time
-            if self.annotate and dolfin_adjoint:
-                dolfin_adjoint.adj_inc_timestep(time=t1)
+            if self.annotate and has_dolfin_adjoint:
+                backend.adj_inc_timestep(time=t1)
 
             self.t0 = t1
 
@@ -250,7 +243,7 @@ class Projecter(object):
         self.u = dolfin.TrialFunction(self.V)
         self.v = dolfin.TestFunction(self.V)
         self.m = dolfin.inner(self.u, self.v) * dolfin.dx()
-        self.M = assemble(self.m)
+        self.M = backend.assemble(self.m)
         self.b = dolfin.Vector(V.mesh().mpi_comm(), V.dim())
 
         solver_type = self.parameters["linear_solver_type"]
@@ -261,11 +254,11 @@ class Projecter(object):
             log(LogLevel.TRACE, "Setting up direct solver for projecter")
 
             # Customize LU solver (reuse everything)
-            solver = LUSolver(self.M)
+            solver = backend.LUSolver(self.M)
         else:
             log(LogLevel.TRACE, "Setting up iterative solver for projecter")
             # Customize Krylov solver (reuse everything)
-            solver = KrylovSolver("cg", "ilu")
+            solver = backend.KrylovSolver("cg", "ilu")
             solver.set_operator(self.M)
             if solver.parameters.has_parameter("preconditioner"):
                 solver.parameters["preconditioner"]["structure"] = "same"
@@ -291,5 +284,5 @@ class Projecter(object):
             The result of the projection
         """
         L = dolfin.inner(f, self.v) * dolfin.dx()
-        assemble(L, tensor=self.b)
+        backend.assemble(L, tensor=self.b)
         self.solver.solve(u.vector(), self.b)

@@ -4,27 +4,17 @@ be imported."""
 
 __author__ = "Johan Hake (hake.dev@gmail.com), 2013"
 
-# FIXME: This is here for readthedocs Mock purposes. Better fix would
-# be, duh, better.
 
-
-try:
-    pass
-except:
-    pass
+import dolfin as backend
 
 try:
-    pass
-except:
-    pass
+    import dolfin_adjoint as backend  # noqa: F811
 
-from dolfin import *
+    has_dolfin_adjoint = True
 
-try:
-    from dolfin_adjoint import *
-    import dolfin_adjoint
-
-except:
+except ImportError:
     # FIXME: Should we raise some sort of warning?
-    dolfin_adjoint = None
-    pass
+    has_dolfin_adjoint = False
+
+
+__all__ = ["backend"]

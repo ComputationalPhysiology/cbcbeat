@@ -6,7 +6,8 @@ from __future__ import division
 from collections import OrderedDict
 import ufl
 
-from cbcbeat.dolfinimport import *
+import dolfin
+from cbcbeat.dolfinimport import backend
 from cbcbeat.cellmodels import CardiacCellModel
 
 
@@ -63,7 +64,7 @@ class Fenton_karma_1998_BR_altered(CardiacCellModel):
         """
         Original gotran transmembrane current dV/dt
         """
-        time = time if time else Constant(0.0)
+        time = time if time else backend.Constant(0.0)
 
         # Assign states
         V = v
@@ -128,7 +129,7 @@ class Fenton_karma_1998_BR_altered(CardiacCellModel):
         """
         Right hand side for ODE system
         """
-        time = time if time else Constant(0.0)
+        time = time if time else backend.Constant(0.0)
 
         # Assign states
         V = v

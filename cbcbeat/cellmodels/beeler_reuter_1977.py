@@ -6,7 +6,8 @@ from __future__ import division
 from collections import OrderedDict
 import ufl
 
-from cbcbeat.dolfinimport import *
+import dolfin
+from cbcbeat.dolfinimport import backend
 from cbcbeat.cellmodels import CardiacCellModel
 
 
@@ -63,7 +64,7 @@ class Beeler_reuter_1977(CardiacCellModel):
         """
         Original gotran transmembrane current dV/dt
         """
-        time = time if time else Constant(0.0)
+        time = time if time else backend.Constant(0.0)
 
         # Assign states
         V = v
@@ -131,7 +132,7 @@ class Beeler_reuter_1977(CardiacCellModel):
         """
         Right hand side for ODE system
         """
-        time = time if time else Constant(0.0)
+        time = time if time else backend.Constant(0.0)
 
         # Assign states
         V = v
