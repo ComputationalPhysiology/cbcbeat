@@ -134,6 +134,7 @@ class TestSplittingSolverAdjoint(object):
         # Define functional
         def form(w):
             return inner(w, w) * dx
+
         J = Functional(form(vs) * dt[FINISH_TIME])
         if Solver == SplittingSolver:
             m = Control(vs)

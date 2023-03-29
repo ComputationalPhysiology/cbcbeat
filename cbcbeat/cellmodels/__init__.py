@@ -1,4 +1,3 @@
-
 # Base class for cardiac cell models
 # import cardiaccellmodel
 

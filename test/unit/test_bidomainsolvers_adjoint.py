@@ -146,6 +146,7 @@ class TestBidomainSolversAdjoint(object):
         # Define functional
         def form(w):
             return inner(w, w) * dx
+
         J = Functional(form(vs) * dt[FINISH_TIME])
         m = Control(vs_)
 

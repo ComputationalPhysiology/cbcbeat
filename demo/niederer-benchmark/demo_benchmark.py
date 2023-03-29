@@ -258,6 +258,7 @@ def create_mesh(dx, refinements=0):
 
     def N(v):
         return int(numpy.rint(v))
+
     mesh = BoxMesh(
         MPI.comm_world,
         Point(0.0, 0.0, 0.0),

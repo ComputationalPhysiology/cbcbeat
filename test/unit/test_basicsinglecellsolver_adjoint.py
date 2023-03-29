@@ -132,8 +132,10 @@ def basic_single_cell_closure(theta, Model):
 
         # Define functional
         (vs_, vs) = solver.solution_fields()
+
         def form(w):
             return inner(w, w) * dx
+
         J = Functional(form(vs) * dt[FINISH_TIME])
 
         # Compute value of functional with current ics

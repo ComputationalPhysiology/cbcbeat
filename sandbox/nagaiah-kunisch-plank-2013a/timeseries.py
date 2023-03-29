@@ -2,8 +2,8 @@ import os.path
 import dolfin
 import cPickle
 
-class MyTimeSeries:
 
+class MyTimeSeries:
     def __init__(self, directory, filename, v, modifier):
         # Store input
         # FIXME: Can be simplified with os.path magic
@@ -52,9 +52,9 @@ class MyTimeSeries:
         num = index[str(time)]
         self._file.read(v.vector(), "/values_{}".format(num), True)
 
-if __name__ == "__main__":
 
-    mesh = dolfin.UnitSquareMesh(2,2)
+if __name__ == "__main__":
+    mesh = dolfin.UnitSquareMesh(2, 2)
     V = dolfin.FunctionSpace(mesh, "CG", 1)
     u = dolfin.Function(V)
 
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     # How to retrieve
     series = MyTimeSeries("results", "foo-series.h5", u, "r")
     (times, index) = series.retrieve_times()
-    print "Retrieved times and index: ", times, index
+    print("Retrieved times and index: ", times, index)
     series.retrieve(u, 0.2)
     dolfin.plot(u, title="u", interactive=True)
-    print "Success!"
+    print("Success!")
