@@ -4,19 +4,18 @@ Verify the correctness of the test splitting solver with an analytic solution
 
 __author__ = "Simon W. Funke (simon@simula.no) and Jakob Schreiner, 2018"
 
-import pytest
 import cbcbeat
 
 from testutils import medium
 from collections import OrderedDict
-from cbcbeat import cellmodels
 from cbcbeat.dolfinimport import Expression, Constant, UnitSquareMesh
-from cbcbeat import BidomainSolver, errornorm, SplittingSolver, CardiacCellModel
+from cbcbeat import errornorm, SplittingSolver, CardiacCellModel
 from cbcbeat.utils import convergence_rate
 
 
 class SimpleODEModel(CardiacCellModel):
-    """This class implements a simple ODE system """
+    """This class implements a simple ODE system"""
+
     def __init__(self, mesh):
         CardiacCellModel.__init__(self)
 
@@ -28,7 +27,7 @@ class SimpleODEModel(CardiacCellModel):
 
     @staticmethod
     def default_initial_conditions():
-        return OrderedDict([("V", 0.0),("S", 0.0)])
+        return OrderedDict([("V", 0.0), ("S", 0.0)])
 
     def num_states(self):
         return 1
@@ -43,8 +42,10 @@ def main(N, dt, T, theta=0.5):
     s_exact_str = "-cos(pi*x[0])*cos(pi*x[1])*cos(t)"
 
     # Source term
-    ac_str = "cos(t)*cos(pi*x[0])*cos(pi*x[1]) + pow(pi, 2)*cos(pi*x[0])*cos(pi*x[1])*sin(t)"
-    ac_str +=" - " + s_exact_str
+    ac_str = (
+        "cos(t)*cos(pi*x[0])*cos(pi*x[1]) + pow(pi, 2)*cos(pi*x[0])*cos(pi*x[1])*sin(t)"
+    )
+    ac_str += " - " + s_exact_str
 
     # Create data
     mesh = UnitSquareMesh(N, N)
@@ -52,7 +53,9 @@ def main(N, dt, T, theta=0.5):
 
     # We choose the FHN parameters such that s=1 and I_s=v
     model = SimpleODEModel(mesh)
-    model.set_initial_conditions(V=0, S=Expression(s_exact_str, degree=5, t=0))    # Set initial condition
+    model.set_initial_conditions(
+        V=0, S=Expression(s_exact_str, degree=5, t=0)
+    )  # Set initial condition
 
     ps = SplittingSolver.default_parameters()
     ps["pde_solver"] = "bidomain"
@@ -63,25 +66,18 @@ def main(N, dt, T, theta=0.5):
     ps["BidomainSolver"]["use_avg_u_constraint"] = True
     ps["apply_stimulus_current_to_pde"] = True
 
-
     stimulus = Expression(ac_str, t=time, dt=dt, degree=5)
     M_i = 1.0
     M_e = 1.0
     heart = cbcbeat.CardiacModel(mesh, time, M_i, M_e, model, stimulus)
     splittingsolver = SplittingSolver(heart, params=ps)
 
-
     # Define exact solution (Note: v is returned at end of time
     # interval(s), u is computed at somewhere in the time interval
     # depending on theta)
-    
-    v_exact = Expression(v_exact_str, t=T, degree=3)
-    u_exact = Expression(
-        u_exact_str,
-        t=T - (1. - theta)*dt,
-        degree=3
-    )
 
+    v_exact = Expression(v_exact_str, t=T, degree=3)
+    u_exact = Expression(u_exact_str, t=T - (1.0 - theta) * dt, degree=3)
 
     pde_vs_, pde_vs, vur = splittingsolver.solution_fields()
     pde_vs_.assign(model.initial_conditions())
@@ -97,6 +93,7 @@ def main(N, dt, T, theta=0.5):
     u_error = errornorm(u_exact, u, "L2", degree_rise=2)
     return v_error, u_error, mesh.hmin(), dt, T
 
+
 @medium
 def test_spatial_convergence():
     """Take a very small timestep, reduce mesh size, expect 2nd order convergence."""
@@ -106,7 +103,7 @@ def test_spatial_convergence():
     dt = 0.01
     T = 1.0
     for N in (5, 10, 20, 40):
-        v_error, u_error, h, dt_, T = main(N, dt, T)   
+        v_error, u_error, h, dt_, T = main(N, dt, T)
         v_errors.append(v_error)
         u_errors.append(u_error)
         hs.append(h)
@@ -133,7 +130,7 @@ def test_temporal_convergence():
     T = 1.0
     N = 150
     for level in (0, 1, 2, 3):
-        a = dt/(2**level)
+        a = dt / (2**level)
         v_error, u_error, h, a, T = main(N, a, T)
         v_errors.append(v_error)
         u_errors.append(u_error)

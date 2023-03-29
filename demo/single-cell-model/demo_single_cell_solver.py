@@ -17,6 +17,7 @@ from cbcbeat import *
 
 # Disable adjointing
 import cbcbeat
+
 if cbcbeat.dolfin_adjoint:
     parameters["adjoint"]["stop_annotating"] = True
 
@@ -29,19 +30,24 @@ parameters["form_compiler"]["cpp_optimize"] = True
 flags = "-O3 -ffast-math -march=native"
 parameters["form_compiler"]["cpp_optimize_flags"] = flags
 
+
 class Stimulus(UserExpression):
     "Some self-defined stimulus."
+
     def __init__(self, time, **kwargs):
         self.t = time
         super().__init__(**kwargs)
+
     def eval(self, value, x):
         if float(self.t) >= 2 and float(self.t) <= 11:
             v_amp = 125
-            value[0] = 0.05*v_amp
+            value[0] = 0.05 * v_amp
         else:
             value[0] = 0.0
+
     def value_shape(self):
         return ()
+
 
 def plot_results(times, values, show=True):
     "Plot the evolution of each variable versus time."
@@ -49,10 +55,14 @@ def plot_results(times, values, show=True):
     variables = list(zip(*values))
     pylab.figure(figsize=(20, 10))
 
-    rows = int(math.ceil(math.sqrt(len(variables))))
-    for (i, var) in enumerate([variables[0],]):
-        #pylab.subplot(rows, rows, i+1)
-        pylab.plot(times, var, '*-')
+    int(math.ceil(math.sqrt(len(variables))))
+    for (i, var) in enumerate(
+        [
+            variables[0],
+        ]
+    ):
+        # pylab.subplot(rows, rows, i+1)
+        pylab.plot(times, var, "*-")
         pylab.title("Var. %d" % i)
         pylab.xlabel("t")
         pylab.grid(True)
@@ -62,20 +72,23 @@ def plot_results(times, values, show=True):
     if show:
         pylab.show()
 
+
 def main(scenario="default"):
     "Solve a single cell model on some time frame."
 
     # Initialize model and assign stimulus
     params = Tentusscher_panfilov_2006_epi_cell.default_parameters()
-    if scenario is not "default":
-        new = {"g_Na": params["g_Na"]*0.38,
-               "g_CaL": params["g_CaL"]*0.31,
-               "g_Kr": params["g_Kr"]*0.30,
-               "g_Ks": params["g_Ks"]*0.20}
+    if scenario != "default":
+        new = {
+            "g_Na": params["g_Na"] * 0.38,
+            "g_CaL": params["g_CaL"] * 0.31,
+            "g_Kr": params["g_Kr"] * 0.30,
+            "g_Ks": params["g_Ks"] * 0.20,
+        }
         model = Tentusscher_panfilov_2006_epi_cell(params=new)
     else:
         model = Tentusscher_panfilov_2006_epi_cell()
-        
+
     time = Constant(0.0)
     model.stimulus = Stimulus(time=time, degree=0)
 
@@ -102,16 +115,21 @@ def main(scenario="default"):
 
     return times, values
 
+
 def compare_results(times, many_values, legends=(), show=True):
     "Plot the evolution of each variable versus time."
 
     pylab.figure(figsize=(20, 10))
     for values in many_values:
         variables = list(zip(*values))
-        rows = int(math.ceil(math.sqrt(len(variables))))
-        for (i, var) in enumerate([variables[0],]):
-            #pylab.subplot(rows, rows, i+1)
-            pylab.plot(times, var, '-')
+        int(math.ceil(math.sqrt(len(variables))))
+        for (i, var) in enumerate(
+            [
+                variables[0],
+            ]
+        ):
+            # pylab.subplot(rows, rows, i+1)
+            pylab.plot(times, var, "-")
             pylab.title("Var. %d" % i)
             pylab.xlabel("t")
             pylab.grid(True)
@@ -122,10 +140,11 @@ def compare_results(times, many_values, legends=(), show=True):
     if show:
         pylab.show()
 
+
 if __name__ == "__main__":
 
     (times, values1) = main("default")
     (times, values2) = main("gray zone")
-    compare_results(times, [values1, values2],
-                    legends=("default", "gray zone"),
-                    show=True)
+    compare_results(
+        times, [values1, values2], legends=("default", "gray zone"), show=True
+    )

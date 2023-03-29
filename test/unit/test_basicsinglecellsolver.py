@@ -5,36 +5,42 @@ __author__ = "Marie E. Rognes (meg@simula.no), 2013"
 __all__ = ["TestCardiacODESolver", "TestBasicSingleCellSolver"]
 
 
-import itertools
 import pytest
-from testutils import medium, assert_almost_equal, parametrize, cell_model
+from testutils import medium, assert_almost_equal, parametrize
 
-from dolfin import info, UnitIntervalMesh
 from ufl.log import info_red, info_green
-from cbcbeat import supported_cell_models, \
-    CardiacODESolver, BasicSingleCellSolver, \
-    NoCellModel, FitzHughNagumoManual, \
-    Tentusscher_2004_mcell, \
-    Constant, Expression
+from cbcbeat import (
+    supported_cell_models,
+    BasicSingleCellSolver,
+    NoCellModel,
+    FitzHughNagumoManual,
+    Tentusscher_2004_mcell,
+    Constant,
+    Expression,
+)
+
 
 class TestBasicSingleCellSolver(object):
     "Test functionality for the basic single cell solver."
 
-    references = {NoCellModel: {1.0: (0, 0.3),
-                                 0.5: (0, 0.2),
-                                 0.0: (0, 0.1)},
-                   FitzHughNagumoManual: {1.0:  (0, -84.70013280019053),
-                                          0.5: (0, -84.8000503072239979),
-                                          0.0:  (0, -84.9)},
-                   Tentusscher_2004_mcell: {1.0: (0, -85.89745525156506),
-                                            0.5: (0, -85.99686000794499),
-                                            0.0:  (0, -86.09643254164848),}
-                   }
+    references = {
+        NoCellModel: {1.0: (0, 0.3), 0.5: (0, 0.2), 0.0: (0, 0.1)},
+        FitzHughNagumoManual: {
+            1.0: (0, -84.70013280019053),
+            0.5: (0, -84.8000503072239979),
+            0.0: (0, -84.9),
+        },
+        Tentusscher_2004_mcell: {
+            1.0: (0, -85.89745525156506),
+            0.5: (0, -85.99686000794499),
+            0.0: (0, -86.09643254164848),
+        },
+    }
 
     def _run_solve(self, model, time, theta):
         "Run two time steps for the given model with the given theta solver."
         dt = 0.01
-        T = 2*dt
+        T = 2 * dt
         interval = (0.0, T)
 
         # Initialize solver
@@ -58,7 +64,7 @@ class TestBasicSingleCellSolver(object):
         return vs.vector()
 
     @medium
-    @parametrize(("theta"), [0., 0.5, 1.])
+    @parametrize(("theta"), [0.0, 0.5, 1.0])
     def test_default_basic_single_cell_solver(self, cell_model, theta):
         "Test basic single cell solver."
         time = Constant(0.0)

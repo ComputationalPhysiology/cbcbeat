@@ -5,4 +5,3 @@ Installation with docker
        `docker build -t cbcbeat .`
 3. Start docker container with
        `docker run -it -v `pwd`:/home/fenics/shared cbcbeat`
-

@@ -9,7 +9,6 @@ from cbcbeat.cellmodels import *
 from cbcbeat.utils import state_space
 
 try:
-    import goss
 
     has_goss = True
 except ImportError:

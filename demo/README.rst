@@ -11,7 +11,7 @@ sensitivities, continue by looking at
 
   monodomain/demo_monodomain_adjoint.py
 
-If you would like to look at a more realistic example, take a look at 
+If you would like to look at a more realistic example, take a look at
 
   bidomain-biventricular/demo_*.py
 

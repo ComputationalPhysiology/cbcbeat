@@ -1,14 +1,14 @@
-import sys
-import os
 import random
-import pytest
 import cbcbeat
+
 if cbcbeat.dolfin_adjoint:
-    import dolfin_adjoint
+    pass
 
 default_params = cbcbeat.parameters.copy()
+
+
 def pytest_runtest_setup(item):
-    """ Hook function which is called before every test """
+    """Hook function which is called before every test"""
 
     # Reset dolfin parameter dictionary
     cbcbeat.parameters.update(default_params)

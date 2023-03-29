@@ -10,13 +10,14 @@ scenarios.
 
 __all__ = ["CardiacModel"]
 
-from cbcbeat.dolfinimport import Parameters, Mesh, Constant, GenericFunction, error
+from cbcbeat.dolfinimport import Mesh, Constant, GenericFunction, error
 from cbcbeat.markerwisefield import Markerwise, handle_markerwise
 from cbcbeat.cellmodels import *
 
 # ------------------------------------------------------------------------------
 # Cardiac models
 # ------------------------------------------------------------------------------
+
 
 class CardiacModel(object):
     """
@@ -54,15 +55,19 @@ class CardiacModel(object):
         an applied current as an ufl Expression
 
     """
-    def __init__(self, domain, time, M_i, M_e, cell_models,
-                 stimulus=None, applied_current=None):
+
+    def __init__(
+        self, domain, time, M_i, M_e, cell_models, stimulus=None, applied_current=None
+    ):
         "Create CardiacModel from given input."
 
-        self._handle_input(domain, time, M_i, M_e, cell_models,
-                           stimulus, applied_current)
+        self._handle_input(
+            domain, time, M_i, M_e, cell_models, stimulus, applied_current
+        )
 
-    def _handle_input(self, domain, time, M_i, M_e, cell_models,
-                      stimulus=None, applied_current=None):
+    def _handle_input(
+        self, domain, time, M_i, M_e, cell_models, stimulus=None, applied_current=None
+    ):
 
         # Check input and store attributes
         msg = "Expecting domain to be a Mesh instance, not %r" % domain
@@ -104,8 +109,7 @@ class CardiacModel(object):
         *Returns*
         (M_i, M_e) (:py:class:`tuple` of :py:class:`ufl.Expr`)
         """
-        return (self.intracellular_conductivity(),
-                self.extracellular_conductivity())
+        return (self.intracellular_conductivity(), self.extracellular_conductivity())
 
     def intracellular_conductivity(self):
         "The intracellular conductivity (:py:class:`ufl.Expr`)."

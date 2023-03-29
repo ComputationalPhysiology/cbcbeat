@@ -7,7 +7,6 @@ __all__ = ["TestSplittingSolver"]
 
 from testutils import assert_almost_equal, medium, parametrize
 
-from dolfin import info
 
 from cbcbeat import *
 
@@ -16,6 +15,7 @@ try:
 except:
     set_log_level(WARNING)
     pass
+
 
 class TestSplittingSolver(object):
     "Test functionality for the splitting solvers."
@@ -30,28 +30,30 @@ class TestSplittingSolver(object):
         self.stimulus = Expression("2.0*t", t=self.time, degree=1)
 
         # Create ac
-        self.applied_current = Expression("sin(2*pi*x[0])*t", t=self.time,
-                                          degree=3)
+        self.applied_current = Expression("sin(2*pi*x[0])*t", t=self.time, degree=3)
 
         # Create conductivity "tensors"
         self.M_i = 1.0
         self.M_e = 2.0
 
         self.cell_model = FitzHughNagumoManual()
-        self.cardiac_model = CardiacModel(self.mesh, self.time,
-                                          self.M_i, self.M_e,
-                                          self.cell_model,
-                                          self.stimulus,
-                                          self.applied_current)
+        self.cardiac_model = CardiacModel(
+            self.mesh,
+            self.time,
+            self.M_i,
+            self.M_e,
+            self.cell_model,
+            self.stimulus,
+            self.applied_current,
+        )
 
         dt = 0.1
         self.t0 = 0.0
-        self.dt = [(0.0, dt), (dt*2, dt/2), (dt*4, dt)]
+        self.dt = [(0.0, dt), (dt * 2, dt / 2), (dt * 4, dt)]
         # Test using variable dt interval but using the same dt.
 
-        self.T = self.t0 + 5*dt
+        self.T = self.t0 + 5 * dt
         self.ics = self.cell_model.initial_conditions()
-
 
     @medium
     @parametrize(("solver_type"), ["direct", "iterative"])
@@ -105,5 +107,5 @@ class TestSplittingSolver(object):
 
         # Compare results, discrepancy is in difference in ODE
         # solves.
-        assert_almost_equal(a, b, tolerance=1.)
-        assert_almost_equal(c, d, tolerance=1.)
+        assert_almost_equal(a, b, tolerance=1.0)
+        assert_almost_equal(c, d, tolerance=1.0)

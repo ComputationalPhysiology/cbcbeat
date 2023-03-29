@@ -37,17 +37,17 @@ def main(filename, params):
 if __name__ == "__main__":
     import sys
     from modelparameters.parameterdict import ParameterDict, OptionParam, Param
-    
+
     params = ParameterDict(\
         output = Param("", description="Specify output file name"),\
         **DOLFINCodeGenerator.default_parameters())
     params.parse_args(usage="usage: %prog FILE [options]")#sys.argv[2:])
-    
+
     if len(sys.argv) < 2:
         raise RuntimeError("Expected a single gotran file argument")
 
     if not os.path.isfile(sys.argv[1]):
         raise IOError("Expected the argument to be a file")
-	 
+
     file_name = sys.argv[1]
     main(file_name, params)

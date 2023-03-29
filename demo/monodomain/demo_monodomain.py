@@ -29,6 +29,7 @@ parameters["form_compiler"]["quadrature_degree"] = 3
 
 # Turn off adjoint functionality
 import cbcbeat
+
 if cbcbeat.dolfin_adjoint:
     parameters["adjoint"]["stop_annotating"] = True
 
@@ -51,9 +52,9 @@ cardiac_model = CardiacModel(mesh, time, M_i, M_e, cell_model, stimulus)
 
 # Customize and create a splitting solver
 ps = SplittingSolver.default_parameters()
-ps["theta"] = 0.5                        # Second order splitting scheme
-ps["pde_solver"] = "monodomain"          # Use Monodomain model for the PDEs
-ps["CardiacODESolver"]["scheme"] = "RL1" # 1st order Rush-Larsen for the ODEs
+ps["theta"] = 0.5  # Second order splitting scheme
+ps["pde_solver"] = "monodomain"  # Use Monodomain model for the PDEs
+ps["CardiacODESolver"]["scheme"] = "RL1"  # 1st order Rush-Larsen for the ODEs
 ps["MonodomainSolver"]["linear_solver_type"] = "iterative"
 ps["MonodomainSolver"]["algorithm"] = "cg"
 ps["MonodomainSolver"]["preconditioner"] = "petsc_amg"
@@ -69,7 +70,7 @@ dt = 0.1
 T = 1.0
 interval = (0.0, T)
 
-timer = Timer("XXX Forward solve") # Time the total solve
+timer = Timer("XXX Forward solve")  # Time the total solve
 
 # Solve!
 for (timestep, fields) in solver.solve(interval, dt):
@@ -92,5 +93,3 @@ plt.savefig("s_0(T).png")
 list_timings(TimingClear.keep, [TimingType.user])
 
 print("Success!")
-
-

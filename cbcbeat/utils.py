@@ -2,8 +2,7 @@
 
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 
-__all__ = ["state_space", "end_of_time", "convergence_rate",
-           "Projecter"]
+__all__ = ["state_space", "end_of_time", "convergence_rate", "Projecter"]
 
 import math
 from cbcbeat.dolfinimport import dolfin, dolfin_adjoint
@@ -15,6 +14,7 @@ if dolfin_adjoint:
 else:
     from dolfin import assemble, LUSolver, KrylovSolver, parameters
 
+
 def annotate_kwargs(ba_parameters):
     if not dolfin_adjoint:
         return {}
@@ -25,9 +25,10 @@ def annotate_kwargs(ba_parameters):
 
     return {"annotate": True}
 
+
 def splat(vs, dim):
 
-    if vs.function_space().ufl_element().num_sub_elements()==dim:
+    if vs.function_space().ufl_element().num_sub_elements() == dim:
         v = vs[0]
         if dim == 2:
             s = vs[1]
@@ -37,6 +38,7 @@ def splat(vs, dim):
         v, s = dolfin.split(vs)
 
     return v, s
+
 
 def state_space(domain, d, family=None, k=1):
     """Return function space for the state variables.
@@ -62,6 +64,7 @@ def state_space(domain, d, family=None, k=1):
         S = dolfin.FunctionSpace(domain, family, k)
     return S
 
+
 def end_of_time(T, t0, t1, dt):
     """
     Return True if the interval (t0, t1) is the last before the end
@@ -69,10 +72,12 @@ def end_of_time(T, t0, t1, dt):
     """
     return (t1 + dt) > (T + dolfin.DOLFIN_EPS)
 
+
 class TimeStepper:
     """
     A helper object that keep track of simulated time
     """
+
     def __init__(self, interval, dt, annotate=False):
         """
         *Arguments*
@@ -88,14 +93,21 @@ class TimeStepper:
 
         self.annotate = annotate
 
-        if not isinstance(interval, (tuple, list)) or len(interval) != 2 or \
-               not all(isinstance(value, (float, int)) for value in interval):
-            raise TypeError("expected tuple or list of size 2 with scalars for "\
-                            "the interval argument")
+        if (
+            not isinstance(interval, (tuple, list))
+            or len(interval) != 2
+            or not all(isinstance(value, (float, int)) for value in interval)
+        ):
+            raise TypeError(
+                "expected tuple or list of size 2 with scalars for "
+                "the interval argument"
+            )
 
         if interval[0] >= interval[1]:
-            raise ValueError("Start time need to be larger than stop time: "\
-                             "interval[0] < interval[1]")
+            raise ValueError(
+                "Start time need to be larger than stop time: "
+                "interval[0] < interval[1]"
+            )
 
         # Store time interval
         (self.T0, self.T1) = interval
@@ -107,19 +119,27 @@ class TimeStepper:
             dt = [(self.T0, dt)]
 
         # Check that all dt are tuples of size 2 with either floats or ints.
-        if any((not isinstance(item, tuple) or \
-                len(item)!=2 or not all(isinstance(value, (float, int)) \
-                                        for value in item)) for item in dt):
-            raise TypeError("expected list of tuples of size 2 with scalars for "\
-                            "the dt argument")
+        if any(
+            (
+                not isinstance(item, tuple)
+                or len(item) != 2
+                or not all(isinstance(value, (float, int)) for value in item)
+            )
+            for item in dt
+        ):
+            raise TypeError(
+                "expected list of tuples of size 2 with scalars for " "the dt argument"
+            )
 
         # Check that first time value of dt is the same as the first given in interval
         if dt[0][0] != self.T0:
-            raise ValueError("expected first time value of dt to be the same as "\
-                             "the first value of time interval.")
+            raise ValueError(
+                "expected first time value of dt to be the same as "
+                "the first value of time interval."
+            )
 
         # Check that all time values given in dt are increasing
-        if not all(dt[i][0] < dt[i+1][0] for i in range(len(dt)-1)):
+        if not all(dt[i][0] < dt[i + 1][0] for i in range(len(dt) - 1)):
             raise ValueError("expected all time values in dt to be increasing")
 
         # Check that all time step values given in dt are positive
@@ -136,7 +156,7 @@ class TimeStepper:
         # Keep track of dt index
         self._dt_ind = 0
         self.t0 = self.T0
-        #self.t1 = self.T0 + self.dt
+        # self.t1 = self.T0 + self.dt
 
         # Step through time steps until at end time.
         if self.annotate and dolfin_adjoint:
@@ -157,7 +177,7 @@ class TimeStepper:
             yield self.t0, t1
 
             # Break if this is the last step
-            if abs(t1-self.T1) < eps:
+            if abs(t1 - self.T1) < eps:
                 if self.annotate and dolfin_adjoint:
                     dolfin_adjoint.adj_inc_timestep(time=t1, finished=True)
                 break
@@ -172,15 +192,16 @@ class TimeStepper:
         """
         Return the time of next end interval
         """
-        assert self._dt_ind < len(self._dt)+1
+        assert self._dt_ind < len(self._dt) + 1
         dt = self._dt[self._dt_ind][1]
-        time_to_switch_dt = self._dt[self._dt_ind+1][0]
-        if time_to_switch_dt - dolfin.DOLFIN_EPS > self.t0 + dt :
+        time_to_switch_dt = self._dt[self._dt_ind + 1][0]
+        if time_to_switch_dt - dolfin.DOLFIN_EPS > self.t0 + dt:
             return self.t0 + dt
 
         # Update dt index
         self._dt_ind += 1
         return time_to_switch_dt
+
 
 def convergence_rate(hs, errors):
     """
@@ -191,13 +212,16 @@ def convergence_rate(hs, errors):
       errors = C hs^r
 
     """
-    assert (len(hs) == len(errors)), "hs and errors must have same length."
+    assert len(hs) == len(errors), "hs and errors must have same length."
     # Compute converence rates
-    rates = [(math.log(errors[i+1]/errors[i]))/(math.log(hs[i+1]/hs[i]))
-             for i in range(len(hs)-1)]
+    rates = [
+        (math.log(errors[i + 1] / errors[i])) / (math.log(hs[i + 1] / hs[i]))
+        for i in range(len(hs) - 1)
+    ]
 
     # Return convergence rates
     return rates
+
 
 class Projecter(object):
     """Customized class for repeated projection.
@@ -225,13 +249,14 @@ class Projecter(object):
         self.V = V
         self.u = dolfin.TrialFunction(self.V)
         self.v = dolfin.TestFunction(self.V)
-        self.m = dolfin.inner(self.u, self.v)*dolfin.dx()
+        self.m = dolfin.inner(self.u, self.v) * dolfin.dx()
         self.M = assemble(self.m)
         self.b = dolfin.Vector(V.mesh().mpi_comm(), V.dim())
 
         solver_type = self.parameters["linear_solver_type"]
-        assert(solver_type == "lu" or solver_type == "cg"),  \
-            "Expecting 'linear_solver_type' to be 'lu' or 'cg'"
+        assert (
+            solver_type == "lu" or solver_type == "cg"
+        ), "Expecting 'linear_solver_type' to be 'lu' or 'cg'"
         if solver_type == "lu":
             log(LogLevel.TRACE, "Setting up direct solver for projecter")
 
@@ -265,6 +290,6 @@ class Projecter(object):
           u (:py:class:`dolfin.Function`)
             The result of the projection
         """
-        L = dolfin.inner(f, self.v)*dolfin.dx()
+        L = dolfin.inner(f, self.v) * dolfin.dx()
         assemble(L, tensor=self.b)
         self.solver.solve(u.vector(), self.b)

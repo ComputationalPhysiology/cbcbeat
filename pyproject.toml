@@ -10,7 +10,7 @@ license = {file = "COPYING.LESSSER"}
 readme = "README.md"
 dependencies = [
     "fenics-dolfin",
-    "numpy",   
+    "numpy",
 ]
 
 [project.optional-dependencies]
@@ -30,7 +30,7 @@ pypi = [
     "build"
 ]
 docs = [
-    "sphinx", 
+    "sphinx",
     "sphinx_book_theme",
 ]
 all = [

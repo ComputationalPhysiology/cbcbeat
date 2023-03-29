@@ -1,15 +1,16 @@
 from dolfin import *
 
+
 def generate_conductivities():
 
-    chi = 1400.0   # Membrane surface-to-volume ratio (1/cm)
-    C_m = 1.0      # Membrane capacitance per unit area (micro F/(cm^2))
+    chi = 1400.0  # Membrane surface-to-volume ratio (1/cm)
+    C_m = 1.0  # Membrane capacitance per unit area (micro F/(cm^2))
 
     info("Loading mesh")
     mesh = Mesh("data/mesh115_refined.xml.gz")
-    mesh.coordinates()[:] /= 1000.0 # Scale mesh from micrometer to millimeter
-    mesh.coordinates()[:] /= 10.0   # Scale mesh from millimeter to centimeter
-    mesh.coordinates()[:] /= 4.0    # Scale mesh as indicated by Johan
+    mesh.coordinates()[:] /= 1000.0  # Scale mesh from micrometer to millimeter
+    mesh.coordinates()[:] /= 10.0  # Scale mesh from millimeter to centimeter
+    mesh.coordinates()[:] /= 4.0  # Scale mesh as indicated by Johan
 
     # Load ischemic region (scalar function between 0-1, where 0 is ischemic)
     info("Loading ischemic region")
@@ -24,35 +25,35 @@ def generate_conductivities():
     # (All values in mS/cm (milli-Siemens per centimeter, before division)
 
     # Extracellular:
-    g_el = 6.25/(C_m*chi) # Fiber
-    g_et = 2.36/(C_m*chi) # Sheet
-    g_et = 2.36/(C_m*chi) # Cross-sheet
+    g_el = 6.25 / (C_m * chi)  # Fiber
+    g_et = 2.36 / (C_m * chi)  # Sheet
+    g_et = 2.36 / (C_m * chi)  # Cross-sheet
 
     # Intracellular:
-    g_il = 1.74/(C_m*chi)   # Fiber
-    g_it = 0.192/(C_m*chi)  # Sheet
-    g_it = 0.192/(C_m*chi)  # Cross-sheet
+    g_il = 1.74 / (C_m * chi)  # Fiber
+    g_it = 0.192 / (C_m * chi)  # Sheet
+    g_it = 0.192 / (C_m * chi)  # Cross-sheet
 
     # Extracellular:
-    g_el_isch = 3.125/(C_m*chi) # Fiber
-    g_et_isch = 1.18/(C_m*chi) # Sheet
-    g_et_isch = 1.18/(C_m*chi) # Cross-sheet
+    g_el_isch = 3.125 / (C_m * chi)  # Fiber
+    g_et_isch = 1.18 / (C_m * chi)  # Sheet
+    g_et_isch = 1.18 / (C_m * chi)  # Cross-sheet
 
     # Intracellular:
-    g_il_isch = 0.125/(C_m*chi)  # Fiber
-    g_it_isch = 0.125/(C_m*chi)  # Sheet
-    g_it_isch = 0.125/(C_m*chi)  # Cross-sheet
+    g_il_isch = 0.125 / (C_m * chi)  # Fiber
+    g_it_isch = 0.125 / (C_m * chi)  # Sheet
+    g_it_isch = 0.125 / (C_m * chi)  # Cross-sheet
 
     info("Creating ischemic conductivities")
     # Combine info into 2x2 distinct conductivity functions:
     g_el_field = Function(V)
-    g_el_field.vector()[:] = (1-ischemic_array)*g_el_isch+ischemic_array*g_el
+    g_el_field.vector()[:] = (1 - ischemic_array) * g_el_isch + ischemic_array * g_el
     g_et_field = Function(V)
-    g_et_field.vector()[:] = (1-ischemic_array)*g_et_isch+ischemic_array*g_et
+    g_et_field.vector()[:] = (1 - ischemic_array) * g_et_isch + ischemic_array * g_et
     g_il_field = Function(V)
-    g_il_field.vector()[:] = (1-ischemic_array)*g_il_isch+ischemic_array*g_il
+    g_il_field.vector()[:] = (1 - ischemic_array) * g_il_isch + ischemic_array * g_il
     g_it_field = Function(V)
-    g_it_field.vector()[:] = (1-ischemic_array)*g_it_isch+ischemic_array*g_it
+    g_it_field.vector()[:] = (1 - ischemic_array) * g_it_isch + ischemic_array * g_it
 
     plot(g_it_field, title="Ischemic g_it_field")
 
@@ -99,8 +100,10 @@ def generate_conductivities():
 
     plot(g_it_field, title="Healthy g_it_field")
 
+
 if __name__ == "__main__":
 
     generate_conductivities()
     import matplotlib.pyplot as plt
+
     plt.savefig("conductivites.png")

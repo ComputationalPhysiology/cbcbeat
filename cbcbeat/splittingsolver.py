@@ -70,7 +70,7 @@ from cbcbeat import CardiacModel
 from cbcbeat.cellsolver import BasicCardiacODESolver, CardiacODESolver
 from cbcbeat.bidomainsolver import BasicBidomainSolver, BidomainSolver
 from cbcbeat.monodomainsolver import BasicMonodomainSolver, MonodomainSolver
-from cbcbeat.utils import state_space, TimeStepper, annotate_kwargs
+from cbcbeat.utils import TimeStepper, annotate_kwargs
 
 try:
     progress = LogLevel.PROGRESS

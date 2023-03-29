@@ -2,7 +2,7 @@
 This demo shows how to:
 - Solve a cardiac cell model over a domain (for each vertex in that domain)
 - How to set heterogeneous (spatially varying) cell model parameters
-- How to set FEniCS parameters for improved computational efficiency  
+- How to set FEniCS parameters for improved computational efficiency
 - How to replay the forward solve using via dolfin-adjoint
 - How to output the recorded forward solve
 """
@@ -18,6 +18,7 @@ flags = "-O3 -ffast-math -march=native"
 parameters["form_compiler"]["cpp_optimize_flags"] = flags
 parameters["form_compiler"]["quadrature_degree"] = 4
 
+
 def forward():
     info_green("Running forward model")
 
@@ -25,7 +26,7 @@ def forward():
     N = 10
     mesh = UnitSquareMesh(N, N)
     time = Constant(0.0)
-  
+
     # Choose your favorite cell model
     model = Tentusscher_2004_mcell()
 
@@ -52,13 +53,14 @@ def forward():
 
     # Do something with the solutions
     times = []
-    values = []
     for ((t0, t1), vs) in solutions:
         times.append(t1)
         print(vs.vector().get_local())
     plot(vs[0], title="v")
     import matplotlib.pyplot as plt
+
     plt.savefig("vs.png")
+
 
 def replay():
     info_green("Replaying forward model")
@@ -74,12 +76,14 @@ def replay():
     else:
         info_green("Replay failed")
 
+
 if __name__ == "__main__":
 
     # Run forward model
     forward()
 
     import cbcbeat
+
     if cbcbeat.dolfin_adjoint:
         # Replay
         replay()

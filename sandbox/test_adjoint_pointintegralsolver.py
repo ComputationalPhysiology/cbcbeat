@@ -78,5 +78,3 @@ if __name__ == "__main__":
 
     # Plot gradient
     plot(dJdic, interactive=True, title="dJdic")
-
-

@@ -18,8 +18,8 @@ except:
     set_log_level(INFO)
     pass
 
-def generate_solver(Solver, solver_type, ics=None, enable_adjoint=True):
 
+def generate_solver(Solver, solver_type, ics=None, enable_adjoint=True):
     class SolverWrapper(object):
         def __init__(self):
             self.mesh = UnitCubeMesh(5, 5, 5)
@@ -31,19 +31,22 @@ def generate_solver(Solver, solver_type, ics=None, enable_adjoint=True):
             self.stimulus = Expression("2.0*t", t=self.time, degree=1)
 
             # Create ac
-            self.applied_current = Expression("sin(2*pi*x[0])*t", t=self.time,
-                                              degree=3)
+            self.applied_current = Expression("sin(2*pi*x[0])*t", t=self.time, degree=3)
 
             # Create conductivity "tensors"
             self.M_i = 1.0
             self.M_e = 2.0
 
             self.cell_model = FitzHughNagumoManual()
-            self.cardiac_model = CardiacModel(self.mesh, self.time,
-                                              self.M_i, self.M_e,
-                                              self.cell_model,
-                                              self.stimulus,
-                                              self.applied_current)
+            self.cardiac_model = CardiacModel(
+                self.mesh,
+                self.time,
+                self.M_i,
+                self.M_e,
+                self.cell_model,
+                self.stimulus,
+                self.applied_current,
+            )
 
             dt = 0.1
             self.t0 = 0.0
@@ -51,35 +54,52 @@ def generate_solver(Solver, solver_type, ics=None, enable_adjoint=True):
                 # FIXME: Dolfin-adjoint fails with adaptive timestep and SplittingSolver
                 self.dt = dt
             else:
-                self.dt = [(0.0, dt), (dt*2, dt/2), (dt*4, dt)]
+                self.dt = [(0.0, dt), (dt * 2, dt / 2), (dt * 4, dt)]
             # Test using variable dt interval but using the same dt.
 
-            self.T = self.t0 + 5*dt
+            self.T = self.t0 + 5 * dt
 
             # Create solver object
             params = Solver.default_parameters()
 
             if Solver == SplittingSolver:
                 params["enable_adjoint"] = enable_adjoint
-                params.update({"BidomainSolver":
-                                {"linear_solver_type": solver_type}})
-                params.update({"BidomainSolver":
-                                {"petsc_krylov_solver":
-                                 {"relative_tolerance": 1e-12}}})
+                params.update({"BidomainSolver": {"linear_solver_type": solver_type}})
+                params.update(
+                    {
+                        "BidomainSolver": {
+                            "petsc_krylov_solver": {"relative_tolerance": 1e-12}
+                        }
+                    }
+                )
             else:
-                params.update({"BasicBidomainSolver":
-                                 {"linear_variational_solver":
-                                  {"linear_solver" :
-                                   "gmres" if solver_type == "iterative"
-                                   else "lu"}}})
-                params.update({"BasicBidomainSolver":
-                               {"linear_variational_solver":
-                                {"krylov_solver":
-                                 {"relative_tolerance": 1e-12}}}})
-                params.update({"BasicBidomainSolver":
-                               {"linear_variational_solver":
-                                {"preconditioner" : 'ilu'}}})
-
+                params.update(
+                    {
+                        "BasicBidomainSolver": {
+                            "linear_variational_solver": {
+                                "linear_solver": "gmres"
+                                if solver_type == "iterative"
+                                else "lu"
+                            }
+                        }
+                    }
+                )
+                params.update(
+                    {
+                        "BasicBidomainSolver": {
+                            "linear_variational_solver": {
+                                "krylov_solver": {"relative_tolerance": 1e-12}
+                            }
+                        }
+                    }
+                )
+                params.update(
+                    {
+                        "BasicBidomainSolver": {
+                            "linear_variational_solver": {"preconditioner": "ilu"}
+                        }
+                    }
+                )
 
             self.solver = Solver(self.cardiac_model, params=params)
             (vs_, vs, vur) = self.solver.solution_fields()
@@ -101,18 +121,20 @@ def generate_solver(Solver, solver_type, ics=None, enable_adjoint=True):
 
     return SolverWrapper()
 
+
 @adjoint
 class TestSplittingSolverAdjoint(object):
     "Test adjoint functionality for the splitting solvers."
 
     def tlm_adj_setup(self, Solver, solver_type):
-        """ Common code for test_tlm and test_adjoint. """
+        """Common code for test_tlm and test_adjoint."""
         wrap = generate_solver(Solver, solver_type)
         vs_, vs = wrap.run_forward_model()
 
         # Define functional
-        form = lambda w: inner(w, w)*dx
-        J = Functional(form(vs)*dt[FINISH_TIME])
+        def form(w):
+            return inner(w, w) * dx
+        J = Functional(form(vs) * dt[FINISH_TIME])
         if Solver == SplittingSolver:
             m = Control(vs)
         else:
@@ -134,14 +156,21 @@ class TestSplittingSolverAdjoint(object):
         return J, Jhat, m, Jics
 
     @medium
-    @parametrize(("Solver", "solver_type", "tol"), [
-            (BasicSplittingSolver, "direct", 0.),
-            (BasicSplittingSolver, "iterative", 0.),
-            (SplittingSolver, "direct", 0.),
-            (SplittingSolver, "iterative", 1e-10),  # NOTE: The replay is not exact because
+    @parametrize(
+        ("Solver", "solver_type", "tol"),
+        [
+            (BasicSplittingSolver, "direct", 0.0),
+            (BasicSplittingSolver, "iterative", 0.0),
+            (SplittingSolver, "direct", 0.0),
+            (
+                SplittingSolver,
+                "iterative",
+                1e-10,
+            ),  # NOTE: The replay is not exact because
             # dolfin-adjoint's overloaded Krylov method is not consistent with DOLFIN's
             # (it orthogonalizes the rhs vector as an additional step)
-            ])
+        ],
+    )
     def test_ReplayOfSplittingSolver_IsExact(self, Solver, solver_type, tol):
         """Test that basic and optimised splitting solvers yield
         very comparative results when configured identically."""
@@ -153,13 +182,18 @@ class TestSplittingSolverAdjoint(object):
         assert success
 
     @slow
-    @parametrize(("Solver", "solver_type"), [
+    @parametrize(
+        ("Solver", "solver_type"),
+        [
             (BasicSplittingSolver, "direct"),
             (BasicSplittingSolver, "iterative"),
             (SplittingSolver, "direct"),
-            (SplittingSolver, "iterative")
-            ])
-    def test_TangentLinearModelOfSplittingSolver_PassesTaylorTest(self, Solver, solver_type):
+            (SplittingSolver, "iterative"),
+        ],
+    )
+    def test_TangentLinearModelOfSplittingSolver_PassesTaylorTest(
+        self, Solver, solver_type
+    ):
         """Test that basic and optimised splitting solvers yield
         very comparative results when configured identically."""
 
@@ -169,19 +203,22 @@ class TestSplittingSolverAdjoint(object):
         info_green("Compute gradient with tangent linear model")
         dJdics = compute_gradient_tlm(J, m, forget=False)
 
-        assert (dJdics is not None), "Gradient is None (#fail)."
+        assert dJdics is not None, "Gradient is None (#fail)."
         conv_rate_tlm = taylor_test(Jhat, m, Jics, dJdics, seed=1)
 
         # Check that minimal convergence rate is greater than some given number
         assert_greater(conv_rate_tlm, 1.9)
 
     @slow
-    @parametrize(("Solver", "solver_type"), [
+    @parametrize(
+        ("Solver", "solver_type"),
+        [
             (BasicSplittingSolver, "direct"),
             (BasicSplittingSolver, "iterative"),
             (SplittingSolver, "direct"),
-            (SplittingSolver, "iterative")
-            ])
+            (SplittingSolver, "iterative"),
+        ],
+    )
     def test_AdjointModelOfSplittingSolver_PassesTaylorTest(self, Solver, solver_type):
         """Test that basic and optimised splitting solvers yield
         very comparative results when configured identically."""
@@ -192,8 +229,8 @@ class TestSplittingSolverAdjoint(object):
         info_green("Compute gradient with adjoint linear model")
         dJdics = compute_gradient(J, m, forget=False)
 
-        assert (dJdics is not None), "Gradient is None (#fail)."
-        conv_rate = taylor_test(Jhat, m, Jics, dJdics, seed=1.)
+        assert dJdics is not None, "Gradient is None (#fail)."
+        conv_rate = taylor_test(Jhat, m, Jics, dJdics, seed=1.0)
 
         # Check that minimal convergence rate is greater than some given number
         assert_greater(conv_rate, 1.9)

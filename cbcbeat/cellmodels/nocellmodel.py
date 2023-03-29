@@ -9,11 +9,13 @@ from collections import OrderedDict
 # FIXME: This class represents a design flaw rather than anything
 # else. Remove in a clean-up of the solvers.
 
+
 class NoCellModel(CardiacCellModel):
     """
     Class representing no cell model (only bidomain equations). It
     actually just represents a single completely decoupled ODE.
     """
+
     def __init__(self, params=None, init_conditions=None):
         CardiacCellModel.__init__(self, params, init_conditions)
 
@@ -34,4 +36,3 @@ class NoCellModel(CardiacCellModel):
 
     def __str__(self):
         return "No cardiac cell model"
-

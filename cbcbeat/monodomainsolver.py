@@ -31,6 +31,7 @@ from cbcbeat.dolfinimport import *
 from cbcbeat.markerwisefield import *
 from cbcbeat.utils import end_of_time, annotate_kwargs
 
+
 class BasicMonodomainSolver(object):
     """This solver is based on a theta-scheme discretization in time
     and CG_1 elements in space.
@@ -70,17 +71,20 @@ class BasicMonodomainSolver(object):
       params (:py:class:`dolfin.Parameters`, optional)
         Solver parameters
 
-      """
-    def __init__(self, mesh, time, M_i, I_s=None, v_=None,
-                 params=None):
+    """
+
+    def __init__(self, mesh, time, M_i, I_s=None, v_=None, params=None):
 
         # Check some input
-        assert isinstance(mesh, Mesh), \
+        assert isinstance(mesh, Mesh), (
             "Expecting mesh to be a Mesh instance, not %r" % mesh
-        assert isinstance(time, Constant) or time is None, \
-            "Expecting time to be a Constant instance (or None)."
-        assert isinstance(params, Parameters) or params is None, \
-            "Expecting params to be a Parameters instance (or None)"
+        )
+        assert (
+            isinstance(time, Constant) or time is None
+        ), "Expecting time to be a Constant instance (or None)."
+        assert (
+            isinstance(params, Parameters) or params is None
+        ), "Expecting params to be a Parameters instance (or None)"
 
         # Store input
         self._mesh = mesh
@@ -168,12 +172,12 @@ class BasicMonodomainSolver(object):
         # Solve on entire interval if no interval is given.
         (T0, T) = interval
         if dt is None:
-            dt = (T - T0)
+            dt = T - T0
         t0 = T0
         t1 = T0 + dt
 
         # Step through time steps until at end time
-        while (True) :
+        while True:
             info("Solving on t = (%g, %g)" % (t0, t1))
             self.step((t0, t1))
 
@@ -215,18 +219,18 @@ class BasicMonodomainSolver(object):
         M_i = self._M_i
 
         # Set time
-        t = t0 + theta*(t1 - t0)
+        t = t0 + theta * (t1 - t0)
         self.time.assign(t)
-        
+
         # Define variational formulation
         v = TrialFunction(self.V)
         w = TestFunction(self.V)
-        Dt_v = (v - self.v_)/k_n
-        v_mid = theta*v + (1.0 - theta)*self.v_
+        Dt_v = (v - self.v_) / k_n
+        v_mid = theta * v + (1.0 - theta) * self.v_
 
         (dz, rhs) = rhs_with_markerwise_field(self._I_s, self._mesh, w)
-        theta_parabolic = inner(M_i*grad(v_mid), grad(w))*dz()
-        G = Dt_v*w*dz() + theta_parabolic - rhs
+        theta_parabolic = inner(M_i * grad(v_mid), grad(w)) * dz()
+        G = Dt_v * w * dz() + theta_parabolic - rhs
 
         # Define variational problem
         a, L = system(G)
@@ -258,19 +262,20 @@ class BasicMonodomainSolver(object):
         params.add(LinearVariationalSolver.default_parameters())
         return params
 
+
 class MonodomainSolver(BasicMonodomainSolver):
     __doc__ = BasicMonodomainSolver.__doc__
 
     def __init__(self, mesh, time, M_i, I_s=None, v_=None, params=None):
 
         # Call super-class
-        BasicMonodomainSolver.__init__(self, mesh, time, M_i, I_s=I_s,
-                                       v_=v_, params=params)
+        BasicMonodomainSolver.__init__(
+            self, mesh, time, M_i, I_s=I_s, v_=v_, params=params
+        )
 
         # Create variational forms
         self._timestep = Constant(self.parameters["default_timestep"])
-        (self._lhs, self._rhs, self._prec) \
-            = self.variational_forms(self._timestep)
+        (self._lhs, self._rhs, self._prec) = self.variational_forms(self._timestep)
 
         # Preassemble left-hand side (will be updated if time-step
         # changes)
@@ -305,8 +310,7 @@ class MonodomainSolver(BasicMonodomainSolver):
             alg = self.parameters["algorithm"]
             prec = self.parameters["preconditioner"]
             if self.parameters["use_custom_preconditioner"]:
-                self._prec_matrix = assemble(self._prec,
-                                             **self._annotate_kwargs)
+                self._prec_matrix = assemble(self._prec, **self._annotate_kwargs)
                 solver = PETScKrylovSolver(alg, prec)
                 solver.parameters.update(self.parameters["krylov_solver"])
                 solver.set_operators(self._lhs_matrix, self._prec_matrix)
@@ -357,7 +361,7 @@ class MonodomainSolver(BasicMonodomainSolver):
         params.add(KrylovSolver.default_parameters())
 
         # Customize default parameters for KrylovSolver
-        #params["krylov_solver"]["preconditioner"]["structure"] = "same"
+        # params["krylov_solver"]["preconditioner"]["structure"] = "same"
 
         return params
 
@@ -383,15 +387,15 @@ class MonodomainSolver(BasicMonodomainSolver):
         w = TestFunction(self.V)
 
         # Set-up variational problem
-        Dt_v_k_n = (v - self.v_)
-        v_mid = theta*v + (1.0 - theta)*self.v_
+        Dt_v_k_n = v - self.v_
+        v_mid = theta * v + (1.0 - theta) * self.v_
 
         (dz, rhs) = rhs_with_markerwise_field(self._I_s, self._mesh, w)
-        theta_parabolic = inner(M_i*grad(v_mid), grad(w))*dz()
-        G = Dt_v_k_n*w*dz + k_n*theta_parabolic - k_n*rhs
+        theta_parabolic = inner(M_i * grad(v_mid), grad(w)) * dz()
+        G = Dt_v_k_n * w * dz + k_n * theta_parabolic - k_n * rhs
 
         # Define preconditioner based on educated(?) guess by Marie
-        prec = (v*w + k_n/2.0*inner(M_i*grad(v), grad(w)))*dz
+        prec = (v * w + k_n / 2.0 * inner(M_i * grad(v), grad(w))) * dz
 
         (a, L) = system(G)
         return (a, L, prec)
@@ -415,11 +419,11 @@ class MonodomainSolver(BasicMonodomainSolver):
         (t0, t1) = interval
         dt = t1 - t0
         theta = self.parameters["theta"]
-        t = t0 + theta*dt
+        t = t0 + theta * dt
         self.time.assign(t)
 
         # Update matrix and linear solvers etc as needed
-        timestep_unchanged = (abs(dt - float(self._timestep)) < 1.e-12)
+        timestep_unchanged = abs(dt - float(self._timestep)) < 1.0e-12
         self._update_solver(timestep_unchanged, dt)
 
         # Assemble right-hand-side
@@ -428,50 +432,48 @@ class MonodomainSolver(BasicMonodomainSolver):
         del timer0
 
         # Solve problem
-        self.linear_solver.solve(self.v.vector(), self._rhs_vector,
-                                 **self._annotate_kwargs)
+        self.linear_solver.solve(
+            self.v.vector(), self._rhs_vector, **self._annotate_kwargs
+        )
         timer.stop()
 
     def _update_lu_solver(self, timestep_unchanged, dt):
         """Helper function for updating an LUSolver depending on
         whether timestep has changed."""
-        
+
         # Update stored timestep
         # FIXME: dolfin_adjoint still can't annotate constant assignment.
-        self._timestep.assign(Constant(dt))#, annotate=annotate)
-        
+        self._timestep.assign(Constant(dt))  # , annotate=annotate)
+
         # Reassemble matrix
-        assemble(self._lhs, tensor=self._lhs_matrix,
-                 **self._annotate_kwargs)
+        assemble(self._lhs, tensor=self._lhs_matrix, **self._annotate_kwargs)
 
     def _update_krylov_solver(self, timestep_unchanged, dt):
         """Helper function for updating a KrylovSolver depending on
         whether timestep has changed."""
 
-        kwargs = annotate_kwargs(self.parameters)
+        annotate_kwargs(self.parameters)
         # Update reuse of preconditioner parameter in accordance with
         # changes in timestep
         if timestep_unchanged:
             debug("Timestep is unchanged, reusing preconditioner")
-            #self.linear_solver.parameters["preconditioner"]["structure"] = "same"
+            # self.linear_solver.parameters["preconditioner"]["structure"] = "same"
         else:
             debug("Timestep has changed, updating preconditioner")
-            #self.linear_solver.parameters["preconditioner"]["structure"] = \
+            # self.linear_solver.parameters["preconditioner"]["structure"] = \
             #                                            "same_nonzero_pattern"
 
             # Update stored timestep
             self._timestep.assign(Constant(dt))
 
             # Reassemble matrix
-            assemble(self._lhs, tensor=self._lhs_matrix,
-                     **self._annotate_kwargs)
+            assemble(self._lhs, tensor=self._lhs_matrix, **self._annotate_kwargs)
 
             # Reassemble preconditioner
             if self.parameters["use_custom_preconditioner"]:
-                assemble(self._prec, tensor=self._prec_matrix,
-                         **self._annotate_kwargs)
+                assemble(self._prec, tensor=self._prec_matrix, **self._annotate_kwargs)
 
         # Set nonzero initial guess if it indeed is nonzero
-        #if (self.v.vector().norm("l2") > 1.e-12):
+        # if (self.v.vector().norm("l2") > 1.e-12):
         #    debug("Initial guess is non-zero.")
         #    self.linear_solver.parameters["nonzero_initial_guess"] = True
