@@ -68,7 +68,7 @@ if __name__ == "__main__":
     # Replay
     print("Replaying")
     success = replay_dolfin(tol=0.0, stop=True)
-    assert success == True, "Replay failed."  # !? How does this actually work
+    assert success is True, "Replay failed."  # !? How does this actually work
 
     # Define favorite functional
     print("Computing gradient")

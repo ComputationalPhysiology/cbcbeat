@@ -111,7 +111,7 @@ def run_monodomain_solver(mesh, dt, T, theta):
     (v_, v) = solver.solution_fields()
     solutions = solver.solve((0, T), dt)
 
-    V = v.function_space()
+    v.function_space()
 
     # Solve
     for timestep, (v_, v) in solutions:
@@ -137,7 +137,9 @@ if __name__ == "__main__":
 
     # Create computational domain [0, Lx] x [0, Ly] x [0, Lz]
     # with resolution prescribed by benchmark
-    N = lambda v: int(numpy.rint(v))
+    def N(v):
+        return int(numpy.rint(v))
+
     domain = BoxMesh(0.0, 0.0, 0.0, Lx, Ly, Lz, N(Lx / dx), N(Ly / dx), N(Lz / dx))
 
     # Run solver
