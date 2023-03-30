@@ -8,8 +8,8 @@ import cbcbeat
 
 from testutils import medium
 from collections import OrderedDict
-from cbcbeat.dolfinimport import Expression, Constant, UnitSquareMesh
-from cbcbeat import errornorm, SplittingSolver, CardiacCellModel
+from dolfin import Expression, errornorm, UnitSquareMesh
+from cbcbeat import SplittingSolver, CardiacCellModel, backend
 from cbcbeat.utils import convergence_rate
 
 
@@ -49,7 +49,7 @@ def main(N, dt, T, theta=0.5):
 
     # Create data
     mesh = UnitSquareMesh(N, N)
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
 
     # We choose the FHN parameters such that s=1 and I_s=v
     model = SimpleODEModel(mesh)

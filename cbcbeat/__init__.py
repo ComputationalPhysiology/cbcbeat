@@ -27,6 +27,7 @@ from cbcbeat.cellmodels import (
     Fenton_karma_1998_BR_altered,
     CardiacCellModel,
     MultiCellModel,
+    supported_cell_models,
 )
 from cbcbeat.markerwisefield import (
     rhs_with_markerwise_field,
@@ -44,6 +45,8 @@ from cbcbeat.cellsolver import (
 )
 from cbcbeat.monodomainsolver import BasicMonodomainSolver, MonodomainSolver
 from cbcbeat.splittingsolver import SplittingSolver, BasicSplittingSolver
+from cbcbeat.dolfinimport import backend
+from cbcbeat import dolfinimport
 
 # Solver imports
 
@@ -55,6 +58,7 @@ import ufl as _ufl
 _ufl.algorithms.apply_derivatives.CONDITIONAL_WORKAROUND = True
 import dolfin as _dolfin
 
+parameters = _dolfin.parameters
 # Set-up some global parameters
 beat_parameters = _dolfin.Parameters("beat-parameters")
 beat_parameters.add("enable_adjoint", True)
@@ -85,4 +89,9 @@ __all__ = [
     "MonodomainSolver",
     "SplittingSolver",
     "BasicSplittingSolver",
+    "backend",
+    "supported_cell_models",
+    "dolfinimport",
+    "parameters",
+    "beat_parameters",
 ]

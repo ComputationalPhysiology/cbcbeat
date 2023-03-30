@@ -5,18 +5,30 @@ Unit tests for various types of solvers for cardiac cell models.
 __author__ = "Marie E. Rognes (meg@simula.no), 2013"
 __all__ = ["TestBasicSingleCellSolverAdjoint"]
 
+
 import types
-from cbcbeat import *
-from testutils import assert_true, assert_greater, adjoint, slow
+import cbcbeat
+from cbcbeat import BasicSingleCellSolver, backend
+import dolfin
+import ufl
+from modelparameters.logger import info_green
+from testutils import assert_true, assert_greater, adjoint, slow, require_dolfin_adjoint
 
 
 def set_dolfin_parameters():
-    parameters["form_compiler"]["cpp_optimize"] = True
+    dolfin.parameters["form_compiler"]["cpp_optimize"] = True
     flags = "-O3 -ffast-math -march=native"
-    parameters["form_compiler"]["cpp_optimize_flags"] = flags
+    dolfin.parameters["form_compiler"]["cpp_optimize_flags"] = flags
+
+
+try:
+    import dolfin_adjoint
+except ImportError:
+    pass
 
 
 def basic_single_cell_closure(theta, Model):
+    @require_dolfin_adjoint
     @adjoint
     @slow
     def test_replay(self):
@@ -27,20 +39,21 @@ def basic_single_cell_closure(theta, Model):
         # Initialize solver
         params = BasicSingleCellSolver.default_parameters()
         params["theta"] = theta
-        time = Constant(0.0)
+        time = backend.Constant(0.0)
         solver = BasicSingleCellSolver(model, time, params=params)
 
         info_green("Running %s with theta %g" % (model, theta))
 
-        ics = project(model.initial_conditions(), solver.VS).copy(
+        ics = backend.project(model.initial_conditions(), solver.VS).copy(
             deepcopy=True, name="ics"
         )
         self._run(solver, model, ics)
 
         info_green("Replaying")
-        success = replay_dolfin(tol=0.0, stop=True)
+        success = dolfin_adjoint.replay_dolfin(tol=0.0, stop=True)
         assert_true(success)
 
+    @require_dolfin_adjoint
     @adjoint
     @slow
     def test_compute_adjoint(self):
@@ -50,13 +63,13 @@ def basic_single_cell_closure(theta, Model):
 
         params = BasicSingleCellSolver.default_parameters()
         params["theta"] = theta
-        time = Constant(0.0)
+        time = backend.Constant(0.0)
         solver = BasicSingleCellSolver(model, time, params=params)
 
         # Get initial conditions (Projection of expressions
         # don't get annotated, which is fine, because there is
         # no need.)
-        ics = project(model.initial_conditions(), solver.VS)
+        ics = backend.project(model.initial_conditions(), solver.VS)
 
         # Run forward model
         info_green("Running forward %s with theta %g" % (model, theta))
@@ -65,18 +78,21 @@ def basic_single_cell_closure(theta, Model):
         (vs_, vs) = solver.solution_fields()
 
         # Define functional and compute gradient etc
-        J = Functional(inner(vs_, vs_) * dx * dt[FINISH_TIME])
+        J = dolfin_adjoint.Functional(
+            ufl.inner(vs_, vs_) * ufl.dx * dolfin_adjoint.dt[dolfin_adjoint.FINISH_TIME]
+        )
 
         # Compute adjoint
         info_green("Computing adjoint")
-        z = compute_adjoint(J)
+        z = dolfin_adjoint.compute_adjoint(J)
 
         # Check that no vs_ adjoint is None (== 0.0!)
-        for (value, var) in z:
+        for value, var in z:
             if var.name == "vs_":
                 msg = "Adjoint solution for vs_ is None (#fail)."
                 assert value is not None, msg
 
+    @require_dolfin_adjoint
     @adjoint
     @slow
     def test_compute_gradient(self):
@@ -86,13 +102,13 @@ def basic_single_cell_closure(theta, Model):
 
         params = BasicSingleCellSolver.default_parameters()
         params["theta"] = theta
-        time = Constant(0.0)
+        time = backend.Constant(0.0)
         solver = BasicSingleCellSolver(model, time, params=params)
 
         # Get initial conditions (Projection of expressions
         # don't get annotated, which is fine, because there is
         # no need.)
-        ics = project(model.initial_conditions(), solver.VS)
+        ics = backend.project(model.initial_conditions(), solver.VS)
 
         # Run forward model
         info_green("Running forward %s with theta %g" % (model, theta))
@@ -100,15 +116,18 @@ def basic_single_cell_closure(theta, Model):
 
         # Define functional
         (vs_, vs) = solver.solution_fields()
-        J = Functional(inner(vs, vs) * dx * dt[FINISH_TIME])
+        J = dolfin_adjoint.Functional(
+            ufl.inner(vs, vs) * ufl.dx * dolfin_adjoint.dt[dolfin_adjoint.FINISH_TIME]
+        )
 
         # Compute gradient with respect to vs_. Highly unclear
         # why with respect to ics and vs fail.
         info_green("Computing gradient")
-        dJdics = compute_gradient(J, Control(vs_))
+        dJdics = dolfin_adjoint.compute_gradient(J, dolfin_adjoint.Control(vs_))
         assert dJdics is not None, "Gradient is None (#fail)."
         print(dJdics.vector().get_local())
 
+    @require_dolfin_adjoint
     @adjoint
     @slow
     def test_taylor_remainder(self):
@@ -118,13 +137,13 @@ def basic_single_cell_closure(theta, Model):
 
         params = BasicSingleCellSolver.default_parameters()
         params["theta"] = theta
-        time = Constant(0.0)
+        time = backend.Constant(0.0)
         solver = BasicSingleCellSolver(model, time, params=params)
 
         # Get initial conditions (Projection of expressions
         # don't get annotated, which is fine, because there is
         # no need.)
-        ics = project(model.initial_conditions(), solver.VS)
+        ics = backend.project(model.initial_conditions(), solver.VS)
 
         # Run forward model
         info_green("Running forward %s with theta %g" % (model, theta))
@@ -134,32 +153,38 @@ def basic_single_cell_closure(theta, Model):
         (vs_, vs) = solver.solution_fields()
 
         def form(w):
-            return inner(w, w) * dx
+            return ufl.inner(w, w) * dolfin.dx
 
-        J = Functional(form(vs) * dt[FINISH_TIME])
+        J = dolfin_adjoint.Functional(
+            form(vs) * dolfin_adjoint.dt[dolfin_adjoint.FINISH_TIME]
+        )
 
         # Compute value of functional with current ics
-        Jics = assemble(form(vs))
+        Jics = backend.assemble(form(vs))
 
         # Compute gradient with respect to vs_ (ics?)
-        dJdics = compute_gradient(J, Control(vs_), forget=False)
+        dJdics = dolfin_adjoint.compute_gradient(
+            J, dolfin_adjoint.Control(vs_), forget=False
+        )
 
         # Stop annotating
-        parameters["adjoint"]["stop_annotating"] = True
+        dolfin.parameters["adjoint"]["stop_annotating"] = True
 
         # Set-up runner
         def Jhat(ics):
             self._run(solver, model, ics)
             (vs_, vs) = solver.solution_fields()
-            return assemble(form(vs))
+            return backend.assemble(form(vs))
 
         # Run taylor test
-        if isinstance(model, Tentusscher_2004_mcell):
+        if isinstance(model, cbcbeat.Tentusscher_2004_mcell):
             seed = 1.0e-5
         else:
             seed = None
 
-        conv_rate = taylor_test(Jhat, Control(vs_), Jics, dJdics, seed=seed)
+        conv_rate = dolfin_adjoint.taylor_test(
+            Jhat, dolfin_adjoint.Control(vs_), Jics, dJdics, seed=seed
+        )
 
         # Check that minimal rate is greater than some given number
         assert_greater(conv_rate, 1.8)
@@ -182,12 +207,12 @@ class TestBasicSingleCellSolverAdjoint(object):
         dt = 0.01
         T = 2 * dt
         solutions = solver.solve((0.0, T), dt)
-        for ((t0, t1), vs) in solutions:
+        for (t0, t1), vs in solutions:
             pass
 
 
 for theta, theta_name in ((0.0, "00"), (0.5, "05"), (1.0, "10")):
-    for Model in (FitzHughNagumoManual, Tentusscher_2004_mcell):
+    for Model in (cbcbeat.FitzHughNagumoManual, cbcbeat.Tentusscher_2004_mcell):
         for func in basic_single_cell_closure(theta, Model):
             # method_name = func.func_name+"_theta_"+theta_name+"_"+Model.__name__
             method_name = func.__str__() + "_theta_" + theta_name + "_" + Model.__name__

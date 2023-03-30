@@ -38,7 +38,7 @@ import dolfin
 from cbcbeat.dolfinimport import backend, has_dolfin_adjoint
 from cbcbeat.markerwisefield import rhs_with_markerwise_field
 from cbcbeat.utils import end_of_time, annotate_kwargs
-from modelparameters.logger import info, debug, error, warning
+from ufl.log import info, debug, error, warning
 
 
 class BasicBidomainSolver(object):
@@ -311,7 +311,7 @@ class BasicBidomainSolver(object):
         params.add("polynomial_degree", 1)
         params.add("use_avg_u_constraint", True)
 
-        params.add(backend.inearVariationalSolver.default_parameters())
+        params.add(backend.LinearVariationalSolver.default_parameters())
         return params
 
 

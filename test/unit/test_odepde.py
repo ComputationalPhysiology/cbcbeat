@@ -5,15 +5,20 @@ model and the same stimulus. We expect the solutions to be the same
 modulo precision.
 """
 
-from cbcbeat import *
 
 __author__ = "Jakob Schreiner (jakob@simula.no), 2018"
-__all__ = []
 
 # Modified by Marie E. Rognes (meg@simula.no), 2018
 
 import itertools
-from cbcbeat import *
+from cbcbeat import (
+    SingleCellSolver,
+    FitzHughNagumoManual,
+    backend,
+    CardiacModel,
+    SplittingSolver,
+)
+from dolfin import Expression, UnitSquareMesh
 from testutils import assert_almost_equal, parametrize
 
 
@@ -26,7 +31,7 @@ def test_ode_pde(theta, pde_solver):
 
     params = SingleCellSolver.default_parameters()
     params["scheme"] = "RK4"
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
     stimulus = Expression("100", degree=1)
     model = FitzHughNagumoManual()
     model.stimulus = stimulus

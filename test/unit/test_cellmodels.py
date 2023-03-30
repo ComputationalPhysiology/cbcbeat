@@ -3,7 +3,9 @@
 __author__ = "Marie E. Rognes (meg@simula.no), 2013 -- 2014"
 
 
-from dolfin import *
+import dolfin
+import ufl
+from cbcbeat import backend
 from cbcbeat.utils import state_space
 
 from testutils import slow, assert_almost_equal
@@ -23,23 +25,23 @@ class TestFormCompilation:
 
     def test_form_compilation(self, ode_test_form):
         "Test that form can be compiled by FFC."
-        Form(ode_test_form)
+        dolfin.Form(ode_test_form)
 
     @slow
     def test_optimized_form_compilation(self, ode_test_form):
         "Test that form can be compiled by FFC with optimizations."
-        ps = parameters["form_compiler"].copy()
+        ps = dolfin.parameters["form_compiler"].copy()
         ps["cpp_optimize"] = True
-        Form(ode_test_form, form_compiler_parameters=ps)
+        dolfin.Form(ode_test_form, form_compiler_parameters=ps)
 
     @slow
     def test_custom_optimized_compilation(self, ode_test_form):
         "Test that form can be compiled with custom optimizations."
-        ps = parameters["form_compiler"].copy()
+        ps = dolfin.parameters["form_compiler"].copy()
         ps["cpp_optimize"] = True
         flags = ["-O3", "-ffast-math", "-march=native"]
         ps["cpp_optimize_flags"] = " ".join(flags)
-        Form(ode_test_form, form_compiler_parameters=ps)
+        dolfin.Form(ode_test_form, form_compiler_parameters=ps)
 
 
 class TestCompilationCorrectness:
@@ -47,25 +49,25 @@ class TestCompilationCorrectness:
 
     def point_integral_step(self, model):
         # Set-up forms
-        mesh = UnitSquareMesh(10, 10)
-        V = FunctionSpace(mesh, "CG", 1)
+        mesh = dolfin.UnitSquareMesh(10, 10)
+        V = dolfin.FunctionSpace(mesh, "CG", 1)
         S = state_space(mesh, model.num_states())
-        Me = MixedElement((V.ufl_element(), S.ufl_element()))
-        VS = FunctionSpace(mesh, Me)
-        vs = Function(VS)
-        vs.assign(project(model.initial_conditions(), VS))
-        (v, s) = split(vs)
-        (w, r) = TestFunctions(VS)
-        rhs = inner(model.F(v, s), r) + inner(-model.I(v, s), w)
-        form = rhs * dP
+        Me = dolfin.MixedElement((V.ufl_element(), S.ufl_element()))
+        VS = dolfin.FunctionSpace(mesh, Me)
+        vs = backend.Function(VS)
+        vs.assign(backend.project(model.initial_conditions(), VS))
+        (v, s) = dolfin.split(vs)
+        (w, r) = dolfin.TestFunctions(VS)
+        rhs = ufl.inner(model.F(v, s), r) + ufl.inner(-model.I(v, s), w)
+        form = rhs * ufl.dP
 
         # Set-up scheme
-        time = Constant(0.0)
-        scheme = BackwardEuler(form, vs, time)
+        time = backend.Constant(0.0)
+        scheme = dolfin.BackwardEuler(form, vs, time)
         scheme.t().assign(float(time))
 
         # Create and step solver
-        solver = PointIntegralSolver(scheme)
+        solver = backend.PointIntegralSolver(scheme)
         solver.parameters["newton_solver"]["relative_tolerance"] = 1e-6
         solver.parameters["newton_solver"]["report"] = False
         dt = 0.1
@@ -76,8 +78,8 @@ class TestCompilationCorrectness:
     def test_point_integral_solver(self, cell_model):
         "Compare form compilation result with and without optimizations."
 
-        parameters["form_compiler"]["representation"] = "uflacs"  # "quadrature"
-        parameters["form_compiler"]["quadrature_degree"] = 2
+        dolfin.parameters["form_compiler"]["representation"] = "uflacs"  # "quadrature"
+        dolfin.parameters["form_compiler"]["quadrature_degree"] = 2
         tolerance = 1.0e-12
 
         # Run with no particular optimizations
@@ -86,16 +88,16 @@ class TestCompilationCorrectness:
 
         # Compare with results using aggresssive optimizations
         flags = "-O3 -ffast-math -march=native"
-        parameters["form_compiler"]["cpp_optimize"] = True
-        parameters["form_compiler"]["cpp_optimize_flags"] = flags
+        dolfin.parameters["form_compiler"]["cpp_optimize"] = True
+        dolfin.parameters["form_compiler"]["cpp_optimize_flags"] = flags
         vs = self.point_integral_step(cell_model)
         assert_almost_equal(
             non_opt_result, vs.vector().get_local(), tolerance
         )  # vs.vector().array(), tolerance)
 
         # Compare with results using standard optimizations
-        parameters["form_compiler"]["cpp_optimize"] = True
-        parameters["form_compiler"]["cpp_optimize_flags"] = "-O2"
+        dolfin.parameters["form_compiler"]["cpp_optimize"] = True
+        dolfin.parameters["form_compiler"]["cpp_optimize_flags"] = "-O2"
         vs = self.point_integral_step(cell_model)
         assert_almost_equal(
             non_opt_result, vs.vector().get_local(), tolerance
@@ -103,14 +105,14 @@ class TestCompilationCorrectness:
 
         # Compare with results using uflacs if installed
         try:
-            parameters["form_compiler"]["representation"] = "uflacs"
+            dolfin.parameters["form_compiler"]["representation"] = "uflacs"
             vs = self.point_integral_step(cell_model)
             assert_almost_equal(
                 non_opt_result, vs.vector.get_local(), tolerance
             )  # vs.vector().array(), tolerance)
-        except:
+        except Exception:
             pass
 
-        # Reset parameters
-        parameters["form_compiler"]["representation"] = "auto"
-        parameters["form_compiler"]["quadrature_degree"] = -1
+        # Reset dolfin.parameters
+        dolfin.parameters["form_compiler"]["representation"] = "auto"
+        dolfin.parameters["form_compiler"]["quadrature_degree"] = -1

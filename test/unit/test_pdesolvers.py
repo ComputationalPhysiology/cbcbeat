@@ -3,17 +3,17 @@ Unit tests for various types of bidomain solver
 """
 
 __author__ = "Marie E. Rognes (meg@simula.no), 2013"
-__all__ = [""]
+__all__ = ["TestBasicBidomainSolver"]
 
 from testutils import assert_almost_equal, assert_equal, fast
 
-from dolfin import *
+from dolfin import UnitCubeMesh, Expression
 from cbcbeat import (
     BasicBidomainSolver,
     BasicMonodomainSolver,
     MonodomainSolver,
     BidomainSolver,
-    Constant,
+    backend,
 )
 
 
@@ -22,7 +22,7 @@ class TestBasicBidomainSolver(object):
 
     def setUp(self):
         self.mesh = UnitCubeMesh(5, 5, 5)
-        self.time = Constant(0.0)
+        self.time = backend.Constant(0.0)
 
         # Create stimulus
         self.stimulus = Expression("2.0", degree=1)
@@ -56,7 +56,7 @@ class TestBasicBidomainSolver(object):
 
         # Solve
         solutions = solver.solve((self.t0, self.t0 + 2 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vs) = fields
 
     @fast
@@ -79,7 +79,7 @@ class TestBasicBidomainSolver(object):
         # Solve
         interval = (self.t0, self.t0 + self.dt)
         solutions = solver.solve(interval, self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
             a = vur.vector().norm("l2")
 
@@ -99,7 +99,7 @@ class TestBasicMonodomainSolver(object):
 
     def setUp(self):
         self.mesh = UnitCubeMesh(5, 5, 5)
-        self.time = Constant(0.0)
+        self.time = backend.Constant(0.0)
 
         # Create stimulus
         self.stimulus = Expression("2.0", degree=1)
@@ -122,7 +122,7 @@ class TestBasicMonodomainSolver(object):
 
         # Solve
         solutions = solver.solve((self.t0, self.t0 + 2 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vs) = fields
 
     @fast
@@ -138,7 +138,7 @@ class TestBasicMonodomainSolver(object):
         # Solve
         interval = (self.t0, self.t0 + self.dt)
         solutions = solver.solve(interval, self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
             a = vur.vector().norm("l2")
 
@@ -157,7 +157,7 @@ class TestBidomainSolver(object):
     def setUp(self):
         N = 5
         self.mesh = UnitCubeMesh(N, N, N)
-        self.time = Constant(0.0)
+        self.time = backend.Constant(0.0)
 
         # Create stimulus
         self.stimulus = Expression("2.0", degree=1)
@@ -187,7 +187,7 @@ class TestBidomainSolver(object):
             I_a=self.applied_current,
         )
         solutions = solver.solve((self.t0, self.t0 + 2 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
 
     @fast
@@ -210,7 +210,7 @@ class TestBidomainSolver(object):
             params=params,
         )
         solutions = solver.solve((self.t0, self.t0 + 2 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
         bidomain_result = vur.vector().norm("l2")
 
@@ -224,7 +224,7 @@ class TestBidomainSolver(object):
             I_a=self.applied_current,
         )
         solutions = solver.solve((self.t0, self.t0 + 2 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
         basic_bidomain_result = vur.vector().norm("l2")
 
@@ -251,7 +251,7 @@ class TestBidomainSolver(object):
             params=params,
         )
         solutions = solver.solve((self.t0, self.t0 + 3 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
             (v, u, r) = vur.split(deepcopy=True)
             a = v.vector().norm("l2")
@@ -269,7 +269,7 @@ class TestBidomainSolver(object):
             params=params,
         )
         solutions = solver.solve((self.t0, self.t0 + 3 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vu) = fields
             (v, u) = vu.split(deepcopy=True)
             b = v.vector().norm("l2")
@@ -283,7 +283,7 @@ class TestMonodomainSolver(object):
     def setUp(self):
         N = 5
         self.mesh = UnitCubeMesh(N, N, N)
-        self.time = Constant(0.0)
+        self.time = backend.Constant(0.0)
 
         # Create stimulus
         self.stimulus = Expression("2.0", degree=1)
@@ -302,7 +302,7 @@ class TestMonodomainSolver(object):
         # Create solver and solve
         solver = MonodomainSolver(self.mesh, self.time, self.M_i, I_s=self.stimulus)
         solutions = solver.solve((self.t0, self.t0 + 2 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
 
     @fast
@@ -318,7 +318,7 @@ class TestMonodomainSolver(object):
             self.mesh, self.time, self.M_i, I_s=self.stimulus, params=params
         )
         solutions = solver.solve((self.t0, self.t0 + 2 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
         monodomain_result = vur.vector().norm("l2")
 
@@ -327,7 +327,7 @@ class TestMonodomainSolver(object):
             self.mesh, self.time, self.M_i, I_s=self.stimulus
         )
         solutions = solver.solve((self.t0, self.t0 + 2 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, vur) = fields
         basic_monodomain_result = vur.vector().norm("l2")
 
@@ -347,7 +347,7 @@ class TestMonodomainSolver(object):
             self.mesh, self.time, self.M_i, I_s=self.stimulus, params=params
         )
         solutions = solver.solve((self.t0, self.t0 + 3 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, v) = fields
             a = v.vector().norm("l2")
 
@@ -359,7 +359,7 @@ class TestMonodomainSolver(object):
             self.mesh, self.time, self.M_i, I_s=self.stimulus, params=params
         )
         solutions = solver.solve((self.t0, self.t0 + 3 * self.dt), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (v_, v) = fields
             b = v.vector().norm("l2")
 

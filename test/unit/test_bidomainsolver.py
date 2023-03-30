@@ -5,11 +5,10 @@ verify the correctness of the BidomainSolver.
 
 __author__ = "Marie E. Rognes (meg@simula.no), 2013"
 # Edited by Simon Funke
-__all__ = []
 
 
-from cbcbeat.dolfinimport import Expression, Constant, UnitSquareMesh, parameters
-from cbcbeat import BidomainSolver, errornorm
+from dolfin import Expression, errornorm, UnitSquareMesh, parameters
+from cbcbeat import BidomainSolver, backend
 from cbcbeat.utils import convergence_rate
 
 from testutils import medium
@@ -28,10 +27,9 @@ parameters.parse(args)
 
 
 def main(N, dt, T, theta):
-
     # Create data
     mesh = UnitSquareMesh(N, N)
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
     ac_str = (
         "cos(t)*cos(pi*x[0])*cos(pi*x[1]) + pow(pi, 2)*cos(pi*x[0])*cos(pi*x[1])*sin(t)"
     )
@@ -60,7 +58,7 @@ def main(N, dt, T, theta):
 
     # Solve
     solutions = solver.solve((0, T), dt)
-    for (interval, fields) in solutions:
+    for interval, fields in solutions:
         continue
 
     # Compute errors
@@ -72,10 +70,9 @@ def main(N, dt, T, theta):
 
 
 def main_simple(N, dt, T, theta):
-
     # Create data
     mesh = UnitSquareMesh(N, N)
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
     ac_str = "1"
     stimulus = Expression(ac_str, t=time, degree=5)
     M_i = 1.0
@@ -100,7 +97,7 @@ def main_simple(N, dt, T, theta):
 
     # Solve
     solutions = solver.solve((0, T), dt)
-    for (interval, fields) in solutions:
+    for interval, fields in solutions:
         continue
 
     # Compute errors
@@ -167,4 +164,5 @@ def test_temporal_convergence():
     print("u_rates = ", u_rates)
 
     assert v_rates[-1] > 1.95, "Failed convergence for v"
-    # assert u_rates[-1] > 1.9, "Failed convergence for u"  # You need to choose N=400 to observe the 2nd order convergence for u
+    # You need to choose N=400 to observe the 2nd order convergence for u
+    # assert u_rates[-1] > 1.9, "Failed convergence for u"

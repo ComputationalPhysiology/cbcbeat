@@ -15,28 +15,26 @@ The test was then shortened to T = 1.0, and mesh reduced to 20x20
 """
 
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2014"
-__all__ = []
 
 import math
 
-from cbcbeat import parameters, FitzHughNagumoManual, as_tensor
-from cbcbeat import UnitSquareMesh, Constant, CardiacModel
-from cbcbeat import BasicSplittingSolver, project, norm
+from dolfin import parameters, UnitSquareMesh, as_tensor, norm
+from cbcbeat import BasicSplittingSolver, FitzHughNagumoManual, CardiacModel, backend
 
 try:
-    from cbcbeat import UserExpression
+    from dolfin import UserExpression
 
-    user_expression = UserExpression
-except:
-    from cbcbeat import Expression
+    UserExpression = UserExpression
+except ImportError:
+    from dolfin import Expression
 
-    user_expression = Expression
-    pass
+    UserExpression = Expression
+
 
 from testutils import assert_almost_equal, medium
 
 
-class InitialCondition(user_expression):
+class InitialCondition(UserExpression):
     def eval(self, values, x):
         r = math.sqrt(x[0] ** 2 + x[1] ** 2)
         values[1] = 0.0
@@ -82,7 +80,7 @@ def setup_model():
 
     # Define mesh
     domain = UnitSquareMesh(20, 20)
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
 
     heart = CardiacModel(domain, time, M_i, M_e, cell)
     return heart
@@ -90,7 +88,6 @@ def setup_model():
 
 @medium
 def test_fitzhugh():
-
     parameters["reorder_dofs_serial"] = False
     parameters["form_compiler"]["cpp_optimize"] = True
     parameters["form_compiler"]["optimize"] = True
@@ -117,16 +114,16 @@ def test_fitzhugh():
     ic = InitialCondition(degree=1)  # Should use degree=0 here for
     # correctness, but to match
     # reference, using 1
-    vs0 = project(ic, solver.VS)
+    vs0 = backend.project(ic, solver.VS)
     (vs_, vs, u) = solver.solution_fields()
     vs_.assign(vs0)
 
     # Solve
     solutions = solver.solve((0, T), dt)
-    for (timestep, (vs_, vs, vur)) in solutions:
+    for timestep, (vs_, vs, vur) in solutions:
         continue
 
-    u = project(vur[1], vur.function_space().sub(1).collapse())
+    u = backend.project(vur[1], vur.function_space().sub(1).collapse())
     norm_u = norm(u)
     reference = 10.3756526773
     print("norm_u = ", norm_u)

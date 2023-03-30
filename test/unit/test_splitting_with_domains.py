@@ -3,24 +3,21 @@ Unit tests for various types of bidomain solver
 """
 
 __author__ = "Marie E. Rognes (meg@simula.no), 2013"
-__all__ = ["TestSplittingSolver"]
 
 from testutils import fast
 from cbcbeat import (
-    UnitCubeMesh,
-    Constant,
-    Expression,
+    backend,
     CardiacModel,
     FitzHughNagumoManual,
     SplittingSolver,
 )
+from dolfin import UnitCubeMesh, Expression
 
 
 @fast
 def test_solver_with_domains():
-
     mesh = UnitCubeMesh(5, 5, 5)
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
 
     stimulus = Expression("2.0*t", t=time, degree=1)
 
@@ -53,7 +50,7 @@ def test_solver_with_domains():
 
     # Solve
     solutions = solver.solve((t0, T), dt)
-    for (interval, fields) in solutions:
+    for interval, fields in solutions:
         (vs_, vs, vur) = fields
 
 

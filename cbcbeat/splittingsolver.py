@@ -72,7 +72,7 @@ from cbcbeat.cellsolver import BasicCardiacODESolver, CardiacODESolver
 from cbcbeat.bidomainsolver import BasicBidomainSolver, BidomainSolver
 from cbcbeat.monodomainsolver import BasicMonodomainSolver, MonodomainSolver
 from cbcbeat.utils import TimeStepper, annotate_kwargs
-from modelparameters.logger import info_blue
+from ufl.log import info_blue
 
 progress = dolfin.LogLevel.PROGRESS
 

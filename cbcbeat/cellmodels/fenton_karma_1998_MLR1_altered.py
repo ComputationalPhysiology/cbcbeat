@@ -8,7 +8,7 @@ import ufl
 import dolfin
 
 from cbcbeat.dolfinimport import backend
-from cbcbeat.cellmodels import CardiacCellModel
+from cbcbeat.cellmodels.cardiaccellmodel import CardiacCellModel
 
 
 class Fenton_karma_1998_MLR1_altered(CardiacCellModel):

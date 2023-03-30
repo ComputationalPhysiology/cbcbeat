@@ -10,7 +10,7 @@ __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["FitzHughNagumoManual"]
 
 from collections import OrderedDict
-from cbcbeat.cellmodels import CardiacCellModel
+from cbcbeat.cellmodels.cardiaccellmodel import CardiacCellModel
 
 
 class FitzHughNagumoManual(CardiacCellModel):

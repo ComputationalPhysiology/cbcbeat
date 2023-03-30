@@ -2,7 +2,7 @@
 Unit tests for various types of solvers for cardiac cell models.
 """
 __author__ = "Marie E. Rognes (meg@simula.no), 2013"
-__all__ = ["TestCardiacODESolver", "TestBasicSingleCellSolver"]
+__all__ = ["TestBasicSingleCellSolver"]
 
 
 import pytest
@@ -15,9 +15,9 @@ from cbcbeat import (
     NoCellModel,
     FitzHughNagumoManual,
     Tentusscher_2004_mcell,
-    Constant,
-    Expression,
+    backend,
 )
+from dolfin import Expression
 
 
 class TestBasicSingleCellSolver(object):
@@ -56,7 +56,7 @@ class TestBasicSingleCellSolver(object):
 
         # Solve for a couple of steps
         solutions = solver.solve(interval, dt)
-        for ((t0, t1), vs) in solutions:
+        for (t0, t1), vs in solutions:
             pass
 
         # Check that we are at the end time
@@ -67,7 +67,7 @@ class TestBasicSingleCellSolver(object):
     @parametrize(("theta"), [0.0, 0.5, 1.0])
     def test_default_basic_single_cell_solver(self, cell_model, theta):
         "Test basic single cell solver."
-        time = Constant(0.0)
+        time = backend.Constant(0.0)
         model = cell_model
         Model = cell_model.__class__
 

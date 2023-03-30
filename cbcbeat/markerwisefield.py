@@ -5,7 +5,7 @@
 __all__ = ["Markerwise", "handle_markerwise", "rhs_with_markerwise_field"]
 
 from dolfin import dx, Measure
-from modelparameters.logger import error
+from ufl.log import error
 
 
 def handle_markerwise(g, classtype):

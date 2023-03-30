@@ -2,21 +2,27 @@
 Unit tests for various types of solvers for cardiac cell models.
 """
 __author__ = "Marie E. Rognes (meg@simula.no), 2013"
-__all__ = ["TestCardiacODESolver", "TestBasicSingleCellSolver"]
+__all__ = ["TestCardiacODESolver"]
 
 
 import itertools
 from testutils import slow, assert_almost_equal, parametrize
 
-from dolfin import info, UnitIntervalMesh
-from ufl.log import info_red, info_green
+from dolfin import UnitIntervalMesh, Expression
 from cbcbeat import (
     supported_cell_models,
     CardiacODESolver,
-    Constant,
-    Expression,
+    backend,
+    NoCellModel,  # noqa:F401
+    FitzHughNagumoManual,  # noqa: F401
+    Tentusscher_2004_mcell,  # noqa: F401
+    RogersMcCulloch,  # noqa: F401
+    Beeler_reuter_1977,  # noqa: F401
+    Tentusscher_panfilov_2006_epi_cell,  # noqa: F401
+    Fenton_karma_1998_MLR1_altered,  # noqa: F401
+    Fenton_karma_1998_BR_altered,  # noqa: F401
 )
-from cbcbeat.cellmodels import *
+from ufl.log import info, info_red, info_green
 
 
 supported_schemes = [
@@ -110,7 +116,7 @@ class TestCardiacODESolver(object):
         """Replace all float values in params by Constants."""
         for param_name in list(params.keys()):
             value = params[param_name]
-            params[param_name] = Constant(value)
+            params[param_name] = backend.Constant(value)
 
     def _setup_solver(self, Model, Scheme, time=0.0, stim=None, params=None):
         """Generate a new solver object with the given start time, stimulus and parameters."""
@@ -149,7 +155,7 @@ class TestCardiacODESolver(object):
         """Runs the given cell model with the numerical scheme
         and compares the result with the reference value."""
 
-        solver = self._setup_solver(Model, Scheme, time=Constant(0))
+        solver = self._setup_solver(Model, Scheme, time=backend.Constant(0))
         (vs_, vs) = solver.solution_fields()
 
         next_dt = 0.01
@@ -172,7 +178,9 @@ class TestCardiacODESolver(object):
         params = Model.default_parameters()
         self.replace_with_constants(params)
 
-        solver = self._setup_solver(Model, Scheme, time=Constant(0), params=params)
+        solver = self._setup_solver(
+            Model, Scheme, time=backend.Constant(0), params=params
+        )
         (vs_, vs) = solver.solution_fields()
 
         next_dt = 0.01

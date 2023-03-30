@@ -8,14 +8,20 @@ __all__ = ["TestCardiacODESolver"]
 import numpy as np
 import os
 
-from dolfin import dof_to_vertex_map
+from dolfin import dof_to_vertex_map, Expression, UnitIntervalMesh, MPI
 from ufl.log import info_green
-from cbcbeat import *
+from cbcbeat import (
+    NoCellModel,
+    FitzHughNagumoManual,
+    Tentusscher_2004_mcell,
+    CardiacODESolver,
+    backend,
+    dolfinimport,
+)
 from testutils import assert_almost_equal, adjoint, slow
 
 
 class TestCardiacODESolver(object):
-
     # Note that these should be essentially identical to the ones
     # for the BasicSingleCellSolver
     references = {
@@ -73,7 +79,6 @@ class TestCardiacODESolver(object):
 @slow
 def closure_long_run(Scheme, dt_org, abs_tol, rel_tol):
     def long_run_compare(self):
-
         mesh = UnitIntervalMesh(5)
 
         # FIXME: We need to make this run in paralell.
@@ -89,7 +94,7 @@ def closure_long_run(Scheme, dt_org, abs_tol, rel_tol):
         Vm_reference = np.fromfile(os.path.join(dir_path, "Vm_reference.npy"))
         params = Model.default_parameters()
 
-        time = Constant(0.0)
+        time = backend.Constant(0.0)
         stim = Expression(
             "(time >= stim_start) && (time < stim_start + stim_duration)"
             " ? stim_amplitude : 0.0 ",
@@ -101,8 +106,8 @@ def closure_long_run(Scheme, dt_org, abs_tol, rel_tol):
         )
 
         # Initiate solver, with model and Scheme
-        if dolfin_adjoint:
-            adj_reset()
+        if dolfinimport.has_dolfin_adjoint:
+            backend.adj_reset()
 
         solver = self._setup_solver(Model, Scheme, mesh, time, stim, params)
         solver._pi_solver.parameters["newton_solver"]["relative_tolerance"] = 1e-8
@@ -130,7 +135,6 @@ def closure_long_run(Scheme, dt_org, abs_tol, rel_tol):
         t0 = 0.0
 
         while next_dt > 0.0:
-
             # Step solver
             solver.step((t0, t0 + next_dt))
             vs_.assign(vs)
@@ -166,6 +170,5 @@ for Scheme, dt_org, abs_tol, rel_tol in [
     ("ESDIRK3", 0.125, 1e-0, 1e-1),
     ("ESDIRK4", 0.125, 1e-0, 1e-1),
 ]:
-
     func = closure_long_run(Scheme, dt_org, abs_tol, rel_tol)
     setattr(TestCardiacODESolver, "test_{0}_long_run_tentusscher".format(Scheme), func)

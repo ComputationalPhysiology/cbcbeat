@@ -7,13 +7,21 @@ __all__ = ["TestSplittingSolver"]
 
 from testutils import assert_almost_equal, medium, parametrize
 
-
-from cbcbeat import *
+import dolfin
+from dolfin import UnitCubeMesh, Expression
+from cbcbeat import (
+    FitzHughNagumoManual,
+    CardiacModel,
+    backend,
+    BasicSplittingSolver,
+    SplittingSolver,
+    dolfinimport,
+)
 
 try:
-    set_log_level(LogLevel.WARNING)
-except:
-    set_log_level(WARNING)
+    dolfin.set_log_level(dolfin.LogLevel.WARNING)
+except Exception:
+    dolfin.set_log_level(dolfin.WARNING)
     pass
 
 
@@ -24,7 +32,7 @@ class TestSplittingSolver(object):
         self.mesh = UnitCubeMesh(5, 5, 5)
 
         # Create time
-        self.time = Constant(0.0)
+        self.time = backend.Constant(0.0)
 
         # Create stimulus
         self.stimulus = Expression("2.0*t", t=self.time, degree=1)
@@ -72,14 +80,16 @@ class TestSplittingSolver(object):
 
         # Solve
         solutions = solver.solve((self.t0, self.T), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (vs_, vs, vur) = fields
         a = vs.vector().norm("l2")
         c = vur.vector().norm("l2")
         assert_almost_equal(interval[1], self.T, 1e-10)
 
-        if dolfin_adjoint:
-            adj_reset()
+        if dolfinimport.has_dolfin_adjoint:
+            import dolfin_adjoint
+
+            dolfin_adjoint.adj_reset()
 
         # Create optimised solver with direct solution algorithm
         params = SplittingSolver.default_parameters()
@@ -94,7 +104,7 @@ class TestSplittingSolver(object):
 
         # Solve again
         solutions = solver.solve((self.t0, self.T), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (vs_, vs, vur) = fields
         assert_almost_equal(interval[1], self.T, 1e-10)
         b = vs.vector().norm("l2")

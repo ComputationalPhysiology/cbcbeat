@@ -7,10 +7,26 @@ __author__ = (
 )
 __all__ = ["TestBidomainSolversAdjoint"]
 
-from cbcbeat import *
-from testutils import assert_equal, fast, slow, adjoint, parametrize, assert_greater
+import ufl
+from cbcbeat import backend, BasicBidomainSolver, BidomainSolver
+from modelparameters.logger import info_green
+from dolfin import parameters, UnitCubeMesh, Expression
+from testutils import (
+    assert_equal,
+    fast,
+    slow,
+    adjoint,
+    parametrize,
+    assert_greater,
+    require_dolfin_adjoint,
+)
 
 import sys
+
+try:
+    import dolfin_adjoint
+except ImportError:
+    pass
 
 args = (
     sys.argv[:1]
@@ -23,12 +39,13 @@ args = (
 parameters.parse(args)
 
 
+@require_dolfin_adjoint
 class TestBidomainSolversAdjoint(object):
     """Test adjoint functionality for the bidomain solver."""
 
     def setup(self):
         self.mesh = UnitCubeMesh(5, 5, 5)
-        self.time = Constant(0.0)
+        self.time = backend.Constant(0.0)
 
         # Create stimulus
         self.stimulus = Expression("2.0", degree=1)
@@ -104,7 +121,7 @@ class TestBidomainSolversAdjoint(object):
             vs_.interpolate(ics)
 
         # Solve
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             pass
 
         return vs
@@ -134,7 +151,7 @@ class TestBidomainSolversAdjoint(object):
 
         # Check replay
         info_green("Running replay basic (%s)" % solver_type)
-        success = replay_dolfin(stop=True, tol=tol)
+        success = dolfin_adjoint.replay_dolfin(stop=True, tol=tol)
         assert_equal(success, True)
 
     def tlm_adj_setup(self, Solver, solver_type):
@@ -145,19 +162,21 @@ class TestBidomainSolversAdjoint(object):
 
         # Define functional
         def form(w):
-            return inner(w, w) * dx
+            return ufl.inner(w, w) * ufl.dx
 
-        J = Functional(form(vs) * dt[FINISH_TIME])
-        m = Control(vs_)
+        J = dolfin_adjoint.Functional(
+            form(vs) * dolfin_adjoint.dt[dolfin_adjoint.FINISH_TIME]
+        )
+        m = dolfin_adjoint.Control(vs_)
 
         # Compute value of functional with current ics
-        Jics = assemble(form(vs))
+        Jics = backend.assemble(form(vs))
 
         # Define reduced functional
         def Jhat(ics):
             self._setup_solver(Solver, solver_type, enable_adjoint=False)
             vs = self._solve(ics)
-            return assemble(form(vs))
+            return backend.assemble(form(vs))
 
         # Stop annotating
         parameters["adjoint"]["stop_annotating"] = True
@@ -182,9 +201,9 @@ class TestBidomainSolversAdjoint(object):
         J, Jhat, m, Jics = self.tlm_adj_setup(Solver, solver_type)
 
         # Check TLM correctness
-        dJdics = compute_gradient_tlm(J, m, forget=False)
+        dJdics = dolfin_adjoint.compute_gradient_tlm(J, m, forget=False)
         assert dJdics is not None, "Gradient is None (#fail)."
-        conv_rate_tlm = taylor_test(Jhat, m, Jics, dJdics)
+        conv_rate_tlm = dolfin_adjoint.taylor_test(Jhat, m, Jics, dJdics)
 
         # Check that minimal convergence rate is greater than some given number
         assert_greater(conv_rate_tlm, 1.9)
@@ -207,9 +226,9 @@ class TestBidomainSolversAdjoint(object):
         J, Jhat, m, Jics = self.tlm_adj_setup(Solver, solver_type)
 
         # Check adjoint correctness
-        dJdics = compute_gradient(J, m, forget=False)
+        dJdics = dolfin_adjoint.compute_gradient(J, m, forget=False)
         assert dJdics is not None, "Gradient is None (#fail)."
-        conv_rate = taylor_test(Jhat, m, Jics, dJdics, seed=1e-3)
+        conv_rate = dolfin_adjoint.taylor_test(Jhat, m, Jics, dJdics, seed=1e-3)
 
         # Check that minimal convergence rate is greater than some given number
         assert_greater(conv_rate, 1.9)

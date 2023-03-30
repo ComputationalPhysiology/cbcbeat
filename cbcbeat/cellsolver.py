@@ -10,6 +10,18 @@ __all__ = [
 ]
 
 import dolfin
+from dolfin import (
+    ForwardEuler,  # noqa:F401
+    BackwardEuler,  # noqa:F401
+    CrankNicolson,  # noqa:F401
+    RK4,  # noqa:F401
+    ESDIRK3,  # noqa:F401
+    ESDIRK4,  # noqa:F401
+    RL1,  # noqa:F401
+    RL2,  # noqa:F401
+    GRL1,  # noqa:F401
+    GRL2,  # noqa:F401
+)
 from cbcbeat.dolfinimport import backend
 from cbcbeat import CardiacCellModel, MultiCellModel
 from cbcbeat.markerwisefield import (
@@ -21,7 +33,7 @@ from cbcbeat.utils import state_space, TimeStepper, splat, annotate_kwargs
 import ufl
 import ufl.classes
 import cbcbeat
-from modelparameters.logger import info_blue, error
+from ufl.log import info_blue, error
 
 
 def point_integral_solver_default_parameters():
@@ -89,7 +101,7 @@ class BasicCardiacODESolver(object):
         A representation of the cardiac cell model(s)
 
       I_s (optional) A typically time-dependent external stimulus
-        given as a :py:class:`dolfin.GenericFunction` or a
+        given as a :py:class:`dolfin.cpp.function.GenericFunction` or a
         Markerwise. NB: it is assumed that the time dependence of I_s
         is encoded via the 'time' Constant.
 
@@ -109,7 +121,7 @@ class BasicCardiacODESolver(object):
         self._num_states = self._model.num_states()
 
         # Handle stimulus
-        self._I_s = handle_markerwise(I_s, dolfin.GenericFunction)
+        self._I_s = handle_markerwise(I_s, dolfin.cpp.function.GenericFunction)
 
         # Initialize and update parameters if given
         self.parameters = self.default_parameters()
@@ -394,7 +406,7 @@ class CardiacODESolver(object):
         self._I_ion = self._model.I
         self._num_states = self._model.num_states()
 
-        self._I_s = handle_markerwise(I_s, dolfin.GenericFunction)
+        self._I_s = handle_markerwise(I_s, dolfin.cpp.function.GenericFunction)
 
         # Create time if not given, otherwise use given time
         if time is None:
@@ -518,7 +530,7 @@ class CardiacODESolver(object):
         dt = t1 - t0
 
         self._annotate_kwargs = annotate_kwargs(self.parameters)
-        if cbcbeat.dolfin_adjoint:
+        if cbcbeat.dolfinimport.has_dolfin_adjoint:
             self._pi_solver.step(dt, **self._annotate_kwargs)
         else:
             self._pi_solver.step(dt)

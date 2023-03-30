@@ -9,16 +9,17 @@ __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["TestBasicSingleCellSolver"]
 
 
-from cbcbeat import Expression, Constant, Parameters, dolfin_adjoint
 from cbcbeat import FitzHughNagumoManual, CardiacCellModel
 from cbcbeat import BasicSingleCellSolver
 import cbcbeat
 
+from dolfin import Expression, Parameters
+
 try:
-    from cbcbeat import UserExpression
+    from dolfin import UserExpression
 
     user_expression = UserExpression
-except:
+except ImportError:
     user_expression = Expression
     pass
 
@@ -44,13 +45,13 @@ class TestBasicSingleCellSolver:
                 else:
                     value[0] = 0.0
 
-        if cbcbeat.dolfin_adjoint:
+        if cbcbeat.dolfinimport.has_dolfin_adjoint:
             from dolfin_adjoint import adj_reset
 
             adj_reset()
 
         cell = FitzHughNagumoManual()
-        time = Constant(0.0)
+        time = cbcbeat.backend.Constant(0.0)
         cell.stimulus = Stimulus(t=time, degree=0)
         solver = BasicSingleCellSolver(cell, time)
 
@@ -69,7 +70,7 @@ class TestBasicSingleCellSolver:
 
         # Solve
         solutions = solver.solve(interval, dt=dt)
-        for (timestep, vs) in solutions:
+        for timestep, vs in solutions:
             (t0, t1) = timestep
             times += [(t0 + t1) / 2]
 
@@ -100,7 +101,6 @@ class TestBasicSingleCellSolver:
 
     @slow
     def test_fitz_hugh_nagumo_modified(self):
-
         k = 0.00004
         Vrest = -85.0
         Vthreshold = -70.0
@@ -174,12 +174,12 @@ class TestBasicSingleCellSolver:
                 return "Modified FitzHugh-Nagumo cardiac cell model"
 
         def _run(cell):
-            if dolfin_adjoint:
+            if cbcbeat.dolfinimport.has_dolfin_adjoint:
                 from dolfin_adjoint import adj_reset
 
                 adj_reset()
 
-            solver = BasicSingleCellSolver(cell, Constant(0.0))
+            solver = BasicSingleCellSolver(cell, cbcbeat.backend.Constant(0.0))
 
             # Setup initial condition
             (vs_, vs) = solver.solution_fields()
@@ -191,7 +191,7 @@ class TestBasicSingleCellSolver:
             times = []
             v_values = []
             s_values = []
-            for ((t0, t1), vs) in solutions:
+            for (t0, t1), vs in solutions:
                 times += [0.5 * (t0 + t1)]
                 v_values.append(vs.vector()[0])
                 s_values.append(vs.vector()[1])

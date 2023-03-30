@@ -101,14 +101,17 @@ class CardiacCellModel:
             if param_name not in self._parameters:
                 dolfin.error("'%s' is not a parameter in %s" % (param_name, self))
             if not isinstance(param_value, (float, int)) and not isinstance(
-                param_value._cpp_object, dolfin.GenericFunction
+                param_value._cpp_object, dolfin.cpp.function.GenericFunction
             ):
                 dolfin.error(
-                    "'%s' is not a scalar or a dolfin.GenericFunction" % param_name
+                    "'%s' is not a scalar or a dolfin.cpp.function.GenericFunction"
+                    % param_name
                 )
                 if (
                     hasattr(param_value, "_cpp_object")
-                    and isinstance(param_value._cpp_object, dolfin.GenericFunction)
+                    and isinstance(
+                        param_value._cpp_object, dolfin.cpp.function.GenericFunction
+                    )
                     and param_value._cpp_object.value_size() != 1
                 ):
                     dolfin.error("expected the value_size of '%s' to be 1" % param_name)
@@ -121,14 +124,17 @@ class CardiacCellModel:
             if init_name not in self._initial_conditions:
                 dolfin.error("'%s' is not a parameter in %s" % (init_name, self))
             if not isinstance(init_value, (float, int)) and not isinstance(
-                init_value._cpp_object, dolfin.GenericFunction
+                init_value._cpp_object, dolfin.cpp.function.GenericFunction
             ):
                 dolfin.error(
-                    "'%s' is not a scalar or a dolfin.GenericFunction" % init_name
+                    "'%s' is not a scalar or a dolfin.cpp.function.GenericFunction"
+                    % init_name
                 )
             if (
                 hasattr(init_value, "_cpp_object")
-                and isinstance(init_value._cpp_object, dolfin.GenericFunction)
+                and isinstance(
+                    init_value._cpp_object, dolfin.cpp.function.GenericFunction
+                )
                 and init_value._cpp_object.value_size() != 1
             ):
                 dolfin.error("expected the value_size of '%s' to be 1" % init_name)
@@ -222,7 +228,7 @@ class MultiCellModel(CardiacCellModel):
         return self._cell_models[k].I(v, s, time)
 
     def initial_conditions(self):
-        "Return initial conditions for v and s as a dolfin.dolfin.GenericFunction."
+        "Return initial conditions for v and s as a dolfin.dolfin.cpp.function.GenericFunction."
 
         n = self.num_states()  # (Maximal) Number of states in MultiCellModel
         VS = dolfin.VectorFunctionSpace(self.mesh(), "DG", 0, n + 1)

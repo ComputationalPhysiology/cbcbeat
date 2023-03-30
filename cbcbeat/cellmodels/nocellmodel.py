@@ -3,7 +3,7 @@
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["NoCellModel"]
 
-from cbcbeat.cellmodels import CardiacCellModel
+from cbcbeat.cellmodels.cardiaccellmodel import CardiacCellModel
 from collections import OrderedDict
 
 # FIXME: This class represents a design flaw rather than anything

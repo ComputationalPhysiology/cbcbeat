@@ -14,7 +14,7 @@ import dolfin
 from cbcbeat.dolfinimport import backend
 from cbcbeat.markerwisefield import Markerwise, handle_markerwise
 from cbcbeat.cellmodels import CardiacCellModel
-from modelparameters.logger import error
+from ufl.log import error
 
 # ------------------------------------------------------------------------------
 # Cardiac models
@@ -89,11 +89,15 @@ class CardiacModel(object):
             error(msg)
 
         # Handle stimulus
-        self._stimulus = handle_markerwise(stimulus, dolfin.GenericFunction)
+        self._stimulus = handle_markerwise(
+            stimulus, dolfin.cpp.function.GenericFunction
+        )
 
         # Handle applied current
         ac = applied_current
-        self._applied_current = handle_markerwise(ac, dolfin.GenericFunction)
+        self._applied_current = handle_markerwise(
+            ac, dolfin.cpp.function.GenericFunction
+        )
 
     def applied_current(self):
         "An applied current: used as a source in the elliptic bidomain equation"

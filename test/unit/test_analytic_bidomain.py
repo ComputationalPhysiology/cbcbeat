@@ -5,33 +5,35 @@ splitting solver.
 """
 
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
-__all__ = []
 
 
 from cbcbeat import CardiacModel, NoCellModel
 from cbcbeat import BasicSplittingSolver
-from cbcbeat import Constant, UnitSquareMesh
-from cbcbeat import Function, Expression, errornorm
+from cbcbeat import backend
+import dolfin
+
 import cbcbeat
 
-if cbcbeat.dolfin_adjoint:
-    from cbcbeat import adj_reset
+if cbcbeat.dolfinimport.has_dolfin_adjoint:
+    from dolfin_adjoint import adj_reset
 
 from cbcbeat.utils import convergence_rate
 from testutils import slow
 
 
 def main(N, dt, T, theta):
-
-    if cbcbeat.dolfin_adjoint:
+    if cbcbeat.dolfinimport.has_dolfin_adjoint:
         adj_reset()
 
     # Create cardiac model
-    mesh = UnitSquareMesh(N, N)
-    time = Constant(0.0)
+    mesh = dolfin.UnitSquareMesh(N, N)
+    time = backend.Constant(0.0)
     cell_model = NoCellModel()
-    ac_str = "cos(t)*cos(2*pi*x[0])*cos(2*pi*x[1]) + 4*pow(pi, 2)*cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)"
-    stimulus = Expression(ac_str, t=time, degree=3)
+    ac_str = (
+        "cos(t)*cos(2*pi*x[0])*cos(2*pi*x[1]) "
+        "+ 4*pow(pi, 2)*cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)"
+    )
+    stimulus = dolfin.Expression(ac_str, t=time, degree=3)
     heart = CardiacModel(mesh, time, 1.0, 1.0, cell_model, stimulus=stimulus)
 
     # Set-up solver
@@ -43,26 +45,26 @@ def main(N, dt, T, theta):
     # Define exact solution (Note: v is returned at end of time
     # interval(s), u is computed at somewhere in the time interval
     # depending on theta)
-    v_exact = Expression("cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)", t=T, degree=3)
-    u_exact = Expression(
+    v_exact = dolfin.Expression("cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)", t=T, degree=3)
+    u_exact = dolfin.Expression(
         "-cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)/2.0", t=T - (1 - theta) * dt, degree=3
     )
 
     # Define initial condition(s)
-    vs0 = Function(solver.VS)
+    vs0 = backend.Function(solver.VS)
     (vs_, vs, vur) = solver.solution_fields()
     vs_.assign(vs0)
 
     # Solve
     solutions = solver.solve((0, T), dt)
-    for (timestep, (vs_, vs, vur)) in solutions:
+    for timestep, (vs_, vs, vur) in solutions:
         continue
 
     # Compute errors
     (v, s) = vs.split(deepcopy=True)
-    v_error = errornorm(v_exact, v, "L2", degree_rise=2)
+    v_error = dolfin.errornorm(v_exact, v, "L2", degree_rise=2)
     (v, u, r) = vur.split(deepcopy=True)
-    u_error = errornorm(u_exact, u, "L2", degree_rise=2)
+    u_error = dolfin.errornorm(u_exact, u, "L2", degree_rise=2)
 
     return (v_error, u_error, mesh.hmin(), dt, T)
 

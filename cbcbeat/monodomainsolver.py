@@ -31,7 +31,7 @@ import dolfin
 from cbcbeat.dolfinimport import backend
 from cbcbeat.markerwisefield import rhs_with_markerwise_field
 from cbcbeat.utils import end_of_time, annotate_kwargs
-from modelparameters.logger import debug, info, error
+from ufl.log import debug, info, error
 
 
 class BasicMonodomainSolver:

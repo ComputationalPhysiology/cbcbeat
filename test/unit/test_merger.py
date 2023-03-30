@@ -13,8 +13,8 @@ from cbcbeat import (
     BasicSplittingSolver,
     SplittingSolver,
     FitzHughNagumoManual,
-    UnitCubeMesh,
 )
+from dolfin import UnitCubeMesh
 
 
 class TestMerger(object):

@@ -8,7 +8,18 @@ __author__ = (
 __all__ = ["TestCardiacODESolverAdjoint"]
 
 import pytest
-from cbcbeat import *
+import ufl
+from cbcbeat import (
+    Tentusscher_2004_mcell,
+    Tentusscher_panfilov_2006_epi_cell,
+    Beeler_reuter_1977,
+    FitzHughNagumoManual,
+    RogersMcCulloch,
+    CardiacODESolver,
+    backend,
+)
+import dolfin
+from modelparameters.logger import info_green
 from testutils import (
     assert_true,
     assert_greater,
@@ -16,7 +27,13 @@ from testutils import (
     adjoint,
     parametrize,
     xfail,
+    require_dolfin_adjoint,
 )
+
+try:
+    import dolfin_adjoint
+except ImportError:
+    pass
 
 supported_schemes = ["CrankNicolson", "RK4", "ESDIRK4"]
 
@@ -35,28 +52,28 @@ seed_collection_tlm = seed_collection_adm.copy()
 seed_collection_tlm[Tentusscher_panfilov_2006_epi_cell] = 4e-5
 
 cellmodel_parameters_seeds = {}
-cellmodel_parameters_seeds[FitzHughNagumoManual] = ("a", 1e-5)
-cellmodel_parameters_seeds[RogersMcCulloch] = ("g", 1e-5)
-cellmodel_parameters_seeds[Tentusscher_2004_mcell] = ("g_CaL", 1e-5)
-cellmodel_parameters_seeds[Tentusscher_panfilov_2006_epi_cell] = ("g_to", 1e-6)
-cellmodel_parameters_seeds[Beeler_reuter_1977] = ("g_s", 1e-5)
+cellmodel_parameters_seeds[FitzHughNagumoManual] = ("a", 1e-5)  # type: ignore
+cellmodel_parameters_seeds[RogersMcCulloch] = ("g", 1e-5)  # type: ignore
+cellmodel_parameters_seeds[Tentusscher_2004_mcell] = ("g_CaL", 1e-5)  # type: ignore
+cellmodel_parameters_seeds[Tentusscher_panfilov_2006_epi_cell] = ("g_to", 1e-6)  # type: ignore
+cellmodel_parameters_seeds[Beeler_reuter_1977] = ("g_s", 1e-5)  # type: ignore
 
 fails_with_forward_euler = ()
 
 
+@require_dolfin_adjoint
 class TestCardiacODESolverAdjoint(object):
     def setup_dolfin_parameters(self):
         """Set optimisation parameters for these tests"""
 
-        parameters["form_compiler"]["cpp_optimize"] = True
+        dolfin.parameters["form_compiler"]["cpp_optimize"] = True
         flags = "-O3 -ffast-math -march=native"
-        parameters["form_compiler"]["cpp_optimize_flags"] = flags
+        dolfin.parameters["form_compiler"]["cpp_optimize_flags"] = flags
 
     def _setup_solver(self, model, Scheme, mesh):
-
         # Initialize time and stimulus (note t=time construction!)
-        time = Constant(0.0)
-        stim = Expression(
+        time = backend.backend.Constant(0.0)
+        stim = dolfin.Expression(
             "(time >= stim_start) && (time < stim_start + stim_duration)"
             " ? stim_amplitude : 0.0 ",
             time=time,
@@ -96,11 +113,11 @@ class TestCardiacODESolverAdjoint(object):
             {"newton_solver": {"always_recompute_jacobian": True}}
         )
         solutions = solver.solve((0.0, T), dt)
-        for ((t0, t1), vs) in solutions:
+        for (t0, t1), vs in solutions:
             pass
 
     def tlm_adj_setup_initial_conditions(self, cell_model, Scheme):
-        mesh = UnitIntervalMesh(3)
+        mesh = dolfin.UnitIntervalMesh(3)
         Model = cell_model.__class__
 
         # Initiate solver, with model and Scheme
@@ -108,7 +125,7 @@ class TestCardiacODESolverAdjoint(object):
         model = Model(params=params)
 
         solver = self._setup_solver(model, Scheme, mesh)
-        ics = project(model.initial_conditions(), solver.VS).copy(
+        ics = backend.project(model.initial_conditions(), solver.VS).copy(
             deepcopy=True, name="ics"
         )
 
@@ -119,71 +136,81 @@ class TestCardiacODESolverAdjoint(object):
         (vs_, vs) = solver.solution_fields()
 
         def form(w):
-            return inner(w, w) * dx
+            return ufl.inner(w, w) * ufl.dx
 
-        J = Functional(form(vs) * dt[FINISH_TIME])
+        J = dolfin_adjoint.dolfin_adjoint.Functional(
+            form(vs) * dolfin_adjoint.dt[dolfin_adjoint.FINISH_TIME]
+        )
 
         # Compute value of functional with current ics
-        Jics = assemble(form(vs))
+        Jics = backend.assemble(form(vs))
 
         # Set-up runner
         def Jhat(ics):
             self._run(solver, ics)
             (vs_, vs) = solver.solution_fields()
-            return assemble(form(vs))
+            return backend.assemble(form(vs))
 
         # Stop annotating
-        parameters["adjoint"]["stop_annotating"] = True
+        dolfin.parameters["adjoint"]["stop_annotating"] = True
 
-        m = Control(vs)
+        m = dolfin_adjoint.Control(vs)
         return J, Jhat, m, Jics
 
     def tlm_adj_setup_cellmodel_parameters(self, cell_model, Scheme):
-        mesh = UnitIntervalMesh(3)
+        mesh = dolfin.UnitIntervalMesh(3)
         Model = cell_model.__class__
 
         # Initiate solver, with model and Scheme
         cell_params = Model.default_parameters()
         param_name = cellmodel_parameters_seeds[Model][0]
-        cell_params[param_name] = Constant(cell_params[param_name], name=param_name)
+        cell_params[param_name] = backend.Constant(
+            cell_params[param_name], name=param_name
+        )
         model = Model(params=cell_params)
 
         solver = self._setup_solver(model, Scheme, mesh)
 
         info_green("Running forward %s with %s (setup)" % (model, Scheme))
-        ics = Function(project(model.initial_conditions(), solver.VS), name="ics")
+        ics = backend.Function(
+            backend.project(model.initial_conditions(), solver.VS), name="ics"
+        )
         self._run(solver, ics)
 
         # Define functional
         (vs_, vs) = solver.solution_fields()
 
         def form(w):
-            return inner(w, w) * dx
+            return ufl.inner(w, w) * ufl.dx
 
-        J = Functional(form(vs) * dt[FINISH_TIME])
+        J = dolfin_adjoint.Functional(
+            form(vs) * dolfin_adjoint.dt[dolfin_adjoint.INISH_TIME]
+        )
 
         # Compute value of functional with current ics
-        Jics = assemble(form(vs))
+        Jics = backend.assemble(form(vs))
 
         # Set-up runner
         def Jhat(val):
             cell_params[param_name].assign(val)
-            ics = Function(project(model.initial_conditions(), solver.VS), name="ics")
+            ics = backend.Function(
+                backend.project(model.initial_conditions(), solver.VS), name="ics"
+            )
             self._run(solver, ics)
             (vs_, vs) = solver.solution_fields()
-            return assemble(form(vs))
+            return backend.assemble(form(vs))
 
         # Stop annotating
-        solver.parameters["enable_adjoint"] = False
+        solver.dolfin.parameters["enable_adjoint"] = False
 
-        m = ConstantControl(cell_params[param_name])
+        m = backend.Constant(dolfin_adjoint.Control(cell_params[param_name]))
         return J, Jhat, m, Jics
 
     @adjoint
     @slow
     @parametrize(("Scheme"), supported_schemes)
     def test_replay(self, cell_model, Scheme):
-        mesh = UnitIntervalMesh(3)
+        mesh = dolfin.UnitIntervalMesh(3)
         Model = cell_model.__class__
 
         if isinstance(cell_model, fails_with_RK4) and Scheme == "RK4":
@@ -194,7 +221,7 @@ class TestCardiacODESolverAdjoint(object):
         model = Model(params=params)
 
         solver = self._setup_solver(model, Scheme, mesh)
-        ics = project(model.initial_conditions(), solver.VS)
+        ics = backend.project(model.initial_conditions(), solver.VS)
 
         info_green("Running forward %s with %s (replay)" % (model, Scheme))
         self._run(solver, ics)
@@ -202,7 +229,7 @@ class TestCardiacODESolverAdjoint(object):
         print(solver.solution_fields()[0].vector().get_local())
 
         info_green("Replaying")
-        success = replay_dolfin(tol=0, stop=True)
+        success = dolfin_adjoint.replay_dolfin(tol=0, stop=True)
         assert_true(success)
 
     @adjoint
@@ -226,16 +253,16 @@ class TestCardiacODESolverAdjoint(object):
 
         # Check TLM correctness
         info_green("Computing gradient")
-        dJdics = compute_gradient_tlm(J, m, forget=False)
+        dJdics = dolfin_adjoint.compute_gradient_tlm(J, m, forget=False)
         assert dJdics is not None, "Gradient is None (#fail)."
-        conv_rate_tlm = taylor_test(Jhat, m, Jics, dJdics, seed=seed)
+        conv_rate_tlm = dolfin_adjoint.taylor_test(Jhat, m, Jics, dJdics, seed=seed)
 
         assert_greater(conv_rate_tlm, 1.8)
         return
 
     @adjoint
     @slow
-    @xfail  #  dolfin-adjoint does not support differentiating with respect to
+    @xfail  # dolfin-adjoint does not support differentiating with respect to
     # ODE parameters yet
     @parametrize(("Scheme"), supported_schemes)
     def test_tlm_cell_model_parameter(self, cell_model, Scheme):
@@ -253,13 +280,13 @@ class TestCardiacODESolverAdjoint(object):
         seed = seed_collection_tlm.get(cell_model.__class__)
 
         # Stop annotating
-        parameters["adjoint"]["stop_annotating"] = True
+        dolfin.parameters["adjoint"]["stop_annotating"] = True
 
         # Check TLM correctness
         info_green("Computing gradient")
-        dJdics = compute_gradient_tlm(J, m, forget=False)
+        dJdics = dolfin_adjoint.compute_gradient_tlm(J, m, forget=False)
         assert dJdics is not None, "Gradient is None (#fail)."
-        conv_rate_tlm = taylor_test(Jhat, m, Jics, dJdics, seed=seed)
+        conv_rate_tlm = dolfin_adjoint.taylor_test(Jhat, m, Jics, dJdics, seed=seed)
 
         assert_greater(conv_rate_tlm, 1.8)
 
@@ -287,16 +314,16 @@ class TestCardiacODESolverAdjoint(object):
 
         # Compute gradient with respect to vs.
         info_green("Computing gradient")
-        dJdics = compute_gradient(J, m, forget=False)
+        dJdics = dolfin_adjoint.compute_gradient(J, m, forget=False)
         assert dJdics is not None, "Gradient is None (#fail)."
-        conv_rate = taylor_test(Jhat, m, Jics, dJdics, seed=seed)
+        conv_rate = dolfin_adjoint.taylor_test(Jhat, m, Jics, dJdics, seed=seed)
 
         # Check that minimal rate is greater than some given number
         assert_greater(conv_rate, 1.9)
 
     @adjoint
     @slow
-    @xfail  #  dolfin-adjoint does not support differentiating with respect to
+    @xfail  # dolfin-adjoint does not support differentiating with respect to
     # ODE parameters yet
     @parametrize(("Scheme"), supported_schemes)
     def test_adjoint_cell_model_parameter(self, cell_model, Scheme):
@@ -320,9 +347,9 @@ class TestCardiacODESolverAdjoint(object):
 
         # Compute gradient with respect to vs.
         info_green("Computing gradient")
-        dJdics = compute_gradient(J, m, forget=False)
+        dJdics = dolfin_adjoint.compute_gradient(J, m, forget=False)
         assert dJdics is not None, "Gradient is None (#fail)."
-        conv_rate = taylor_test(Jhat, m, Jics, dJdics, seed=seed)
+        conv_rate = dolfin_adjoint.taylor_test(Jhat, m, Jics, dJdics, seed=seed)
 
         # Check that minimal rate is greater than some given number
         assert_greater(conv_rate, 1.9)

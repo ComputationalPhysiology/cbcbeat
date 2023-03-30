@@ -18,7 +18,7 @@ from gotran.codegeneration.algorithmcomponents import componentwise_derivative
 from gotran.codegeneration.codecomponent import CodeComponent
 
 from cbcbeat.gotran2dolfin import DOLFINCodeGenerator
-from modelparameters.logger import error
+from ufl.log import error
 
 _class_template = """
 \"\"\"This module contains a {ModelName} cardiac cell model
