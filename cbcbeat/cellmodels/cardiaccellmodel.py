@@ -1,9 +1,8 @@
 """This module contains a base class for cardiac cell models."""
-from __future__ import division
-
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["CardiacCellModel", "MultiCellModel"]
 
+from ufl.log import error
 import dolfin
 from cbcbeat.dolfinimport import backend
 from collections import OrderedDict
@@ -99,11 +98,11 @@ class CardiacCellModel:
         "Update parameters in model"
         for param_name, param_value in params.items():
             if param_name not in self._parameters:
-                dolfin.error("'%s' is not a parameter in %s" % (param_name, self))
+                error("'%s' is not a parameter in %s" % (param_name, self))
             if not isinstance(param_value, (float, int)) and not isinstance(
                 param_value._cpp_object, dolfin.cpp.function.GenericFunction
             ):
-                dolfin.error(
+                error(
                     "'%s' is not a scalar or a dolfin.cpp.function.GenericFunction"
                     % param_name
                 )
@@ -114,7 +113,7 @@ class CardiacCellModel:
                     )
                     and param_value._cpp_object.value_size() != 1
                 ):
-                    dolfin.error("expected the value_size of '%s' to be 1" % param_name)
+                    error("expected the value_size of '%s' to be 1" % param_name)
 
             self._parameters[param_name] = param_value
 
@@ -122,11 +121,11 @@ class CardiacCellModel:
         "Update initial_conditions in model"
         for init_name, init_value in init.items():
             if init_name not in self._initial_conditions:
-                dolfin.error("'%s' is not a parameter in %s" % (init_name, self))
+                error("'%s' is not a parameter in %s" % (init_name, self))
             if not isinstance(init_value, (float, int)) and not isinstance(
                 init_value._cpp_object, dolfin.cpp.function.GenericFunction
             ):
-                dolfin.error(
+                error(
                     "'%s' is not a scalar or a dolfin.cpp.function.GenericFunction"
                     % init_name
                 )
@@ -137,7 +136,7 @@ class CardiacCellModel:
                 )
                 and init_value._cpp_object.value_size() != 1
             ):
-                dolfin.error("expected the value_size of '%s' to be 1" % init_name)
+                error("expected the value_size of '%s' to be 1" % init_name)
             self._initial_conditions[init_name] = init_value
 
     def initial_conditions(self):
@@ -152,16 +151,16 @@ class CardiacCellModel:
 
     def F(self, v, s, time=None):
         "Return right-hand side for state variable evolution."
-        dolfin.error("Must define F = F(v, s)")
+        error("Must define F = F(v, s)")
 
     def I(self, v, s, time=None):
         "Return the ionic current."
-        dolfin.error("Must define I = I(v, s)")
+        error("Must define I = I(v, s)")
 
     def num_states(self):
         """Return number of state variables (in addition to the
         membrane potential)."""
-        dolfin.error("Must overload num_states")
+        error("Must overload num_states")
 
     def __str__(self):
         "Return string representation of class."
@@ -215,14 +214,14 @@ class MultiCellModel(CardiacCellModel):
 
     def F(self, v, s, time=None, index=None):
         if index is None:
-            dolfin.error("(Domain) index must be specified for multi cell models")
+            error("(Domain) index must be specified for multi cell models")
         # Extract which cell model index (given by index in incoming tuple)
         k = self._key_to_cell_model[index]
         return self._cell_models[k].F(v, s, time)
 
     def I(self, v, s, time=None, index=None):
         if index is None:
-            dolfin.error("(Domain) index must be specified for multi cell models")
+            error("(Domain) index must be specified for multi cell models")
         # Extract which cell model index (given by index in incoming tuple)
         k = self._key_to_cell_model[index]
         return self._cell_models[k].I(v, s, time)
