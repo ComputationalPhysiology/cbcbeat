@@ -92,10 +92,12 @@ def test_monodomain_goss_DG():
         field_states=states,
     )
 
-    # Do not apply any stimulus in the cell model since we will do this through the bidomain model
+    # Do not apply any stimulus in the cell model since
+    # we will do this through the bidomain model
     cellmodel.set_parameter("stim_amplitude", 0)
 
-    # Next we need to define the conductivity tensors. Here we use the same parameters as in {ref}`bidomain`
+    # Next we need to define the conductivity tensors.
+    # Here we use the same parameters as in {ref}`bidomain`
 
     chi = 12000.0  # cm^{-1}
     s_il = 300.0 / chi  # mS
@@ -109,7 +111,8 @@ def test_monodomain_goss_DG():
     st = s_it * s_et / (s_it + s_et)
     M_i = dolfin.as_tensor(((dolfin.Constant(sl), 0), (0, dolfin.Constant(st))))
 
-    # Create and the CardiacModel in `cbcbeat`. Since we use a monodomain model we don't need to pass the extracellular conductivity
+    # Create and the CardiacModel in `cbcbeat`.
+    # Since we use a monodomain model we don't need to pass the extracellular conductivity
 
     heart = cbcbeat.CardiacModel(
         domain=domain,
@@ -134,16 +137,14 @@ def test_monodomain_goss_DG():
     _, vs0_CG, _ = solver_CG.solution_fields()
     v0_CG = extract_subfunction(vs0_CG, index=states.index("V"))
 
-    for (timestep, fields) in solver_CG.solve(interval, dt):
-
+    for timestep, fields in solver_CG.solve(interval, dt):
         _, vs_CG, _ = fields
     v_CG = extract_subfunction(vs_CG, index=states.index("V"))
 
     _, vs0_DG, _ = solver_DG.solution_fields()
     v0_DG = extract_subfunction(vs0_DG, index=states.index("V"))
 
-    for (timestep, fields) in solver_DG.solve(interval, dt):
-
+    for timestep, fields in solver_DG.solve(interval, dt):
         _, vs_DG, _ = fields
 
     v_DG = extract_subfunction(vs_DG, index=states.index("V"))
