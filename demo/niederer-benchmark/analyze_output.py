@@ -1,10 +1,9 @@
-from dolfin import *
+import dolfin
 import numpy
 import matplotlib.pyplot as pyplot
 
 
 def plot_p1p8_line(a, casedir=None):
-
     Lx = 20.0  # mm
     Ly = 7.0  # mm
     Lz = 3.0  # mm
@@ -33,7 +32,6 @@ def plot_p1p8_line(a, casedir=None):
 
 
 def compute_activation_times_at_p1p8_line(casedir):
-
     # evaluation_points = [(0, 0, 0), (0, 7, 0), (20, 0, 0), (20, 7, 0),
     #                     (0, 0, 3), (0, 7, 3), (20, 0, 3), (20, 7, 3),
     #                     (10, 3.5, 1.5)]
@@ -41,11 +39,11 @@ def compute_activation_times_at_p1p8_line(casedir):
     # Open mesh
 
     # Open stored v
-    vfile = HDF5File(MPI.comm_world, "%s/v.h5" % casedir, "r")
-    mesh = Mesh()
+    vfile = dolfin.HDF5File(dolfin.MPI.comm_world, "%s/v.h5" % casedir, "r")
+    mesh = dolfin.Mesh()
     vfile.read(mesh, "/mesh", False)
-    V = FunctionSpace(mesh, "CG", 1)
-    v = Function(V)
+    V = dolfin.FunctionSpace(mesh, "CG", 1)
+    v = dolfin.Function(V)
 
     # Set-up data structures for computed activation times
     # times = []
@@ -54,7 +52,7 @@ def compute_activation_times_at_p1p8_line(casedir):
     threshold = 0.0
     # Field to store the activation times. a(x) = first time when v(x)
     # exceeds given threshold
-    a = Function(V)
+    a = dolfin.Function(V)
     a.vector()[:] = -1
     threshold = 0.0
     t0 = 0.0
@@ -71,18 +69,18 @@ def compute_activation_times_at_p1p8_line(casedir):
             for i in dofs:
                 if v.vector()[i] >= threshold and a.vector()[i] < t0:
                     a.vector()[i] = t
-        except:
+        except Exception:
             break
 
     vfile.close()
 
     # Store output in same directory
-    afile = HDF5File(mesh.mpi_comm(), "%s/a.h5" % casedir, "w")
+    afile = dolfin.HDF5File(mesh.mpi_comm(), "%s/a.h5" % casedir, "w")
     afile.write(a, "/function", t0)
     afile.close()
 
     # Plot resulting activation times
-    plot(a, title="Activation times")
+    dolfin.plot(a, title="Activation times")
 
     return a
 
@@ -93,7 +91,6 @@ def compute_activation_times(casedir):
 
 
 if __name__ == "__main__":
-
     import sys
 
     compute_activation_times(sys.argv[1])

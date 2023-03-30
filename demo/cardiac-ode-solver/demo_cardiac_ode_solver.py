@@ -8,15 +8,16 @@ This demo shows how to:
 """
 
 __author__ = "Marie E. Rognes (meg@simula.no)"
-
-from cbcbeat import *
+from ufl.log import info_green
+import dolfin
+from cbcbeat import backend, Tentusscher_2004_mcell, CardiacODESolver
 
 # For computing faster
-parameters["form_compiler"]["representation"] = "uflacs"
-parameters["form_compiler"]["cpp_optimize"] = True
+dolfin.parameters["form_compiler"]["representation"] = "uflacs"
+dolfin.parameters["form_compiler"]["cpp_optimize"] = True
 flags = "-O3 -ffast-math -march=native"
-parameters["form_compiler"]["cpp_optimize_flags"] = flags
-parameters["form_compiler"]["quadrature_degree"] = 4
+dolfin.parameters["form_compiler"]["cpp_optimize_flags"] = flags
+dolfin.parameters["form_compiler"]["quadrature_degree"] = 4
 
 
 def forward():
@@ -24,17 +25,17 @@ def forward():
 
     # Set-up domain in space and time
     N = 10
-    mesh = UnitSquareMesh(N, N)
-    time = Constant(0.0)
+    mesh = dolfin.UnitSquareMesh(N, N)
+    time = backend.Constant(0.0)
 
     # Choose your favorite cell model
     model = Tentusscher_2004_mcell()
 
     # You can set spatially varying cell model parameters e.g. as:
-    model.set_parameters(K_mNa=Expression("40*sin(pi*x[0])", degree=4))
+    model.set_parameters(K_mNa=dolfin.Expression("40*sin(pi*x[0])", degree=4))
 
     # Add some stimulus
-    stimulus = Expression("100*t", t=time, degree=0)
+    stimulus = dolfin.Expression("100*t", t=time, degree=0)
 
     Solver = CardiacODESolver
     params = Solver.default_parameters()
@@ -53,24 +54,26 @@ def forward():
 
     # Do something with the solutions
     times = []
-    for ((t0, t1), vs) in solutions:
+    for (t0, t1), vs in solutions:
         times.append(t1)
         print(vs.vector().get_local())
-    plot(vs[0], title="v")
+    dolfin.plot(vs[0], title="v")
     import matplotlib.pyplot as plt
 
     plt.savefig("vs.png")
 
 
 def replay():
+    import dolfin_adjoint
+
     info_green("Replaying forward model")
 
     # Output some html
-    adj_html("forward.html", "forward")
+    dolfin_adjoint.adj_html("forward.html", "forward")
 
     # Replay
-    parameters["adjoint"]["stop_annotating"] = True
-    success = replay_dolfin(tol=0.0, stop=True)
+    dolfin.parameters["adjoint"]["stop_annotating"] = True
+    success = dolfin_adjoint.replay_dolfin(tol=0.0, stop=True)
     if success:
         info_green("Replay successful")
     else:
@@ -78,12 +81,11 @@ def replay():
 
 
 if __name__ == "__main__":
-
     # Run forward model
     forward()
 
     import cbcbeat
 
-    if cbcbeat.dolfin_adjoint:
+    if cbcbeat.dolfinimport.has_dolfin_adjoint:
         # Replay
         replay()

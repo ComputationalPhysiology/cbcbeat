@@ -6,6 +6,9 @@ from cbcbeat.cellmodels.tentusscher_2004_mcell import Tentusscher_2004_mcell
 from cbcbeat.cellmodels.tentusscher_panfilov_2006_epi_cell import (
     Tentusscher_panfilov_2006_epi_cell,
 )
+from cbcbeat.cellmodels.tentusscher_panfilov_2006_M_cell import (
+    Tentusscher_panfilov_2006_M_cell,
+)
 from cbcbeat.cellmodels.fenton_karma_1998_BR_altered import Fenton_karma_1998_BR_altered
 from cbcbeat.cellmodels.fenton_karma_1998_MLR1_altered import (
     Fenton_karma_1998_MLR1_altered,
@@ -35,4 +38,5 @@ __all__ = [
     "Fenton_karma_1998_BR_altered",
     "CardiacCellModel",
     "MultiCellModel",
+    "Tentusscher_panfilov_2006_M_cell",
 ]

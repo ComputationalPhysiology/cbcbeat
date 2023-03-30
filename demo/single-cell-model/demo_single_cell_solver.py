@@ -12,26 +12,29 @@
 __author__ = "Marie E. Rognes (meg@simula.no), 2017"
 
 import math
+from ufl.log import info_green
 import pylab
-from cbcbeat import *
+import cbcbeat
+import dolfin
+from cbcbeat import backend, Tentusscher_panfilov_2006_epi_cell, SingleCellSolver
 
 # Disable adjointing
-import cbcbeat
 
-if cbcbeat.dolfin_adjoint:
-    parameters["adjoint"]["stop_annotating"] = True
+
+if cbcbeat.dolfinimport.has_dolfin_adjoint:
+    dolfin.parameters["adjoint"]["stop_annotating"] = True
 
 # For easier visualization of the variables
-parameters["reorder_dofs_serial"] = False
+dolfin.parameters["reorder_dofs_serial"] = False
 
 # For computing faster
-parameters["form_compiler"]["representation"] = "uflacs"
-parameters["form_compiler"]["cpp_optimize"] = True
+dolfin.parameters["form_compiler"]["representation"] = "uflacs"
+dolfin.parameters["form_compiler"]["cpp_optimize"] = True
 flags = "-O3 -ffast-math -march=native"
-parameters["form_compiler"]["cpp_optimize_flags"] = flags
+dolfin.parameters["form_compiler"]["cpp_optimize_flags"] = flags
 
 
-class Stimulus(UserExpression):
+class Stimulus(dolfin.UserExpression):
     "Some self-defined stimulus."
 
     def __init__(self, time, **kwargs):
@@ -56,7 +59,7 @@ def plot_results(times, values, show=True):
     pylab.figure(figsize=(20, 10))
 
     int(math.ceil(math.sqrt(len(variables))))
-    for (i, var) in enumerate(
+    for i, var in enumerate(
         [
             variables[0],
         ]
@@ -89,7 +92,7 @@ def main(scenario="default"):
     else:
         model = Tentusscher_panfilov_2006_epi_cell()
 
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
     model.stimulus = Stimulus(time=time, degree=0)
 
     # Initialize solver
@@ -108,7 +111,7 @@ def main(scenario="default"):
     solutions = solver.solve(interval, dt)
     times = []
     values = []
-    for ((t0, t1), vs) in solutions:
+    for (t0, t1), vs in solutions:
         print(("Current time: %g" % t1))
         times.append(t1)
         values.append(vs.vector().get_local())
@@ -123,7 +126,7 @@ def compare_results(times, many_values, legends=(), show=True):
     for values in many_values:
         variables = list(zip(*values))
         int(math.ceil(math.sqrt(len(variables))))
-        for (i, var) in enumerate(
+        for i, var in enumerate(
             [
                 variables[0],
             ]
@@ -142,7 +145,6 @@ def compare_results(times, many_values, legends=(), show=True):
 
 
 if __name__ == "__main__":
-
     (times, values1) = main("default")
     (times, values2) = main("gray zone")
     compare_results(

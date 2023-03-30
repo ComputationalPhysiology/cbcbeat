@@ -19,13 +19,14 @@ __author__ = "Johan Hake and Simon W. Funke (simon@simula.no)"
 
 # Modified by Marie E. Rognes (meg@simula.no), 2014
 
-try:
-    pass
-except:
-    print("Cannot import petsc4py")
-
-from dolfin import *
-from cbcbeat import *
+import dolfin
+from cbcbeat import (
+    backend,
+    Markerwise,
+    CardiacModel,
+    Tentusscher_panfilov_2006_epi_cell,
+    SplittingSolver,
+)
 
 import sys
 import numpy
@@ -45,17 +46,16 @@ args = (
                        --petsc.mg_levels_pc_type sor
                        """.split()
 )
-parameters.parse(argv=args)
+dolfin.parameters.parse(argv=args)
 
-parameters["form_compiler"]["cpp_optimize"] = True
+dolfin.parameters["form_compiler"]["cpp_optimize"] = True
 flags = ["-O3", "-ffast-math", "-march=native"]
-parameters["form_compiler"]["cpp_optimize_flags"] = " ".join(flags)
-parameters["form_compiler"]["quadrature_degree"] = 3
-parameters["form_compiler"]["representation"] = "uflacs"
+dolfin.parameters["form_compiler"]["cpp_optimize_flags"] = " ".join(flags)
+dolfin.parameters["form_compiler"]["quadrature_degree"] = 3
+dolfin.parameters["form_compiler"]["representation"] = "uflacs"
 
 
 def define_conductivity_tensor(chi, C_m):
-
     # Conductivities as defined by page 4339 of Niederer benchmark
     sigma_il = 0.17  # mS / mm
     sigma_it = 0.019  # mS / mm
@@ -75,7 +75,7 @@ def define_conductivity_tensor(chi, C_m):
     s_t = sigma_t / (C_m * chi)  # mm^2 / ms
 
     # Define conductivity tensor
-    M = as_tensor(((s_l, 0, 0), (0, s_t, 0), (0, 0, s_t)))
+    M = dolfin.as_tensor(((s_l, 0, 0), (0, s_t, 0), (0, 0, s_t)))
 
     return M
 
@@ -84,7 +84,7 @@ def setup_model(cellmodel, mesh):
     """Set-up cardiac model based on benchmark parameters."""
 
     # Define time
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
 
     # Surface to volume ratio
     chi = 140.0  # mm^{-1}
@@ -97,11 +97,11 @@ def setup_model(cellmodel, mesh):
     # Mark stimulation region defined as [0, L]^3
     S1_marker = 1
     L = 1.5
-    S1_subdomain = CompiledSubDomain(
+    S1_subdomain = dolfin.CompiledSubDomain(
         "x[0] <= L + DOLFIN_EPS && x[1] <= L + DOLFIN_EPS && x[2] <= L + DOLFIN_EPS",
         L=L,
     )
-    S1_markers = MeshFunction("size_t", mesh, mesh.topology().dim())
+    S1_markers = dolfin.MeshFunction("size_t", mesh, mesh.topology().dim())
     S1_subdomain.mark(S1_markers, S1_marker)
 
     # Define stimulation (NB: region of interest carried by the mesh
@@ -111,7 +111,7 @@ def setup_model(cellmodel, mesh):
     cm2mm = 10.0
     factor = 1.0 / (chi * C_m)  # NB: cbcbeat convention
     amplitude = factor * A * (1.0 / cm2mm) ** 3  # mV/ms
-    I_s = Expression(
+    I_s = dolfin.Expression(
         "time >= start ? (time <= (duration + start) ? amplitude : 0.0) : 0.0",
         time=time,
         start=0.0,
@@ -154,7 +154,6 @@ def cell_model_initial_conditions():
 
 
 def run_splitting_solver(mesh, application_parameters):
-
     # Extract parameters
     T = application_parameters["T"]
     dt = application_parameters["dt"]
@@ -184,8 +183,8 @@ def run_splitting_solver(mesh, application_parameters):
     # Disable adjoint annotating and recording (saves memory)
     import cbcbeat
 
-    if cbcbeat.dolfin_adjoint:
-        parameters["adjoint"]["stop_annotating"] = True
+    if cbcbeat.dolfinimport.has_dolfin_adjoint:
+        dolfin.parameters["adjoint"]["stop_annotating"] = True
 
     # Customize cell model parameters based on benchmark specifications
     cell_inits = cell_model_initial_conditions()
@@ -195,7 +194,7 @@ def run_splitting_solver(mesh, application_parameters):
     heart = setup_model(cellmodel, mesh)
 
     # Set-up solver and time it
-    timer = Timer("SplittingSolver: setup")
+    timer = dolfin.Timer("SplittingSolver: setup")
     solver = SplittingSolver(heart, ps)
     timer.stop()
 
@@ -206,16 +205,16 @@ def run_splitting_solver(mesh, application_parameters):
     # Set-up separate potential function for post processing
     VS0 = vs.function_space().sub(0)
     V = VS0.collapse()
-    v = Function(V)
+    v = backend.Function(V)
 
     # Set-up object to optimize assignment from a function to subfunction
-    assigner = FunctionAssigner(V, VS0)
+    assigner = backend.FunctionAssigner(V, VS0)
     assigner.assign(v, vs_.sub(0))
 
     # Output some degrees of freedom
     total_dofs = vs.function_space().dim()
     pde_dofs = V.dim()
-    if MPI.rank(MPI.comm_world) == 0:
+    if dolfin.MPI.rank(dolfin.MPI.comm_world) == 0:
         print("Total degrees of freedom: ", total_dofs)
         print("PDE degrees of freedom: ", pde_dofs)
 
@@ -223,17 +222,17 @@ def run_splitting_solver(mesh, application_parameters):
 
     # Store initial v
     if store:
-        vfile = HDF5File(mesh.mpi_comm(), "%s/v.h5" % casedir, "w")
+        vfile = dolfin.HDF5File(mesh.mpi_comm(), "%s/v.h5" % casedir, "w")
         vfile.write(v, "/function", t0)
         vfile.write(mesh, "/mesh")
 
     # Solve
-    timer = Timer("SplittingSolver: solve and store")
+    timer = dolfin.Timer("SplittingSolver: solve and store")
     solutions = solver.solve((t0, T), dt)
 
-    for (i, ((t0, t1), fields)) in enumerate(solutions):
-        if (i % 20 == 0) and MPI.rank(MPI.comm_world) == 0:
-            info("Reached t=%g/%g, dt=%g" % (t0, T, dt))
+    for i, ((t0, t1), fields) in enumerate(solutions):
+        if (i % 20 == 0) and dolfin.MPI.rank(dolfin.MPI.comm_world) == 0:
+            dolfin.info("Reached t=%g/%g, dt=%g" % (t0, T, dt))
         if store:
             assigner.assign(v, vs.sub(0))
             vfile.write(v, "/function", t1)
@@ -259,10 +258,10 @@ def create_mesh(dx, refinements=0):
     def N(v):
         return int(numpy.rint(v))
 
-    mesh = BoxMesh(
-        MPI.comm_world,
-        Point(0.0, 0.0, 0.0),
-        Point(Lx, Ly, Lz),
+    mesh = dolfin.BoxMesh(
+        dolfin.MPI.comm_world,
+        dolfin.Point(0.0, 0.0, 0.0),
+        dolfin.Point(Lx, Ly, Lz),
         N(Lx / dx),
         N(Ly / dx),
         N(Lz / dx),
@@ -270,13 +269,12 @@ def create_mesh(dx, refinements=0):
 
     for i in range(refinements):
         print("Performing refinement", i + 1)
-        mesh = refine(mesh, redistribute=False)
+        mesh = dolfin.refine(mesh, redistribute=False)
 
     return mesh
 
 
 def forward(application_parameters):
-
     # Create mesh
     dx = application_parameters["dx"]
     R = application_parameters["refinements"]
@@ -290,8 +288,8 @@ def forward(application_parameters):
 
 
 def init_application_parameters():
-    begin("Setting up application parameters")
-    application_parameters = Parameters("Niederer-benchmark")
+    dolfin.begin("Setting up application parameters")
+    application_parameters = dolfin.Parameters("Niederer-benchmark")
     application_parameters.add("casedir", "results")
     application_parameters.add("theta", 0.5)
     application_parameters.add("store", True)
@@ -302,25 +300,24 @@ def init_application_parameters():
     application_parameters.add("preconditioner", "sor")
     application_parameters.add("refinements", 0)
     application_parameters.parse()
-    end()
+    dolfin.end()
 
     return application_parameters
 
 
 if __name__ == "__main__":
-
     # Default application parameters and parse from command-line
     application_parameters = init_application_parameters()
     application_parameters.parse()
 
     # Solve benchmark problem with given specifications
     if True:
-        timer = Timer("Total forward time")
+        timer = dolfin.Timer("Total forward time")
         vs = forward(application_parameters)
         timer.stop()
 
         # List timings
-        list_timings(TimingClear.keep, [TimingType.wall])
+        dolfin.list_timings(dolfin.TimingClear.keep, [dolfin.TimingType.wall])
 
     # Set this to True to also analyze outputs
     if False:
