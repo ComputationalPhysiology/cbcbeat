@@ -27,8 +27,11 @@ repos:
     rev: 'v0.0.254'
     hooks:
       - id: ruff
+        files: cbcbeat/|test/|demo/
+
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.950
     hooks:
       - id: mypy
+        files: cbcbeat/|test/|demo/
