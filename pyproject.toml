@@ -100,6 +100,7 @@ exclude = [
     "dist",
     "node_modules",
     "venv",
+    "cbcbeat/__init__.py"
 ]
 
 # Same as Black.
