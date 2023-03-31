@@ -225,15 +225,16 @@ document.write(`
                   
   <h1>Source code for cbcbeat.cellmodels.cardiaccellmodel</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;This module contains a base class for cardiac cell models.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Marie E. Rognes (meg@simula.no), 2012--2013&quot;</span>
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CardiacCellModel&quot;</span><span class="p">,</span> <span class="s2">&quot;MultiCellModel&quot;</span><span class="p">]</span>
 
-<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Expression</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">,</span> <span class="n">VectorFunctionSpace</span><span class="p">,</span> <span class="n">Function</span><span class="p">,</span> <span class="n">DirichletBC</span><span class="p">,</span> <span class="n">TrialFunction</span><span class="p">,</span> <span class="n">TestFunction</span><span class="p">,</span> <span class="n">solve</span><span class="p">,</span> <span class="n">Measure</span><span class="p">,</span> <span class="n">inner</span>
+<span class="kn">from</span> <span class="nn">ufl.log</span> <span class="kn">import</span> <span class="n">error</span>
+<span class="kn">import</span> <span class="nn">dolfin</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">backend</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
-<div class="viewcode-block" id="CardiacCellModel"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel">[docs]</a><span class="k">class</span> <span class="nc">CardiacCellModel</span><span class="p">:</span>
+
+<div class="viewcode-block" id="CardiacCellModel"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel">[docs]</a><span class="k">class</span> <span class="nc">CardiacCellModel</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for cardiac cell models. Specialized cell models should</span>
 <span class="sd">    subclass this class.</span>
@@ -241,7 +242,7 @@ document.write(`
 <span class="sd">    Essentially, a cell model represents a system of ordinary</span>
 <span class="sd">    differential equations. A cell model is here described by two</span>
 <span class="sd">    (Python) functions, named F and I. The model describes the</span>
-<span class="sd">    behaviour of the transmembrane potential &#39;v&#39; and a number of state</span>
+<span class="sd">    behavior of the transmembrane potential &#39;v&#39; and a number of state</span>
 <span class="sd">    variables &#39;s&#39;</span>
 
 <span class="sd">    The function F gives the right-hand side for the evolution of the</span>
@@ -292,76 +293,97 @@ document.write(`
         <span class="n">init_conditions</span> <span class="o">=</span> <span class="n">init_conditions</span> <span class="ow">or</span> <span class="n">OrderedDict</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> \
-                   <span class="s2">&quot;expected a dict or a Parameters, as the params argument&quot;</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+                <span class="n">params</span><span class="p">,</span> <span class="nb">dict</span>
+            <span class="p">),</span> <span class="s2">&quot;expected a dict or a Parameters, as the params argument&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">):</span>
                 <span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">init_conditions</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_conditions</span><span class="p">,</span> <span class="nb">dict</span><span class="p">),</span> \
-                <span class="s2">&quot;expected a dict or a Parameters, as the init_condition argument&quot;</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_conditions</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">):</span>
+            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span>
+                <span class="n">init_conditions</span><span class="p">,</span> <span class="nb">dict</span>
+            <span class="p">),</span> <span class="s2">&quot;expected a dict or a Parameters, as the init_condition argument&quot;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_conditions</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">):</span>
                 <span class="n">init_conditions</span> <span class="o">=</span> <span class="n">init_conditions</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_initial_conditions</span><span class="p">(</span><span class="o">**</span><span class="n">init_conditions</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stimulus</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="CardiacCellModel.default_parameters"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.default_parameters">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="CardiacCellModel.default_parameters"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.default_parameters">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">default_parameters</span><span class="p">():</span>
         <span class="s2">&quot;Set-up and return default parameters.&quot;</span>
         <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CardiacCellModel.default_initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.default_initial_conditions">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="CardiacCellModel.default_initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.default_initial_conditions">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">default_initial_conditions</span><span class="p">():</span>
         <span class="s2">&quot;Set-up and return default initial conditions.&quot;</span>
         <span class="k">return</span> <span class="n">OrderedDict</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="CardiacCellModel.set_parameters"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.set_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="CardiacCellModel.set_parameters"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.set_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
         <span class="s2">&quot;Update parameters in model&quot;</span>
         <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">param_value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">param_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">:</span>
-                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is not a parameter in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">param_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
-            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span>
-                <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)):</span>
-                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is not a scalar or a GenericFunction&quot;</span> <span class="o">%</span> <span class="n">param_name</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">param_value</span><span class="p">,</span> <span class="s2">&quot;_cpp_object&quot;</span><span class="p">)</span> <span class="ow">and</span>\
-                   <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)</span> <span class="ow">and</span> \
-                   <span class="n">param_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="o">.</span><span class="n">value_size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is not a parameter in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">param_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">param_value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+                <span class="n">param_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">GenericFunction</span>
+            <span class="p">):</span>
+                <span class="n">error</span><span class="p">(</span>
+                    <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is not a scalar or a dolfin.cpp.function.GenericFunction&quot;</span>
+                    <span class="o">%</span> <span class="n">param_name</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="nb">hasattr</span><span class="p">(</span><span class="n">param_value</span><span class="p">,</span> <span class="s2">&quot;_cpp_object&quot;</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
+                        <span class="n">param_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">GenericFunction</span>
+                    <span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">param_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="o">.</span><span class="n">value_size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span>
+                <span class="p">):</span>
                     <span class="n">error</span><span class="p">(</span><span class="s2">&quot;expected the value_size of &#39;</span><span class="si">%s</span><span class="s2">&#39; to be 1&quot;</span> <span class="o">%</span> <span class="n">param_name</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="n">param_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">param_value</span></div>
 
-<div class="viewcode-block" id="CardiacCellModel.set_initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.set_initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">set_initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">init</span><span class="p">):</span>
+<div class="viewcode-block" id="CardiacCellModel.set_initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.set_initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">set_initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">init</span><span class="p">):</span>
         <span class="s2">&quot;Update initial_conditions in model&quot;</span>
         <span class="k">for</span> <span class="n">init_name</span><span class="p">,</span> <span class="n">init_value</span> <span class="ow">in</span> <span class="n">init</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="k">if</span> <span class="n">init_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initial_conditions</span><span class="p">:</span>
-                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is not a parameter in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">init_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">):</span>
-                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is not a scalar or a GenericFunction&quot;</span> <span class="o">%</span> <span class="n">init_name</span><span class="p">)</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">init_value</span><span class="p">,</span> <span class="s2">&quot;_cpp_object&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)</span> <span class="ow">and</span> \
-               <span class="n">init_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="o">.</span><span class="n">value_size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">error</span><span class="p">(</span><span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is not a parameter in </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">init_name</span><span class="p">,</span> <span class="bp">self</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">init_value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span>
+                <span class="n">init_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">GenericFunction</span>
+            <span class="p">):</span>
+                <span class="n">error</span><span class="p">(</span>
+                    <span class="s2">&quot;&#39;</span><span class="si">%s</span><span class="s2">&#39; is not a scalar or a dolfin.cpp.function.GenericFunction&quot;</span>
+                    <span class="o">%</span> <span class="n">init_name</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="nb">hasattr</span><span class="p">(</span><span class="n">init_value</span><span class="p">,</span> <span class="s2">&quot;_cpp_object&quot;</span><span class="p">)</span>
+                <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span>
+                    <span class="n">init_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">GenericFunction</span>
+                <span class="p">)</span>
+                <span class="ow">and</span> <span class="n">init_value</span><span class="o">.</span><span class="n">_cpp_object</span><span class="o">.</span><span class="n">value_size</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span>
+            <span class="p">):</span>
                 <span class="n">error</span><span class="p">(</span><span class="s2">&quot;expected the value_size of &#39;</span><span class="si">%s</span><span class="s2">&#39; to be 1&quot;</span> <span class="o">%</span> <span class="n">init_name</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_initial_conditions</span><span class="p">[</span><span class="n">init_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">init_value</span></div>
 
-<div class="viewcode-block" id="CardiacCellModel.initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CardiacCellModel.initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Return initial conditions for v and s as an Expression.&quot;</span>
-        <span class="k">return</span> <span class="n">Expression</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_conditions</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                          <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_conditions</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Expression</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_conditions</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span> <span class="n">degree</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_initial_conditions</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="CardiacCellModel.parameters"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.parameters">[docs]</a>    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CardiacCellModel.parameters"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.parameters">[docs]</a>    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Return the current parameters.&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span></div>
 
-<div class="viewcode-block" id="CardiacCellModel.F"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.F">[docs]</a>    <span class="k">def</span> <span class="nf">F</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CardiacCellModel.F"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.F">[docs]</a>    <span class="k">def</span> <span class="nf">F</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Return right-hand side for state variable evolution.&quot;</span>
         <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must define F = F(v, s)&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CardiacCellModel.I"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.I">[docs]</a>    <span class="k">def</span> <span class="nf">I</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="CardiacCellModel.I"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.I">[docs]</a>    <span class="k">def</span> <span class="nf">I</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Return the ionic current.&quot;</span>
         <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must define I = I(v, s)&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="CardiacCellModel.num_states"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.CardiacCellModel.num_states">[docs]</a>    <span class="k">def</span> <span class="nf">num_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="CardiacCellModel.num_states"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.CardiacCellModel.num_states">[docs]</a>    <span class="k">def</span> <span class="nf">num_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return number of state variables (in addition to the</span>
 <span class="sd">        membrane potential).&quot;&quot;&quot;</span>
         <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Must overload num_states&quot;</span><span class="p">)</span></div>
@@ -370,7 +392,8 @@ document.write(`
         <span class="s2">&quot;Return string representation of class.&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Some cardiac cell model&quot;</span></div>
 
-<div class="viewcode-block" id="MultiCellModel"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel">[docs]</a><span class="k">class</span> <span class="nc">MultiCellModel</span><span class="p">(</span><span class="n">CardiacCellModel</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MultiCellModel"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel">[docs]</a><span class="k">class</span> <span class="nc">MultiCellModel</span><span class="p">(</span><span class="n">CardiacCellModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    MultiCellModel</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -395,66 +418,67 @@ document.write(`
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">()[</span><span class="bp">self</span><span class="o">.</span><span class="n">_key_to_cell_model</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span>
 
-<div class="viewcode-block" id="MultiCellModel.models"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.models">[docs]</a>    <span class="k">def</span> <span class="nf">models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiCellModel.models"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.models">[docs]</a>    <span class="k">def</span> <span class="nf">models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cell_models</span></div>
 
-<div class="viewcode-block" id="MultiCellModel.markers"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.markers">[docs]</a>    <span class="k">def</span> <span class="nf">markers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiCellModel.markers"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.markers">[docs]</a>    <span class="k">def</span> <span class="nf">markers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_markers</span></div>
 
-<div class="viewcode-block" id="MultiCellModel.keys"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiCellModel.keys"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_keys</span></div>
 
-<div class="viewcode-block" id="MultiCellModel.mesh"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.mesh">[docs]</a>    <span class="k">def</span> <span class="nf">mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiCellModel.mesh"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.mesh">[docs]</a>    <span class="k">def</span> <span class="nf">mesh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_markers</span><span class="o">.</span><span class="n">mesh</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="MultiCellModel.num_models"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.num_models">[docs]</a>    <span class="k">def</span> <span class="nf">num_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiCellModel.num_models"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.num_models">[docs]</a>    <span class="k">def</span> <span class="nf">num_models</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cell_models</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MultiCellModel.num_states"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.num_states">[docs]</a>    <span class="k">def</span> <span class="nf">num_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiCellModel.num_states"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.num_states">[docs]</a>    <span class="k">def</span> <span class="nf">num_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return number of state variables (in addition to the</span>
 <span class="sd">        membrane potential).&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span></div>
 
-<div class="viewcode-block" id="MultiCellModel.F"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.F">[docs]</a>    <span class="k">def</span> <span class="nf">F</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiCellModel.F"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.F">[docs]</a>    <span class="k">def</span> <span class="nf">F</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">error</span><span class="p">(</span><span class="s2">&quot;(Domain) index must be specified for multi cell models&quot;</span><span class="p">)</span>
         <span class="c1"># Extract which cell model index (given by index in incoming tuple)</span>
         <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_to_cell_model</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cell_models</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">F</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MultiCellModel.I"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.I">[docs]</a>    <span class="k">def</span> <span class="nf">I</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MultiCellModel.I"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.I">[docs]</a>    <span class="k">def</span> <span class="nf">I</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">error</span><span class="p">(</span><span class="s2">&quot;(Domain) index must be specified for multi cell models&quot;</span><span class="p">)</span>
         <span class="c1"># Extract which cell model index (given by index in incoming tuple)</span>
         <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_key_to_cell_model</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cell_models</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">I</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="MultiCellModel.initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.cardiaccellmodel.MultiCellModel.initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="s2">&quot;Return initial conditions for v and s as a dolfin.GenericFunction.&quot;</span>
+<div class="viewcode-block" id="MultiCellModel.initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.MultiCellModel.initial_conditions">[docs]</a>    <span class="k">def</span> <span class="nf">initial_conditions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Return initial conditions for v and s as a dolfin.dolfin.cpp.function.GenericFunction.&quot;</span>
 
-        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span> <span class="c1"># (Maximal) Number of states in MultiCellModel</span>
-        <span class="n">VS</span> <span class="o">=</span> <span class="n">VectorFunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">(),</span> <span class="s2">&quot;DG&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">vs</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="n">VS</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span>  <span class="c1"># (Maximal) Number of states in MultiCellModel</span>
+        <span class="n">VS</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">VectorFunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">(),</span> <span class="s2">&quot;DG&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">vs</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="n">VS</span><span class="p">)</span>
 
         <span class="n">markers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">markers</span><span class="p">()</span>
-        <span class="n">u</span> <span class="o">=</span> <span class="n">TrialFunction</span><span class="p">(</span><span class="n">VS</span><span class="p">)</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="n">TestFunction</span><span class="p">(</span><span class="n">VS</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">TrialFunction</span><span class="p">(</span><span class="n">VS</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">TestFunction</span><span class="p">(</span><span class="n">VS</span><span class="p">)</span>
 
-        <span class="n">dy</span> <span class="o">=</span> <span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;dx&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">(),</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="n">markers</span><span class="p">)</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;dx&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mesh</span><span class="p">(),</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="n">markers</span><span class="p">)</span>
 
         <span class="c1"># Define projection into multiverse</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="n">inner</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">dy</span><span class="p">()</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="n">dy</span><span class="p">()</span>
 
         <span class="n">Ls</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">()):</span>
-            <span class="n">ic</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">initial_conditions</span><span class="p">()</span> <span class="c1"># Extract initial conditions</span>
-            <span class="n">n_k</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span> <span class="c1"># Extract number of local states</span>
-            <span class="n">i_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">k</span><span class="p">]</span> <span class="c1"># Extract domain index of cell model k</span>
-            <span class="n">L_k</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ic</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">v</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">dy</span><span class="p">(</span><span class="n">i_k</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">model</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">models</span><span class="p">()):</span>
+            <span class="n">ic</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">initial_conditions</span><span class="p">()</span>  <span class="c1"># Extract initial conditions</span>
+            <span class="n">n_k</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span>  <span class="c1"># Extract number of local states</span>
+            <span class="n">i_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="n">k</span><span class="p">]</span>  <span class="c1"># Extract domain index of cell model k</span>
+            <span class="n">L_k</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ic</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">dy</span><span class="p">(</span><span class="n">i_k</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">))</span>
             <span class="n">Ls</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L_k</span><span class="p">)</span>
         <span class="n">L</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Ls</span><span class="p">)</span>
-        <span class="n">solve</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">L</span><span class="p">,</span> <span class="n">vs</span><span class="p">)</span>
+        <span class="n">backend</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">L</span><span class="p">,</span> <span class="n">vs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">vs</span></div></div>
+
 
 <span class="c1"># from dolfin import *</span>
 <span class="c1"># from cbcbeat import *</span>
