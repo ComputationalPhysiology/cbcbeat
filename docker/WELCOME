@@ -1,7 +1,0 @@
-# Welcome to CBCBeat
-
-This image provides a docker image of cbcbeat
-(<http://cbcbeat.readthedocs.io/en/latest/>).
-
-To access the demo, type
-    cd ~/cbcbeat/demo
