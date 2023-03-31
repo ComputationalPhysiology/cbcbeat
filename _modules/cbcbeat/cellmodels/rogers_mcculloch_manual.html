@@ -242,10 +242,10 @@ document.write(`
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RogersMcCulloch&quot;</span><span class="p">]</span>
 
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Expression</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.cellmodels</span> <span class="kn">import</span> <span class="n">CardiacCellModel</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.cellmodels.cardiaccellmodel</span> <span class="kn">import</span> <span class="n">CardiacCellModel</span>
 
-<div class="viewcode-block" id="RogersMcCulloch"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch">[docs]</a><span class="k">class</span> <span class="nc">RogersMcCulloch</span><span class="p">(</span><span class="n">CardiacCellModel</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RogersMcCulloch"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.RogersMcCulloch">[docs]</a><span class="k">class</span> <span class="nc">RogersMcCulloch</span><span class="p">(</span><span class="n">CardiacCellModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The Rogers-McCulloch model is a modified FitzHughNagumo model. This</span>
 <span class="sd">    formulation follows the description on page 2 of &quot;Optimal control</span>
 <span class="sd">    approach ...&quot; by Nagaiah, Kunisch and Plank, 2013, J Math Biol</span>
@@ -272,21 +272,26 @@ document.write(`
 <span class="sd">          F(v, s) = \eta_2  (v/vp - \eta_3 s)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">init_conditions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Create cardiac cell model, optionally from given parameters.&quot;</span>
         <span class="n">CardiacCellModel</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">init_conditions</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RogersMcCulloch.default_parameters"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.default_parameters">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RogersMcCulloch.default_parameters"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.RogersMcCulloch.default_parameters">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">default_parameters</span><span class="p">():</span>
         <span class="s2">&quot;Set-up and return default parameters.&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span> <span class="c1"># S/(cm^2)</span>
-                              <span class="p">(</span><span class="s2">&quot;v_th&quot;</span><span class="p">,</span> <span class="mf">13.</span><span class="p">),</span> <span class="c1"># mV</span>
-                              <span class="p">(</span><span class="s2">&quot;v_p&quot;</span><span class="p">,</span> <span class="mf">100.</span><span class="p">),</span> <span class="c1"># mV</span>
-                              <span class="p">(</span><span class="s2">&quot;eta_1&quot;</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">),</span> <span class="c1"># S/(cm^2)</span>
-                              <span class="p">(</span><span class="s2">&quot;eta_2&quot;</span><span class="p">,</span> <span class="mf">0.012</span><span class="p">),</span>
-                              <span class="p">(</span><span class="s2">&quot;eta_3&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)])</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="s2">&quot;g&quot;</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span>  <span class="c1"># S/(cm^2)</span>
+                <span class="p">(</span><span class="s2">&quot;v_th&quot;</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">),</span>  <span class="c1"># mV</span>
+                <span class="p">(</span><span class="s2">&quot;v_p&quot;</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">),</span>  <span class="c1"># mV</span>
+                <span class="p">(</span><span class="s2">&quot;eta_1&quot;</span><span class="p">,</span> <span class="mf">4.4</span><span class="p">),</span>  <span class="c1"># S/(cm^2)</span>
+                <span class="p">(</span><span class="s2">&quot;eta_2&quot;</span><span class="p">,</span> <span class="mf">0.012</span><span class="p">),</span>
+                <span class="p">(</span><span class="s2">&quot;eta_3&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
         <span class="c1"># The original parameters of Rogers and McCulloch, 1994.</span>
-        <span class="c1">#params = OrderedDict([(&quot;a&quot;, 0.13),</span>
+        <span class="c1"># params = OrderedDict([(&quot;a&quot;, 0.13),</span>
         <span class="c1">#                      (&quot;b&quot;, 0.013),</span>
         <span class="c1">#                      (&quot;d&quot;, 1.),</span>
         <span class="c1">#                      (&quot;c_1&quot;, 0.26),</span>
@@ -294,7 +299,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">params</span></div>
 
-<div class="viewcode-block" id="RogersMcCulloch.I"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.I">[docs]</a>    <span class="k">def</span> <span class="nf">I</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RogersMcCulloch.I"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.RogersMcCulloch.I">[docs]</a>    <span class="k">def</span> <span class="nf">I</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Return the ionic current.&quot;</span>
 
         <span class="c1"># Extract parameters</span>
@@ -303,38 +308,37 @@ document.write(`
         <span class="n">v_th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="s2">&quot;v_th&quot;</span><span class="p">]</span>
         <span class="n">eta_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="s2">&quot;eta_1&quot;</span><span class="p">]</span>
         <span class="c1"># Define current</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="n">g</span><span class="o">*</span><span class="n">v</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">v</span><span class="o">/</span><span class="n">v_th</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">v</span><span class="o">/</span><span class="n">v_p</span><span class="p">)</span> <span class="o">+</span> <span class="n">eta_1</span><span class="o">*</span><span class="n">v</span><span class="o">*</span><span class="n">s</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">g</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">v</span> <span class="o">/</span> <span class="n">v_th</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">v</span> <span class="o">/</span> <span class="n">v_p</span><span class="p">)</span> <span class="o">+</span> <span class="n">eta_1</span> <span class="o">*</span> <span class="n">v</span> <span class="o">*</span> <span class="n">s</span>
 
         <span class="c1"># Original R&amp;McC current</span>
-        <span class="c1">#a = self._parameters[&quot;a&quot;]</span>
-        <span class="c1">#c_1 = self._parameters[&quot;c_1&quot;]</span>
-        <span class="c1">#c_2 = self._parameters[&quot;c_2&quot;]</span>
-        <span class="c1">#i = - (c_1*v*(v - a)*(1 - v) - c_2*v*s)</span>
+        <span class="c1"># a = self._parameters[&quot;a&quot;]</span>
+        <span class="c1"># c_1 = self._parameters[&quot;c_1&quot;]</span>
+        <span class="c1"># c_2 = self._parameters[&quot;c_2&quot;]</span>
+        <span class="c1"># i = - (c_1*v*(v - a)*(1 - v) - c_2*v*s)</span>
 
         <span class="k">return</span> <span class="n">i</span></div>
 
-<div class="viewcode-block" id="RogersMcCulloch.F"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.F">[docs]</a>    <span class="k">def</span> <span class="nf">F</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RogersMcCulloch.F"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.RogersMcCulloch.F">[docs]</a>    <span class="k">def</span> <span class="nf">F</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Return right-hand side for state variable evolution.&quot;</span>
 
         <span class="c1"># Extract parameters</span>
         <span class="n">eta_2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="s2">&quot;eta_2&quot;</span><span class="p">]</span>
         <span class="n">eta_3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="s2">&quot;eta_3&quot;</span><span class="p">]</span>
         <span class="n">v_p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="s2">&quot;v_p&quot;</span><span class="p">]</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">eta_2</span><span class="o">*</span><span class="p">(</span><span class="n">v</span><span class="o">/</span><span class="n">v_p</span> <span class="o">-</span> <span class="n">eta_3</span><span class="o">*</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">eta_2</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span> <span class="o">/</span> <span class="n">v_p</span> <span class="o">-</span> <span class="n">eta_3</span> <span class="o">*</span> <span class="n">s</span><span class="p">)</span>
 
         <span class="c1"># The original from R&amp;McC 1994</span>
-        <span class="c1">#b = self._parameters[&quot;b&quot;]</span>
-        <span class="c1">#d = self._parameters[&quot;d&quot;]</span>
-        <span class="c1">#f = b*(v - d*s)</span>
+        <span class="c1"># b = self._parameters[&quot;b&quot;]</span>
+        <span class="c1"># d = self._parameters[&quot;d&quot;]</span>
+        <span class="c1"># f = b*(v - d*s)</span>
         <span class="k">return</span> <span class="n">f</span></div>
 
-<div class="viewcode-block" id="RogersMcCulloch.default_initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.default_initial_conditions">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RogersMcCulloch.default_initial_conditions"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.RogersMcCulloch.default_initial_conditions">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">default_initial_conditions</span><span class="p">():</span>
-        <span class="n">ic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="s2">&quot;V&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
-                          <span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)])</span>
+        <span class="n">ic</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([(</span><span class="s2">&quot;V&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)])</span>
         <span class="k">return</span> <span class="n">ic</span></div>
 
-<div class="viewcode-block" id="RogersMcCulloch.num_states"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.cellmodels.rogers_mcculloch_manual.RogersMcCulloch.num_states">[docs]</a>    <span class="k">def</span> <span class="nf">num_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RogersMcCulloch.num_states"><a class="viewcode-back" href="../../../cbcbeat.cellmodels.html#cbcbeat.RogersMcCulloch.num_states">[docs]</a>    <span class="k">def</span> <span class="nf">num_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;Return number of state variables.&quot;</span>
         <span class="k">return</span> <span class="mi">1</span></div>
 
