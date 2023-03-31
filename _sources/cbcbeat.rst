@@ -60,14 +60,6 @@ cbcbeat.gotran2cellmodel module
    :undoc-members:
    :show-inheritance:
 
-cbcbeat.gotran2dolfin module
-----------------------------
-
-.. automodule:: cbcbeat.gotran2dolfin
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 cbcbeat.markerwisefield module
 ------------------------------
 
