@@ -228,63 +228,43 @@ document.write(`
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Marie E. Rognes (meg@simula.no), 2012--2013&quot;</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;BasicSingleCellSolver&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;BasicCardiacODESolver&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;CardiacODESolver&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SingleCellSolver&quot;</span><span class="p">,</span>
-<span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BasicSingleCellSolver&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;BasicCardiacODESolver&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;CardiacODESolver&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;SingleCellSolver&quot;</span><span class="p">]</span>
 
-<span class="kn">import</span> <span class="nn">dolfin</span>
-<span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">ForwardEuler</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">BackwardEuler</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">CrankNicolson</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">RK4</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">ESDIRK3</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">ESDIRK4</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">RL1</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">RL2</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">GRL1</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-    <span class="n">GRL2</span><span class="p">,</span>  <span class="c1"># noqa:F401</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">backend</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">cbcbeat</span> <span class="kn">import</span> <span class="n">CardiacCellModel</span><span class="p">,</span> <span class="n">MultiCellModel</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.markerwisefield</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">handle_markerwise</span><span class="p">,</span>
-    <span class="n">Markerwise</span><span class="p">,</span>
-    <span class="n">rhs_with_markerwise_field</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.markerwisefield</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">cbcbeat.utils</span> <span class="kn">import</span> <span class="n">state_space</span><span class="p">,</span> <span class="n">TimeStepper</span><span class="p">,</span> <span class="n">splat</span><span class="p">,</span> <span class="n">annotate_kwargs</span>
-<span class="kn">import</span> <span class="nn">ufl</span>
-<span class="kn">import</span> <span class="nn">ufl.classes</span>
+<span class="kn">from</span> <span class="nn">cbcbeat</span> <span class="kn">import</span> <span class="n">zero</span>
 <span class="kn">import</span> <span class="nn">cbcbeat</span>
-<span class="kn">from</span> <span class="nn">ufl.log</span> <span class="kn">import</span> <span class="n">info_blue</span><span class="p">,</span> <span class="n">error</span>
-
 
 <span class="k">def</span> <span class="nf">point_integral_solver_default_parameters</span><span class="p">():</span>
+
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">PointIntegralSolver</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">()</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">PointIntegralSolver</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-        <span class="n">p</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;point_integral_solver&quot;</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;point_integral_solver&quot;</span><span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;reset_stage_solutions&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="c1"># Set parameters for NewtonSolver</span>
-        <span class="n">pn</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;newton_solver&quot;</span><span class="p">)</span>
+        <span class="n">pn</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;newton_solver&quot;</span><span class="p">)</span>
         <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;maximum_iterations&quot;</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
         <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;always_recompute_jacobian&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;recompute_jacobian_each_solve&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;relaxation_parameter&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;relative_tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-20</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
-        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;absolute_tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="mf">1e-20</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">)</span>
+        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;relaxation_parameter&quot;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
+        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;relative_tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="mf">1e-20</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span>
+        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;absolute_tolerance&quot;</span><span class="p">,</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="mf">1e-20</span><span class="p">,</span> <span class="mf">2.</span><span class="p">)</span>
         <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;kappa&quot;</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;eta_0&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
-        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;max_relative_previous_residual&quot;</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;eta_0&quot;</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1e-15</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;max_relative_previous_residual&quot;</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1.</span><span class="p">)</span>
         <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;reset_each_step&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;report&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;report_vertex&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">32767</span><span class="p">)</span>
         <span class="n">pn</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;verbose_report&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="n">p</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">pn</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">p</span>
+
 
 
 <div class="viewcode-block" id="BasicCardiacODESolver"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cellsolver.BasicCardiacODESolver">[docs]</a><span class="k">class</span> <span class="nc">BasicCardiacODESolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -327,15 +307,15 @@ document.write(`
 <span class="sd">        A representation of the cardiac cell model(s)</span>
 
 <span class="sd">      I_s (optional) A typically time-dependent external stimulus</span>
-<span class="sd">        given as a :py:class:`dolfin.cpp.function.GenericFunction` or a</span>
+<span class="sd">        given as a :py:class:`dolfin.GenericFunction` or a</span>
 <span class="sd">        Markerwise. NB: it is assumed that the time dependence of I_s</span>
 <span class="sd">        is encoded via the &#39;time&#39; Constant.</span>
 
 <span class="sd">      params (:py:class:`dolfin.Parameters`, optional)</span>
 <span class="sd">        Solver parameters</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">I_s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
         <span class="c1"># Store input</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span> <span class="o">=</span> <span class="n">mesh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span>
@@ -347,7 +327,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span>
 
         <span class="c1"># Handle stimulus</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">I_s</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">GenericFunction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">I_s</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)</span>
 
         <span class="c1"># Initialize and update parameters if given</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">()</span>
@@ -360,19 +340,18 @@ document.write(`
         <span class="n">s_family</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;S_polynomial_family&quot;</span><span class="p">]</span>
         <span class="n">s_degree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;S_polynomial_degree&quot;</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">v_family</span> <span class="o">==</span> <span class="n">s_family</span> <span class="ow">and</span> <span class="n">s_degree</span> <span class="o">==</span> <span class="n">v_degree</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">VS</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">VectorFunctionSpace</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="n">v_family</span><span class="p">,</span> <span class="n">v_degree</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">v_family</span> <span class="o">==</span> <span class="n">s_family</span> <span class="ow">and</span> <span class="n">s_degree</span> <span class="o">==</span> <span class="n">v_degree</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VS</span> <span class="o">=</span> <span class="n">VectorFunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="n">v_family</span><span class="p">,</span> <span class="n">v_degree</span><span class="p">,</span>
+                                          <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">V</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="n">v_family</span><span class="p">,</span> <span class="n">v_degree</span><span class="p">)</span>
+            <span class="n">V</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="n">v_family</span><span class="p">,</span> <span class="n">v_degree</span><span class="p">)</span>
             <span class="n">S</span> <span class="o">=</span> <span class="n">state_space</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span><span class="p">,</span> <span class="n">s_family</span><span class="p">,</span> <span class="n">s_degree</span><span class="p">)</span>
-            <span class="n">Mx</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">MixedElement</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">(),</span> <span class="n">S</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">())</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">VS</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="n">Mx</span><span class="p">)</span>
+            <span class="n">Mx</span> <span class="o">=</span> <span class="n">MixedElement</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">(),</span> <span class="n">S</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">())</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">VS</span> <span class="o">=</span> <span class="n">FunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="n">Mx</span><span class="p">)</span>
 
         <span class="c1"># Initialize solution fields</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vs_</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vs_&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vs</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vs_</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vs_&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vs</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -386,7 +365,7 @@ document.write(`
 <span class="sd">        *Returns*</span>
 <span class="sd">          A set of parameters (:py:class:`dolfin.Parameters`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;BasicCardiacODESolver&quot;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;BasicCardiacODESolver&quot;</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;theta&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;V_polynomial_degree&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;V_polynomial_family&quot;</span><span class="p">,</span> <span class="s2">&quot;DG&quot;</span><span class="p">)</span>
@@ -395,10 +374,8 @@ document.write(`
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Use iterative solver as default.</span>
-        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">NonlinearVariationalSolver</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">())</span>
-        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;nonlinear_variational_solver&quot;</span><span class="p">][</span><span class="s2">&quot;newton_solver&quot;</span><span class="p">][</span>
-            <span class="s2">&quot;linear_solver&quot;</span>
-        <span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;gmres&quot;</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">NonlinearVariationalSolver</span><span class="o">.</span><span class="n">default_parameters</span><span class="p">())</span>
+        <span class="n">params</span><span class="p">[</span><span class="s2">&quot;nonlinear_variational_solver&quot;</span><span class="p">][</span><span class="s2">&quot;newton_solver&quot;</span><span class="p">][</span><span class="s2">&quot;linear_solver&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;gmres&quot;</span>
 
         <span class="k">return</span> <span class="n">params</span></div>
 
@@ -446,13 +423,13 @@ document.write(`
 
         <span class="c1"># Solve on entire interval if no interval is given.</span>
         <span class="k">if</span> <span class="n">dt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">dt</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">T0</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="n">T0</span><span class="p">)</span>
 
         <span class="c1"># Create timestepper</span>
-        <span class="n">time_stepper</span> <span class="o">=</span> <span class="n">TimeStepper</span><span class="p">(</span>
-            <span class="n">interval</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
+        <span class="n">time_stepper</span> <span class="o">=</span> <span class="n">TimeStepper</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> \
+                                   <span class="n">annotate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span> <span class="ow">in</span> <span class="n">time_stepper</span><span class="p">:</span>
+
             <span class="n">info_blue</span><span class="p">(</span><span class="s2">&quot;Solving on t = (</span><span class="si">%g</span><span class="s2">, </span><span class="si">%g</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
 
@@ -472,58 +449,56 @@ document.write(`
 <span class="sd">            The time interval (t0, t1) for the step</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">timer</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;ODE step&quot;</span><span class="p">)</span>
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;ODE step&quot;</span><span class="p">)</span>
 
         <span class="c1"># Check for cell meshs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="o">.</span><span class="n">topology</span><span class="p">()</span><span class="o">.</span><span class="n">dim</span><span class="p">()</span>
 
         <span class="c1"># Extract time mesh</span>
         <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="o">=</span> <span class="n">interval</span>
-        <span class="n">k_n</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
+        <span class="n">k_n</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
 
         <span class="c1"># Extract previous solution(s)</span>
-        <span class="p">(</span><span class="n">v_</span><span class="p">,</span> <span class="n">s_</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">v_</span><span class="p">,</span> <span class="n">s_</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># Set-up current variables</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs_</span><span class="p">)</span>  <span class="c1"># Start with good guess</span>
-        <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="n">dolfin</span><span class="o">.</span><span class="n">TestFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs_</span><span class="p">)</span> <span class="c1"># Start with good guess</span>
+        <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="n">TestFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># Define equation based on cell model</span>
-        <span class="n">Dt_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">v_</span><span class="p">)</span> <span class="o">/</span> <span class="n">k_n</span>
-        <span class="n">Dt_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">s_</span><span class="p">)</span> <span class="o">/</span> <span class="n">k_n</span>
+        <span class="n">Dt_v</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">-</span> <span class="n">v_</span><span class="p">)</span><span class="o">/</span><span class="n">k_n</span>
+        <span class="n">Dt_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">s</span> <span class="o">-</span> <span class="n">s_</span><span class="p">)</span><span class="o">/</span><span class="n">k_n</span>
 
         <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;theta&quot;</span><span class="p">]</span>
 
         <span class="c1"># Set time (propagates to time-dependent variables defined via</span>
         <span class="c1"># self.time)</span>
-        <span class="n">t</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">theta</span> <span class="o">*</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">theta</span><span class="o">*</span><span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
 
-        <span class="n">v_mid</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">v</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">v_</span>
-        <span class="n">s_mid</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">s</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">s_</span>
+        <span class="n">v_mid</span> <span class="o">=</span> <span class="n">theta</span><span class="o">*</span><span class="n">v</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">v_</span>
+        <span class="n">s_mid</span> <span class="o">=</span> <span class="n">theta</span><span class="o">*</span><span class="n">s</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">s_</span>
 
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="n">MultiCellModel</span><span class="p">):</span>
-            <span class="c1"># assert(model.mesh() == self._mesh)</span>
+            <span class="c1">#assert(model.mesh() == self._mesh)</span>
 
             <span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span>
             <span class="n">mesh</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">mesh</span><span class="p">()</span>
-            <span class="n">dy</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;dx&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">markers</span><span class="p">())</span>
+            <span class="n">dy</span> <span class="o">=</span> <span class="n">Measure</span><span class="p">(</span><span class="s2">&quot;dx&quot;</span><span class="p">,</span> <span class="n">domain</span><span class="o">=</span><span class="n">mesh</span><span class="p">,</span> <span class="n">subdomain_data</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">markers</span><span class="p">())</span>
 
             <span class="c1"># Only allowing trivial forcing functions here</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span><span class="p">,</span> <span class="n">Markerwise</span><span class="p">):</span>
                 <span class="n">error</span><span class="p">(</span><span class="s2">&quot;Not implemented&quot;</span><span class="p">)</span>
-            <span class="n">rhs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span> <span class="o">*</span> <span class="n">w</span> <span class="o">*</span> <span class="n">dy</span><span class="p">()</span>
+            <span class="n">rhs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">dy</span><span class="p">()</span>
 
-            <span class="n">n</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span>  <span class="c1"># Extract number of global states</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span> <span class="c1"># Extract number of global states</span>
 
             <span class="c1"># Collect contributions to lhs by iterating over the different cell models</span>
             <span class="n">domains</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
             <span class="n">lhs</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">model_k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">models</span><span class="p">()):</span>
-                <span class="n">n_k</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="n">model_k</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span>
-                <span class="p">)</span>  <span class="c1"># Extract number of local (non-trivial) states</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">model_k</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">models</span><span class="p">()):</span>
+                <span class="n">n_k</span> <span class="o">=</span> <span class="n">model_k</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span> <span class="c1"># Extract number of local (non-trivial) states</span>
 
                 <span class="c1"># Extract right components of coefficients and test functions</span>
                 <span class="c1"># () is not the same as (1,)</span>
@@ -532,25 +507,21 @@ document.write(`
                     <span class="n">r_k</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                     <span class="n">Dt_s_k</span> <span class="o">=</span> <span class="n">Dt_s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">s_mid_k</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">as_vector</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">s_mid</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">)))</span>
-                    <span class="n">r_k</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">as_vector</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">)))</span>
-                    <span class="n">Dt_s_k</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">as_vector</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">Dt_s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">)))</span>
+                    <span class="n">s_mid_k</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">s_mid</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">)))</span>
+                    <span class="n">r_k</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">)))</span>
+                    <span class="n">Dt_s_k</span> <span class="o">=</span> <span class="n">as_vector</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">Dt_s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">)))</span>
 
-                <span class="n">i_k</span> <span class="o">=</span> <span class="n">domains</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>  <span class="c1"># Extract domain index of cell model k</span>
+                <span class="n">i_k</span> <span class="o">=</span> <span class="n">domains</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="c1"># Extract domain index of cell model k</span>
 
                 <span class="c1"># Extract right currents and ion channel expressions</span>
                 <span class="n">F_theta_k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">(</span><span class="n">v_mid</span><span class="p">,</span> <span class="n">s_mid_k</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i_k</span><span class="p">)</span>
                 <span class="n">I_theta_k</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_I_ion</span><span class="p">(</span><span class="n">v_mid</span><span class="p">,</span> <span class="n">s_mid_k</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">i_k</span><span class="p">)</span>
 
                 <span class="c1"># Variational contribution over the relevant domain</span>
-                <span class="n">a_k</span> <span class="o">=</span> <span class="p">(</span>
-                    <span class="p">(</span><span class="n">Dt_v</span> <span class="o">-</span> <span class="n">I_theta_k</span><span class="p">)</span> <span class="o">*</span> <span class="n">w</span>
-                    <span class="o">+</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">Dt_s_k</span><span class="p">,</span> <span class="n">r_k</span><span class="p">)</span>
-                    <span class="o">+</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="o">-</span><span class="n">F_theta_k</span><span class="p">,</span> <span class="n">r_k</span><span class="p">)</span>
-                <span class="p">)</span> <span class="o">*</span> <span class="n">dy</span><span class="p">(</span><span class="n">i_k</span><span class="p">)</span>
+                <span class="n">a_k</span> <span class="o">=</span> <span class="p">((</span><span class="n">Dt_v</span> <span class="o">-</span> <span class="n">I_theta_k</span><span class="p">)</span><span class="o">*</span><span class="n">w</span> <span class="o">+</span> <span class="n">inner</span><span class="p">(</span><span class="n">Dt_s_k</span><span class="p">,</span> <span class="n">r_k</span><span class="p">)</span> <span class="o">+</span> <span class="n">inner</span><span class="p">(</span><span class="o">-</span> <span class="n">F_theta_k</span><span class="p">,</span> <span class="n">r_k</span><span class="p">))</span><span class="o">*</span><span class="n">dy</span><span class="p">(</span><span class="n">i_k</span><span class="p">)</span>
 
                 <span class="c1"># Add s_trivial = 0 on Omega_{i_k} in variational form:</span>
-                <span class="n">a_k</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">r</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="o">*</span> <span class="n">dy</span><span class="p">(</span><span class="n">i_k</span><span class="p">)</span>
+                <span class="n">a_k</span> <span class="o">+=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">r</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_k</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span><span class="o">*</span><span class="n">dy</span><span class="p">(</span><span class="n">i_k</span><span class="p">)</span>
                 <span class="n">lhs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a_k</span><span class="p">)</span>
             <span class="n">lhs</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">lhs</span><span class="p">)</span>
 
@@ -559,17 +530,15 @@ document.write(`
 
             <span class="c1"># Evaluate currents at averaged v and s. Note sign for I_theta</span>
             <span class="n">F_theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">(</span><span class="n">v_mid</span><span class="p">,</span> <span class="n">s_mid</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-            <span class="n">I_theta</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_I_ion</span><span class="p">(</span><span class="n">v_mid</span><span class="p">,</span> <span class="n">s_mid</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-            <span class="n">lhs</span> <span class="o">=</span> <span class="p">(</span><span class="n">Dt_v</span> <span class="o">-</span> <span class="n">I_theta</span><span class="p">)</span> <span class="o">*</span> <span class="n">w</span> <span class="o">*</span> <span class="n">dz</span> <span class="o">+</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">Dt_s</span> <span class="o">-</span> <span class="n">F_theta</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="o">*</span> <span class="n">dz</span>
+            <span class="n">I_theta</span> <span class="o">=</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_ion</span><span class="p">(</span><span class="n">v_mid</span><span class="p">,</span> <span class="n">s_mid</span><span class="p">,</span> <span class="n">time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+            <span class="n">lhs</span> <span class="o">=</span> <span class="p">(</span><span class="n">Dt_v</span> <span class="o">-</span> <span class="n">I_theta</span><span class="p">)</span><span class="o">*</span><span class="n">w</span><span class="o">*</span><span class="n">dz</span> <span class="o">+</span> <span class="n">inner</span><span class="p">(</span><span class="n">Dt_s</span> <span class="o">-</span> <span class="n">F_theta</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span><span class="o">*</span><span class="n">dz</span>
 
         <span class="c1"># Set-up system of equations</span>
         <span class="n">G</span> <span class="o">=</span> <span class="n">lhs</span> <span class="o">-</span> <span class="n">rhs</span>
 
         <span class="c1"># Solve system</span>
-        <span class="n">pde</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">NonlinearVariationalProblem</span><span class="p">(</span>
-            <span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="n">dolfin</span><span class="o">.</span><span class="n">derivative</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">solver</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">NonlinearVariationalSolver</span><span class="p">(</span><span class="n">pde</span><span class="p">)</span>
+        <span class="n">pde</span> <span class="o">=</span> <span class="n">NonlinearVariationalProblem</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">,</span> <span class="n">J</span><span class="o">=</span><span class="n">derivative</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">))</span>
+        <span class="n">solver</span> <span class="o">=</span> <span class="n">NonlinearVariationalSolver</span><span class="p">(</span><span class="n">pde</span><span class="p">)</span>
         <span class="n">solver_params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nonlinear_variational_solver&quot;</span><span class="p">]</span>
         <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">solver_params</span><span class="p">)</span>
         <span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
@@ -620,8 +589,10 @@ document.write(`
 <span class="sd">        Solver parameters</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">I_s</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="kn">import</span> <span class="nn">ufl.classes</span>
+
         <span class="c1"># Store input</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span> <span class="o">=</span> <span class="n">mesh</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span>
@@ -632,11 +603,11 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_I_ion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">I</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">num_states</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">I_s</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">GenericFunction</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">I_s</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)</span>
 
         <span class="c1"># Create time if not given, otherwise use given time</span>
         <span class="k">if</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Constant</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">Constant</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span>
 
@@ -646,46 +617,45 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
 
         <span class="c1"># Create (vector) function space for potential + states</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">VS</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">VectorFunctionSpace</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">VS</span> <span class="o">=</span> <span class="n">VectorFunctionSpace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                                      <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># Initialize solution field</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vs_</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vs_&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vs</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vs_</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vs_&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vs</span> <span class="o">=</span> <span class="n">Function</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;vs&quot;</span><span class="p">)</span>
 
         <span class="c1"># Initialize scheme</span>
-        <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="n">dolfin</span><span class="o">.</span><span class="n">TestFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="o">=</span> <span class="n">splat</span><span class="p">(</span><span class="n">TestFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">VS</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># Workaround to get algorithm in RL schemes working as it only</span>
         <span class="c1"># works for scalar expressions</span>
         <span class="n">F_exprs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_F</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">)</span>
 
         <span class="c1"># MER: This looks much more complicated than it needs to be!</span>
-        <span class="c1"># If we have a dolfin.as_vector expression</span>
-        <span class="n">F_exprs_q</span> <span class="o">=</span> <span class="n">ufl</span><span class="o">.</span><span class="n">zero</span><span class="p">()</span>
+        <span class="c1"># If we have a as_vector expression</span>
+        <span class="n">F_exprs_q</span> <span class="o">=</span> <span class="n">zero</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">F_exprs</span><span class="p">,</span> <span class="n">ufl</span><span class="o">.</span><span class="n">classes</span><span class="o">.</span><span class="n">ListTensor</span><span class="p">):</span>
-            <span class="c1"># for i, expr_i in enumerate(F_exprs.operands()):</span>
+            <span class="c1">#for i, expr_i in enumerate(F_exprs.operands()):</span>
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">expr_i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">F_exprs</span><span class="o">.</span><span class="n">ufl_operands</span><span class="p">):</span>
-                <span class="n">F_exprs_q</span> <span class="o">+=</span> <span class="n">expr_i</span> <span class="o">*</span> <span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">F_exprs_q</span> <span class="o">+=</span> <span class="n">expr_i</span><span class="o">*</span><span class="n">q</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">F_exprs_q</span> <span class="o">=</span> <span class="n">F_exprs</span> <span class="o">*</span> <span class="n">q</span>
+            <span class="n">F_exprs_q</span> <span class="o">=</span> <span class="n">F_exprs</span><span class="o">*</span><span class="n">q</span>
 
-        <span class="n">rhs</span> <span class="o">=</span> <span class="n">F_exprs_q</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_ion</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">)</span> <span class="o">*</span> <span class="n">w</span>
+        <span class="n">rhs</span> <span class="o">=</span> <span class="n">F_exprs_q</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_ion</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">)</span><span class="o">*</span><span class="n">w</span>
 
         <span class="c1"># Handle stimulus: only handle single function case for now</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Markerwise stimulus not supported by PointIntegralSolver.&quot;</span>
-        <span class="k">assert</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span><span class="p">,</span> <span class="n">Markerwise</span><span class="p">),</span> <span class="n">msg</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span><span class="p">,</span> <span class="n">Markerwise</span><span class="p">)),</span> <span class="n">msg</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span><span class="p">:</span>
-            <span class="n">rhs</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span> <span class="o">*</span> <span class="n">w</span>
+            <span class="n">rhs</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I_s</span><span class="o">*</span><span class="n">w</span>
 
         <span class="c1"># FIXME: The application of dP was moved so adding an integral</span>
         <span class="c1"># is done just once. Otherwise ufl could not figure out that</span>
         <span class="c1"># we had only one integral...</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_rhs</span> <span class="o">=</span> <span class="n">rhs</span> <span class="o">*</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">dP</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rhs</span> <span class="o">=</span> <span class="n">rhs</span><span class="o">*</span><span class="n">dP</span><span class="p">()</span>
 
-        <span class="c1"># sys.exit()</span>
+        <span class="c1">#sys.exit()</span>
         <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;scheme&quot;</span><span class="p">]</span>
         <span class="n">Scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name_to_scheme</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_scheme</span> <span class="o">=</span> <span class="n">Scheme</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rhs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time</span><span class="p">)</span>
@@ -694,7 +664,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span> <span class="o">=</span> <span class="n">annotate_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
 
         <span class="c1"># Initialize solver and update its parameters</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_pi_solver</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">PointIntegralSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scheme</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pi_solver</span> <span class="o">=</span> <span class="n">PointIntegralSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scheme</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pi_solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;point_integral_solver&quot;</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_name_to_scheme</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -716,7 +686,7 @@ document.write(`
 <span class="sd">        *Returns*</span>
 <span class="sd">          A set of parameters (:py:class:`dolfin.Parameters`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">params</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;CardiacODESolver&quot;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;CardiacODESolver&quot;</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;scheme&quot;</span><span class="p">,</span> <span class="s2">&quot;BackwardEuler&quot;</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">point_integral_solver_default_parameters</span><span class="p">())</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
@@ -749,14 +719,14 @@ document.write(`
         <span class="c1"># NB: The point integral solver operates on vs directly, map</span>
         <span class="c1"># initial condition in vs_ to vs:</span>
 
-        <span class="n">timer</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;ODE step&quot;</span><span class="p">)</span>
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;ODE step&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs_</span><span class="p">)</span>
 
         <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span> <span class="o">=</span> <span class="n">interval</span>
         <span class="n">dt</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">t0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span> <span class="o">=</span> <span class="n">annotate_kwargs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">cbcbeat</span><span class="o">.</span><span class="n">dolfinimport</span><span class="o">.</span><span class="n">has_dolfin_adjoint</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cbcbeat</span><span class="o">.</span><span class="n">dolfin_adjoint</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_pi_solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_pi_solver</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
@@ -793,14 +763,14 @@ document.write(`
 
         <span class="c1"># Solve on entire interval if no interval is given.</span>
         <span class="k">if</span> <span class="n">dt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">dt</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">T0</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="n">T0</span><span class="p">)</span>
 
         <span class="c1"># Create timestepper</span>
-        <span class="n">time_stepper</span> <span class="o">=</span> <span class="n">TimeStepper</span><span class="p">(</span>
-            <span class="n">interval</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
+        <span class="n">time_stepper</span> <span class="o">=</span> <span class="n">TimeStepper</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> \
+                                   <span class="n">annotate</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">])</span>
 
         <span class="k">for</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span> <span class="ow">in</span> <span class="n">time_stepper</span><span class="p">:</span>
+
             <span class="n">info_blue</span><span class="p">(</span><span class="s2">&quot;Solving on t = (</span><span class="si">%g</span><span class="s2">, </span><span class="si">%g</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
 
@@ -809,7 +779,6 @@ document.write(`
 
             <span class="c1"># FIXME: This eventually breaks in parallel!?</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">vs_</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vs</span><span class="p">)</span></div></div>
-
 
 <div class="viewcode-block" id="BasicSingleCellSolver"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cellsolver.BasicSingleCellSolver">[docs]</a><span class="k">class</span> <span class="nc">BasicSingleCellSolver</span><span class="p">(</span><span class="n">BasicCardiacODESolver</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A basic, non-optimised solver for systems of ODEs typically</span>
@@ -857,54 +826,46 @@ document.write(`
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Create solver from given cell model and optional parameters.&quot;</span>
 
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">CardiacCellModel</span><span class="p">),</span> <span class="p">(</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">CardiacCellModel</span><span class="p">),</span> \
             <span class="s2">&quot;Expecting model to be a CardiacCellModel, not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">model</span>
-        <span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">backend</span><span class="o">.</span><span class="n">Constant</span><span class="p">),</span> <span class="p">(</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">Constant</span><span class="p">)),</span> \
             <span class="s2">&quot;Expecting time to be a Constant instance, not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">time</span>
-        <span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">)</span> <span class="ow">or</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span> <span class="ow">or</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> \
             <span class="s2">&quot;Expecting params to be a Parameters (or None), not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">params</span>
-        <span class="p">)</span>
 
         <span class="c1"># Store model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
 
         <span class="c1"># Define carefully chosen dummy mesh</span>
-        <span class="n">mesh</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">UnitIntervalMesh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">UnitIntervalMesh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># Extract information from cardiac cell model and ship off to</span>
         <span class="c1"># super-class.</span>
-        <span class="n">BasicCardiacODESolver</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">I_s</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">stimulus</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
-        <span class="p">)</span></div>
-
+        <span class="n">BasicCardiacODESolver</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
+                                       <span class="n">I_s</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">stimulus</span><span class="p">,</span>
+                                       <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SingleCellSolver"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cellsolver.SingleCellSolver">[docs]</a><span class="k">class</span> <span class="nc">SingleCellSolver</span><span class="p">(</span><span class="n">CardiacODESolver</span><span class="p">):</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Create solver from given cell model and optional parameters.&quot;</span>
 
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">CardiacCellModel</span><span class="p">),</span> <span class="p">(</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">CardiacCellModel</span><span class="p">),</span> \
             <span class="s2">&quot;Expecting model to be a CardiacCellModel, not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">model</span>
-        <span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">backend</span><span class="o">.</span><span class="n">Constant</span><span class="p">),</span> <span class="p">(</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">Constant</span><span class="p">)),</span> \
             <span class="s2">&quot;Expecting time to be a Constant instance, not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">time</span>
-        <span class="p">)</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">)</span> <span class="ow">or</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="p">(</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">Parameters</span><span class="p">)</span> <span class="ow">or</span> <span class="n">params</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> \
             <span class="s2">&quot;Expecting params to be a Parameters (or None), not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">params</span>
-        <span class="p">)</span>
 
         <span class="c1"># Store model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_model</span> <span class="o">=</span> <span class="n">model</span>
 
         <span class="c1"># Define carefully chosen dummy mesh</span>
-        <span class="n">mesh</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">UnitIntervalMesh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">mesh</span> <span class="o">=</span> <span class="n">UnitIntervalMesh</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># Extract information from cardiac cell model and ship off to</span>
         <span class="c1"># super-class.</span>
-        <span class="n">CardiacODESolver</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">I_s</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">stimulus</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span>
-        <span class="p">)</span></div>
+        <span class="n">CardiacODESolver</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span>
+                                  <span class="n">I_s</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">stimulus</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span></div>
 </pre></div>
 
                 </article>

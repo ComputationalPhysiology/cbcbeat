@@ -236,16 +236,13 @@ document.write(`
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CardiacModel&quot;</span><span class="p">]</span>
 
-<span class="kn">import</span> <span class="nn">dolfin</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">backend</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">Parameters</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">,</span> <span class="n">Constant</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">,</span> <span class="n">error</span>
 <span class="kn">from</span> <span class="nn">cbcbeat.markerwisefield</span> <span class="kn">import</span> <span class="n">Markerwise</span><span class="p">,</span> <span class="n">handle_markerwise</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.cellmodels</span> <span class="kn">import</span> <span class="n">CardiacCellModel</span>
-<span class="kn">from</span> <span class="nn">ufl.log</span> <span class="kn">import</span> <span class="n">error</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.cellmodels</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="c1"># ------------------------------------------------------------------------------</span>
 <span class="c1"># Cardiac models</span>
 <span class="c1"># ------------------------------------------------------------------------------</span>
-
 
 <div class="viewcode-block" id="CardiacModel"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel">[docs]</a><span class="k">class</span> <span class="nc">CardiacModel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -283,26 +280,23 @@ document.write(`
 <span class="sd">        an applied current as an ufl Expression</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span> <span class="n">stimulus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">applied_current</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span>
+                 <span class="n">stimulus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">applied_current</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="s2">&quot;Create CardiacModel from given input.&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_handle_input</span><span class="p">(</span>
-            <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span> <span class="n">stimulus</span><span class="p">,</span> <span class="n">applied_current</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle_input</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span>
+                           <span class="n">stimulus</span><span class="p">,</span> <span class="n">applied_current</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_handle_input</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span> <span class="n">stimulus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">applied_current</span><span class="o">=</span><span class="kc">None</span>
-    <span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">domain</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">M_i</span><span class="p">,</span> <span class="n">M_e</span><span class="p">,</span> <span class="n">cell_models</span><span class="p">,</span>
+                      <span class="n">stimulus</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">applied_current</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
         <span class="c1"># Check input and store attributes</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Expecting domain to be a Mesh instance, not </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">domain</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Mesh</span><span class="p">),</span> <span class="n">msg</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">Mesh</span><span class="p">),</span> <span class="n">msg</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_domain</span> <span class="o">=</span> <span class="n">domain</span>
 
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Expecting time to be a Constant instance, not </span><span class="si">%r</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">time</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">backend</span><span class="o">.</span><span class="n">Constant</span><span class="p">)</span> <span class="ow">or</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="n">msg</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">Constant</span><span class="p">)</span> <span class="ow">or</span> <span class="n">time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span> <span class="n">msg</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_time</span> <span class="o">=</span> <span class="n">time</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_intracellular_conductivity</span> <span class="o">=</span> <span class="n">M_i</span>
@@ -315,15 +309,11 @@ document.write(`
             <span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="c1"># Handle stimulus</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_stimulus</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span>
-            <span class="n">stimulus</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">GenericFunction</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_stimulus</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">stimulus</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)</span>
 
         <span class="c1"># Handle applied current</span>
         <span class="n">ac</span> <span class="o">=</span> <span class="n">applied_current</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_applied_current</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span>
-            <span class="n">ac</span><span class="p">,</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">cpp</span><span class="o">.</span><span class="n">function</span><span class="o">.</span><span class="n">GenericFunction</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_applied_current</span> <span class="o">=</span> <span class="n">handle_markerwise</span><span class="p">(</span><span class="n">ac</span><span class="p">,</span> <span class="n">GenericFunction</span><span class="p">)</span>
 
 <div class="viewcode-block" id="CardiacModel.applied_current"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.applied_current">[docs]</a>    <span class="k">def</span> <span class="nf">applied_current</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;An applied current: used as a source in the elliptic bidomain equation&quot;</span>
@@ -340,7 +330,8 @@ document.write(`
 <span class="sd">        *Returns*</span>
 <span class="sd">        (M_i, M_e) (:py:class:`tuple` of :py:class:`ufl.Expr`)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intracellular_conductivity</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">extracellular_conductivity</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">intracellular_conductivity</span><span class="p">(),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">extracellular_conductivity</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="CardiacModel.intracellular_conductivity"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.cardiacmodels.CardiacModel.intracellular_conductivity">[docs]</a>    <span class="k">def</span> <span class="nf">intracellular_conductivity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="s2">&quot;The intracellular conductivity (:py:class:`ufl.Expr`).&quot;</span>

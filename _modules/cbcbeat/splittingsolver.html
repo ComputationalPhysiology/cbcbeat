@@ -290,17 +290,19 @@ document.write(`
     <span class="s2">&quot;BasicSplittingSolver&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 
-<span class="kn">import</span> <span class="nn">dolfin</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">backend</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="o">*</span>
 
 <span class="kn">from</span> <span class="nn">cbcbeat</span> <span class="kn">import</span> <span class="n">CardiacModel</span>
 <span class="kn">from</span> <span class="nn">cbcbeat.cellsolver</span> <span class="kn">import</span> <span class="n">BasicCardiacODESolver</span><span class="p">,</span> <span class="n">CardiacODESolver</span>
 <span class="kn">from</span> <span class="nn">cbcbeat.bidomainsolver</span> <span class="kn">import</span> <span class="n">BasicBidomainSolver</span><span class="p">,</span> <span class="n">BidomainSolver</span>
 <span class="kn">from</span> <span class="nn">cbcbeat.monodomainsolver</span> <span class="kn">import</span> <span class="n">BasicMonodomainSolver</span><span class="p">,</span> <span class="n">MonodomainSolver</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.utils</span> <span class="kn">import</span> <span class="n">TimeStepper</span><span class="p">,</span> <span class="n">annotate_kwargs</span>
-<span class="kn">from</span> <span class="nn">ufl.log</span> <span class="kn">import</span> <span class="n">info_blue</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.utils</span> <span class="kn">import</span> <span class="n">state_space</span><span class="p">,</span> <span class="n">TimeStepper</span><span class="p">,</span> <span class="n">annotate_kwargs</span>
 
-<span class="n">progress</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">PROGRESS</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">progress</span> <span class="o">=</span> <span class="n">LogLevel</span><span class="o">.</span><span class="n">PROGRESS</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">progress</span> <span class="o">=</span> <span class="n">PROGRESS</span>
+    <span class="k">pass</span>
 
 
 <span class="k">class</span> <span class="nc">Interpolator</span><span class="p">:</span>
@@ -318,7 +320,7 @@ document.write(`
     <span class="n">vur_el</span> <span class="o">=</span> <span class="n">vur_space</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">ode_el</span><span class="o">.</span><span class="n">family</span><span class="p">()</span> <span class="o">==</span> <span class="n">vur_el</span><span class="o">.</span><span class="n">family</span><span class="p">():</span>
-        <span class="k">return</span> <span class="n">backend</span><span class="o">.</span><span class="n">FunctionAssigner</span><span class="p">(</span><span class="n">ode_space</span><span class="p">,</span> <span class="n">vur_space</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">FunctionAssigner</span><span class="p">(</span><span class="n">ode_space</span><span class="p">,</span> <span class="n">vur_space</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Interpolator</span><span class="p">()</span>
 
@@ -511,14 +513,15 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">params</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;BasicSplittingSolver&quot;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;BasicSplittingSolver&quot;</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;theta&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;apply_stimulus_current_to_pde&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pde_solver&quot;</span><span class="p">,</span> <span class="s2">&quot;bidomain&quot;</span><span class="p">,</span> <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;bidomain&quot;</span><span class="p">,</span> <span class="s2">&quot;monodomain&quot;</span><span class="p">]))</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">except</span><span class="p">:</span>
             <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pde_solver&quot;</span><span class="p">,</span> <span class="s2">&quot;bidomain&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;bidomain&quot;</span><span class="p">,</span> <span class="s2">&quot;monodomain&quot;</span><span class="p">])</span>
+            <span class="k">pass</span>
 
         <span class="c1"># Add default parameters from ODE solver, but update for V</span>
         <span class="c1"># space</span>
@@ -585,6 +588,7 @@ document.write(`
         <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span> <span class="ow">in</span> <span class="n">time_stepper</span><span class="p">:</span>
+
             <span class="n">info_blue</span><span class="p">(</span><span class="s2">&quot;Solving on t = (</span><span class="si">%g</span><span class="s2">, </span><span class="si">%g</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
 
@@ -618,18 +622,18 @@ document.write(`
         <span class="n">t</span> <span class="o">=</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">theta</span> <span class="o">*</span> <span class="n">dt</span>
 
         <span class="c1"># Compute tentative membrane potential and state (vs_star)</span>
-        <span class="n">dolfin</span><span class="o">.</span><span class="n">begin</span><span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="s2">&quot;Tentative ODE step&quot;</span><span class="p">)</span>
+        <span class="n">begin</span><span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="s2">&quot;Tentative ODE step&quot;</span><span class="p">)</span>
         <span class="c1"># Assumes that its vs_ is in the correct state, gives its vs</span>
         <span class="c1"># in the current state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ode_solver</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">t0</span><span class="p">,</span> <span class="n">t</span><span class="p">))</span>
-        <span class="n">dolfin</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="n">end</span><span class="p">()</span>
 
         <span class="c1"># Compute tentative potentials vu = (v, u)</span>
-        <span class="n">dolfin</span><span class="o">.</span><span class="n">begin</span><span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="s2">&quot;PDE step&quot;</span><span class="p">)</span>
+        <span class="n">begin</span><span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="s2">&quot;PDE step&quot;</span><span class="p">)</span>
         <span class="c1"># Assumes that its vs_ is in the correct state, gives vur in</span>
         <span class="c1"># the current state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pde_solver</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
-        <span class="n">dolfin</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="n">end</span><span class="p">()</span>
 
         <span class="c1"># If first order splitting, we need to ensure that self.vs is</span>
         <span class="c1"># up to date, but otherwise we are done.</span>
@@ -641,7 +645,7 @@ document.write(`
             <span class="k">return</span>
 
         <span class="c1"># Otherwise, we do another ode_step:</span>
-        <span class="n">dolfin</span><span class="o">.</span><span class="n">begin</span><span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="s2">&quot;Corrective ODE step&quot;</span><span class="p">)</span>
+        <span class="n">begin</span><span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="s2">&quot;Corrective ODE step&quot;</span><span class="p">)</span>
 
         <span class="c1"># Update vs_ based on vs, the s part of vs and vs_ are now in</span>
         <span class="c1"># the correct state.</span>
@@ -655,7 +659,7 @@ document.write(`
         <span class="c1"># the correct state</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ode_solver</span><span class="o">.</span><span class="n">step</span><span class="p">((</span><span class="n">t</span><span class="p">,</span> <span class="n">t1</span><span class="p">))</span>
 
-        <span class="n">dolfin</span><span class="o">.</span><span class="n">end</span><span class="p">()</span></div>
+        <span class="n">end</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="BasicSplittingSolver.merge"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.splittingsolver.BasicSplittingSolver.merge">[docs]</a>    <span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -666,16 +670,16 @@ document.write(`
 <span class="sd">          solution (:py:class:`dolfin.Function`)</span>
 <span class="sd">            Function holding the combined result</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">timer</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;Merge step&quot;</span><span class="p">)</span>
+        <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span><span class="s2">&quot;Merge step&quot;</span><span class="p">)</span>
 
-        <span class="n">dolfin</span><span class="o">.</span><span class="n">begin</span><span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="s2">&quot;Merging&quot;</span><span class="p">)</span>
+        <span class="n">begin</span><span class="p">(</span><span class="n">progress</span><span class="p">,</span> <span class="s2">&quot;Merging&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;pde_solver&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;bidomain&quot;</span><span class="p">:</span>
             <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vur</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vur</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">merger</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_extract_V</span><span class="p">(</span><span class="n">solution</span><span class="p">),</span> <span class="n">v</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_annotate_kwargs</span><span class="p">)</span>
-        <span class="n">dolfin</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+        <span class="n">end</span><span class="p">()</span>
 
         <span class="n">timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div></div>
 
@@ -729,12 +733,9 @@ document.write(`
 <span class="sd">      ps[&quot;theta&quot;] = 1.0 # Use first order splitting</span>
 <span class="sd">      ps[&quot;CardiacODESolver&quot;][&quot;scheme&quot;] = &quot;GRL1&quot; # Use Generalized Rush-Larsen scheme</span>
 
-<span class="sd">      # Use monodomain equations as the PDE model</span>
-<span class="sd">      ps[&quot;pde_solver&quot;] = &quot;monodomain&quot;</span>
-<span class="sd">      # Use direct linear solver of the PDEs</span>
-<span class="sd">      ps[&quot;MonodomainSolver&quot;][&quot;linear_solver_type&quot;] = &quot;direct&quot;</span>
-<span class="sd">      # Use backward Euler for temporal discretization for the PDEs</span>
-<span class="sd">      ps[&quot;MonodomainSolver&quot;][&quot;theta&quot;] = 1.0</span>
+<span class="sd">      ps[&quot;pde_solver&quot;] = &quot;monodomain&quot;                         # Use monodomain equations as the PDE model</span>
+<span class="sd">      ps[&quot;MonodomainSolver&quot;][&quot;linear_solver_type&quot;] = &quot;direct&quot; # Use direct linear solver of the PDEs</span>
+<span class="sd">      ps[&quot;MonodomainSolver&quot;][&quot;theta&quot;] = 1.0                   # Use backward Euler for temporal discretization for the PDEs</span>
 
 <span class="sd">      solver = SplittingSolver(cm, params=ps)</span>
 
@@ -769,7 +770,7 @@ document.write(`
 <span class="sd">          info(SplittingSolver.default_parameters(), True)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">params</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;SplittingSolver&quot;</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;SplittingSolver&quot;</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;theta&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;apply_stimulus_current_to_pde&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -780,7 +781,7 @@ document.write(`
                 <span class="s2">&quot;CardiacODESolver&quot;</span><span class="p">,</span>
                 <span class="nb">set</span><span class="p">([</span><span class="s2">&quot;BasicCardiacODESolver&quot;</span><span class="p">,</span> <span class="s2">&quot;CardiacODESolver&quot;</span><span class="p">]),</span>
             <span class="p">)</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">except</span><span class="p">:</span>
             <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pde_solver&quot;</span><span class="p">,</span> <span class="s2">&quot;bidomain&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;bidomain&quot;</span><span class="p">,</span> <span class="s2">&quot;monodomain&quot;</span><span class="p">])</span>
             <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
                 <span class="s2">&quot;ode_solver_choice&quot;</span><span class="p">,</span>

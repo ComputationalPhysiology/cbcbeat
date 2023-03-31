@@ -23,7 +23,7 @@ assimillation or other inverse problems.
 cbcbeat is based on the finite element functionality provided by the
 FEniCS Project software, the automated derivation and computation of
 adjoints offered by the dolfin-adjoint software and cardiac cell
-models from the CellML repository.
+models from the CellML repository. 
 
 cbcbeat originates from the `Center for Biomedical Computing
 <http://cbc.simula.no>`__, a Norwegian Centre of Excellence, hosted by
@@ -81,9 +81,9 @@ run the tests.
 
 cbcbeat uses GitHub issues for automated and continuous testing,
 see the current test status of cbcbeat here:
-
+ 
   https://github.com/ComputationalPhysiology/cbcbeat/issues
-
+  
 Contributions:
 ==============
 
@@ -118,8 +118,8 @@ API documentation:
 
 .. toctree::
    :maxdepth: 2
-   :numbered:
-
+   :numbered:              
+              
    cbcbeat
 
 Indices and tables

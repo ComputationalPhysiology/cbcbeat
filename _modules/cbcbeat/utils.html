@@ -228,27 +228,32 @@ document.write(`
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Marie E. Rognes (meg@simula.no), 2012--2013&quot;</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;state_space&quot;</span><span class="p">,</span> <span class="s2">&quot;end_of_time&quot;</span><span class="p">,</span> <span class="s2">&quot;convergence_rate&quot;</span><span class="p">,</span> <span class="s2">&quot;Projecter&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;state_space&quot;</span><span class="p">,</span> <span class="s2">&quot;end_of_time&quot;</span><span class="p">,</span> <span class="s2">&quot;convergence_rate&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;Projecter&quot;</span><span class="p">]</span>
 
 <span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">dolfin</span>
-<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">backend</span><span class="p">,</span> <span class="n">has_dolfin_adjoint</span>
+<span class="kn">from</span> <span class="nn">cbcbeat.dolfinimport</span> <span class="kn">import</span> <span class="n">dolfin</span><span class="p">,</span> <span class="n">dolfin_adjoint</span>
 <span class="kn">from</span> <span class="nn">dolfin.cpp.log</span> <span class="kn">import</span> <span class="n">log</span><span class="p">,</span> <span class="n">LogLevel</span>
 
+<span class="k">if</span> <span class="n">dolfin_adjoint</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">dolfin_adjoint</span> <span class="kn">import</span> <span class="n">assemble</span><span class="p">,</span> <span class="n">LUSolver</span><span class="p">,</span> <span class="n">KrylovSolver</span>
+    <span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="n">parameters</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">dolfin</span> <span class="kn">import</span> <span class="n">assemble</span><span class="p">,</span> <span class="n">LUSolver</span><span class="p">,</span> <span class="n">KrylovSolver</span><span class="p">,</span> <span class="n">parameters</span>
 
 <span class="k">def</span> <span class="nf">annotate_kwargs</span><span class="p">(</span><span class="n">ba_parameters</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_dolfin_adjoint</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dolfin_adjoint</span><span class="p">:</span>
         <span class="k">return</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ba_parameters</span><span class="p">[</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;annotate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
-    <span class="k">if</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;adjoint&quot;</span><span class="p">][</span><span class="s2">&quot;stop_annotating&quot;</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;adjoint&quot;</span><span class="p">][</span><span class="s2">&quot;stop_annotating&quot;</span><span class="p">]:</span>
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;annotate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;annotate&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 
-
 <span class="k">def</span> <span class="nf">splat</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">vs</span><span class="o">.</span><span class="n">function_space</span><span class="p">()</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">()</span><span class="o">.</span><span class="n">num_sub_elements</span><span class="p">()</span> <span class="o">==</span> <span class="n">dim</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="n">vs</span><span class="o">.</span><span class="n">function_space</span><span class="p">()</span><span class="o">.</span><span class="n">ufl_element</span><span class="p">()</span><span class="o">.</span><span class="n">num_sub_elements</span><span class="p">()</span><span class="o">==</span><span class="n">dim</span><span class="p">:</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">dim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">s</span> <span class="o">=</span> <span class="n">vs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -258,7 +263,6 @@ document.write(`
         <span class="n">v</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">vs</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">v</span><span class="p">,</span> <span class="n">s</span>
-
 
 <div class="viewcode-block" id="state_space"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.utils.state_space">[docs]</a><span class="k">def</span> <span class="nf">state_space</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return function space for the state variables.</span>
@@ -284,7 +288,6 @@ document.write(`
         <span class="n">S</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">FunctionSpace</span><span class="p">(</span><span class="n">domain</span><span class="p">,</span> <span class="n">family</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">S</span></div>
 
-
 <div class="viewcode-block" id="end_of_time"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.utils.end_of_time">[docs]</a><span class="k">def</span> <span class="nf">end_of_time</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return True if the interval (t0, t1) is the last before the end</span>
@@ -292,12 +295,10 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">t1</span> <span class="o">+</span> <span class="n">dt</span><span class="p">)</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">DOLFIN_EPS</span><span class="p">)</span></div>
 
-
 <span class="k">class</span> <span class="nc">TimeStepper</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A helper object that keep track of simulated time</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">annotate</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        *Arguments*</span>
@@ -313,21 +314,14 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">annotate</span> <span class="o">=</span> <span class="n">annotate</span>
 
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span>
-            <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span>
-            <span class="ow">or</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">)</span>
-        <span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s2">&quot;expected tuple or list of size 2 with scalars for &quot;</span>
-                <span class="s2">&quot;the interval argument&quot;</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> \
+               <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">interval</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expected tuple or list of size 2 with scalars for &quot;</span>\
+                            <span class="s2">&quot;the interval argument&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">interval</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">interval</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Start time need to be larger than stop time: &quot;</span>
-                <span class="s2">&quot;interval[0] &lt; interval[1]&quot;</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Start time need to be larger than stop time: &quot;</span>\
+                             <span class="s2">&quot;interval[0] &lt; interval[1]&quot;</span><span class="p">)</span>
 
         <span class="c1"># Store time interval</span>
         <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T1</span><span class="p">)</span> <span class="o">=</span> <span class="n">interval</span>
@@ -339,27 +333,19 @@ document.write(`
             <span class="n">dt</span> <span class="o">=</span> <span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">,</span> <span class="n">dt</span><span class="p">)]</span>
 
         <span class="c1"># Check that all dt are tuples of size 2 with either floats or ints.</span>
-        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
-            <span class="p">(</span>
-                <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
-                <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span>
-                <span class="ow">or</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">item</span><span class="p">)</span>
-            <span class="p">)</span>
-            <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dt</span>
-        <span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="s2">&quot;expected list of tuples of size 2 with scalars for &quot;</span> <span class="s2">&quot;the dt argument&quot;</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> \
+                <span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">!=</span><span class="mi">2</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span> \
+                                        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">item</span><span class="p">))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">dt</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;expected list of tuples of size 2 with scalars for &quot;</span>\
+                            <span class="s2">&quot;the dt argument&quot;</span><span class="p">)</span>
 
         <span class="c1"># Check that first time value of dt is the same as the first given in interval</span>
         <span class="k">if</span> <span class="n">dt</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;expected first time value of dt to be the same as &quot;</span>
-                <span class="s2">&quot;the first value of time interval.&quot;</span>
-            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;expected first time value of dt to be the same as &quot;</span>\
+                             <span class="s2">&quot;the first value of time interval.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Check that all time values given in dt are increasing</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">dt</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">dt</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">dt</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">dt</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;expected all time values in dt to be increasing&quot;</span><span class="p">)</span>
 
         <span class="c1"># Check that all time step values given in dt are positive</span>
@@ -376,11 +362,11 @@ document.write(`
         <span class="c1"># Keep track of dt index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dt_ind</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T0</span>
-        <span class="c1"># self.t1 = self.T0 + self.dt</span>
+        <span class="c1">#self.t1 = self.T0 + self.dt</span>
 
         <span class="c1"># Step through time steps until at end time.</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate</span> <span class="ow">and</span> <span class="n">has_dolfin_adjoint</span><span class="p">:</span>
-            <span class="n">backend</span><span class="o">.</span><span class="n">adj_start_timestep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate</span> <span class="ow">and</span> <span class="n">dolfin_adjoint</span><span class="p">:</span>
+            <span class="n">dolfin_adjoint</span><span class="o">.</span><span class="n">adj_start_timestep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T0</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -389,6 +375,7 @@ document.write(`
         <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-10</span>
 
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+
             <span class="c1"># Get next t1</span>
             <span class="n">t1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_t1</span><span class="p">()</span>
 
@@ -396,14 +383,14 @@ document.write(`
             <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span><span class="p">,</span> <span class="n">t1</span>
 
             <span class="c1"># Break if this is the last step</span>
-            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">T1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">eps</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate</span> <span class="ow">and</span> <span class="n">has_dolfin_adjoint</span><span class="p">:</span>
-                    <span class="n">backend</span><span class="o">.</span><span class="n">adj_inc_timestep</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">finished</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">t1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">T1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">eps</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate</span> <span class="ow">and</span> <span class="n">dolfin_adjoint</span><span class="p">:</span>
+                    <span class="n">dolfin_adjoint</span><span class="o">.</span><span class="n">adj_inc_timestep</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t1</span><span class="p">,</span> <span class="n">finished</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
                 <span class="k">break</span>
 
             <span class="c1"># Move to next time</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate</span> <span class="ow">and</span> <span class="n">has_dolfin_adjoint</span><span class="p">:</span>
-                <span class="n">backend</span><span class="o">.</span><span class="n">adj_inc_timestep</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">annotate</span> <span class="ow">and</span> <span class="n">dolfin_adjoint</span><span class="p">:</span>
+                <span class="n">dolfin_adjoint</span><span class="o">.</span><span class="n">adj_inc_timestep</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">t1</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">=</span> <span class="n">t1</span>
 
@@ -411,16 +398,15 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the time of next end interval</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt_ind</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt_ind</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span>
         <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dt_ind</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">time_to_switch_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dt_ind</span> <span class="o">+</span> <span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">time_to_switch_dt</span> <span class="o">-</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">DOLFIN_EPS</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">+</span> <span class="n">dt</span><span class="p">:</span>
+        <span class="n">time_to_switch_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_dt_ind</span><span class="o">+</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">time_to_switch_dt</span> <span class="o">-</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">DOLFIN_EPS</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">+</span> <span class="n">dt</span> <span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">t0</span> <span class="o">+</span> <span class="n">dt</span>
 
         <span class="c1"># Update dt index</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dt_ind</span> <span class="o">+=</span> <span class="mi">1</span>
         <span class="k">return</span> <span class="n">time_to_switch_dt</span>
-
 
 <div class="viewcode-block" id="convergence_rate"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.utils.convergence_rate">[docs]</a><span class="k">def</span> <span class="nf">convergence_rate</span><span class="p">(</span><span class="n">hs</span><span class="p">,</span> <span class="n">errors</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -431,16 +417,13 @@ document.write(`
 <span class="sd">      errors = C hs^r</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">hs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">),</span> <span class="s2">&quot;hs and errors must have same length.&quot;</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hs</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)),</span> <span class="s2">&quot;hs and errors must have same length.&quot;</span>
     <span class="c1"># Compute converence rates</span>
-    <span class="n">rates</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">errors</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">errors</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">/</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">hs</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hs</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="p">]</span>
+    <span class="n">rates</span> <span class="o">=</span> <span class="p">[(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">errors</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">errors</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span><span class="o">/</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">hs</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hs</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
 
     <span class="c1"># Return convergence rates</span>
     <span class="k">return</span> <span class="n">rates</span></div>
-
 
 <div class="viewcode-block" id="Projecter"><a class="viewcode-back" href="../../cbcbeat.html#cbcbeat.utils.Projecter">[docs]</a><span class="k">class</span> <span class="nc">Projecter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Customized class for repeated projection.</span>
@@ -468,23 +451,22 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">V</span> <span class="o">=</span> <span class="n">V</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">TrialFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">v</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">TestFunction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">V</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">m</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">dolfin</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">M</span> <span class="o">=</span> <span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">m</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Vector</span><span class="p">(</span><span class="n">V</span><span class="o">.</span><span class="n">mesh</span><span class="p">()</span><span class="o">.</span><span class="n">mpi_comm</span><span class="p">(),</span> <span class="n">V</span><span class="o">.</span><span class="n">dim</span><span class="p">())</span>
 
         <span class="n">solver_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;linear_solver_type&quot;</span><span class="p">]</span>
-        <span class="k">assert</span> <span class="p">(</span>
-            <span class="n">solver_type</span> <span class="o">==</span> <span class="s2">&quot;lu&quot;</span> <span class="ow">or</span> <span class="n">solver_type</span> <span class="o">==</span> <span class="s2">&quot;cg&quot;</span>
-        <span class="p">),</span> <span class="s2">&quot;Expecting &#39;linear_solver_type&#39; to be &#39;lu&#39; or &#39;cg&#39;&quot;</span>
+        <span class="k">assert</span><span class="p">(</span><span class="n">solver_type</span> <span class="o">==</span> <span class="s2">&quot;lu&quot;</span> <span class="ow">or</span> <span class="n">solver_type</span> <span class="o">==</span> <span class="s2">&quot;cg&quot;</span><span class="p">),</span>  \
+            <span class="s2">&quot;Expecting &#39;linear_solver_type&#39; to be &#39;lu&#39; or &#39;cg&#39;&quot;</span>
         <span class="k">if</span> <span class="n">solver_type</span> <span class="o">==</span> <span class="s2">&quot;lu&quot;</span><span class="p">:</span>
             <span class="n">log</span><span class="p">(</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">TRACE</span><span class="p">,</span> <span class="s2">&quot;Setting up direct solver for projecter&quot;</span><span class="p">)</span>
 
             <span class="c1"># Customize LU solver (reuse everything)</span>
-            <span class="n">solver</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">LUSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
+            <span class="n">solver</span> <span class="o">=</span> <span class="n">LUSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">log</span><span class="p">(</span><span class="n">LogLevel</span><span class="o">.</span><span class="n">TRACE</span><span class="p">,</span> <span class="s2">&quot;Setting up iterative solver for projecter&quot;</span><span class="p">)</span>
             <span class="c1"># Customize Krylov solver (reuse everything)</span>
-            <span class="n">solver</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">KrylovSolver</span><span class="p">(</span><span class="s2">&quot;cg&quot;</span><span class="p">,</span> <span class="s2">&quot;ilu&quot;</span><span class="p">)</span>
+            <span class="n">solver</span> <span class="o">=</span> <span class="n">KrylovSolver</span><span class="p">(</span><span class="s2">&quot;cg&quot;</span><span class="p">,</span> <span class="s2">&quot;ilu&quot;</span><span class="p">)</span>
             <span class="n">solver</span><span class="o">.</span><span class="n">set_operator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">M</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">has_parameter</span><span class="p">(</span><span class="s2">&quot;preconditioner&quot;</span><span class="p">):</span>
                 <span class="n">solver</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;preconditioner&quot;</span><span class="p">][</span><span class="s2">&quot;structure&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;same&quot;</span>
@@ -509,8 +491,8 @@ document.write(`
 <span class="sd">          u (:py:class:`dolfin.Function`)</span>
 <span class="sd">            The result of the projection</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">L</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span> <span class="o">*</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
-        <span class="n">backend</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">tensor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">inner</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">v</span><span class="p">)</span><span class="o">*</span><span class="n">dolfin</span><span class="o">.</span><span class="n">dx</span><span class="p">()</span>
+        <span class="n">assemble</span><span class="p">(</span><span class="n">L</span><span class="p">,</span> <span class="n">tensor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">vector</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">b</span><span class="p">)</span></div>
 </pre></div>
 
