@@ -5,33 +5,35 @@ splitting solver.
 """
 
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
-__all__ = []
 
-import pytest
 
 from cbcbeat import CardiacModel, NoCellModel
 from cbcbeat import BasicSplittingSolver
-from cbcbeat import Constant, UnitSquareMesh
-from cbcbeat import Function, Expression, errornorm
+from cbcbeat import backend
+import dolfin
+
 import cbcbeat
 
-if cbcbeat.dolfin_adjoint:
-    from cbcbeat import dolfin_adjoint, adj_reset
+if cbcbeat.dolfinimport.has_dolfin_adjoint:
+    from dolfin_adjoint import adj_reset
 
 from cbcbeat.utils import convergence_rate
 from testutils import slow
 
-def main(N, dt, T, theta):
 
-    if cbcbeat.dolfin_adjoint:
+def main(N, dt, T, theta):
+    if cbcbeat.dolfinimport.has_dolfin_adjoint:
         adj_reset()
 
     # Create cardiac model
-    mesh = UnitSquareMesh(N, N)
-    time = Constant(0.0)
+    mesh = dolfin.UnitSquareMesh(N, N)
+    time = backend.Constant(0.0)
     cell_model = NoCellModel()
-    ac_str = "cos(t)*cos(2*pi*x[0])*cos(2*pi*x[1]) + 4*pow(pi, 2)*cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)"
-    stimulus = Expression(ac_str, t=time, degree=3)
+    ac_str = (
+        "cos(t)*cos(2*pi*x[0])*cos(2*pi*x[1]) "
+        "+ 4*pow(pi, 2)*cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)"
+    )
+    stimulus = dolfin.Expression(ac_str, t=time, degree=3)
     heart = CardiacModel(mesh, time, 1.0, 1.0, cell_model, stimulus=stimulus)
 
     # Set-up solver
@@ -43,27 +45,29 @@ def main(N, dt, T, theta):
     # Define exact solution (Note: v is returned at end of time
     # interval(s), u is computed at somewhere in the time interval
     # depending on theta)
-    v_exact = Expression("cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)", t=T, degree=3)
-    u_exact = Expression("-cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)/2.0",
-                         t=T - (1 - theta)*dt, degree=3)
+    v_exact = dolfin.Expression("cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)", t=T, degree=3)
+    u_exact = dolfin.Expression(
+        "-cos(2*pi*x[0])*cos(2*pi*x[1])*sin(t)/2.0", t=T - (1 - theta) * dt, degree=3
+    )
 
     # Define initial condition(s)
-    vs0 = Function(solver.VS)
+    vs0 = backend.Function(solver.VS)
     (vs_, vs, vur) = solver.solution_fields()
     vs_.assign(vs0)
 
     # Solve
     solutions = solver.solve((0, T), dt)
-    for (timestep, (vs_, vs, vur)) in solutions:
+    for timestep, (vs_, vs, vur) in solutions:
         continue
 
     # Compute errors
     (v, s) = vs.split(deepcopy=True)
-    v_error = errornorm(v_exact, v, "L2", degree_rise=2)
+    v_error = dolfin.errornorm(v_exact, v, "L2", degree_rise=2)
     (v, u, r) = vur.split(deepcopy=True)
-    u_error = errornorm(u_exact, u, "L2", degree_rise=2)
+    u_error = dolfin.errornorm(u_exact, u, "L2", degree_rise=2)
 
     return (v_error, u_error, mesh.hmin(), dt, T)
+
 
 @slow
 def test_analytic_bidomain():
@@ -71,13 +75,13 @@ def test_analytic_bidomain():
 
     # Create domain
     level = 0
-    N = 10*(2**level)
-    dt = 0.01/(2**level)
+    N = 10 * (2**level)
+    dt = 0.01 / (2**level)
     T = 0.1
     (v_error, u_error, h, dt, T) = main(N, dt, T, 0.5)
 
-    #v_reference = 4.1152719193176370e-03 # with degree = 5 and degree_rise=5
-    #u_reference = 2.0271098018943513e-03 # with degree = 5 and degree_rise=5
+    # v_reference = 4.1152719193176370e-03 # with degree = 5 and degree_rise=5
+    # u_reference = 2.0271098018943513e-03 # with degree = 5 and degree_rise=5
     if level == 0:
         v_reference = 4.1142235248997714e-03
         u_reference = 2.0266633058042697e-03
@@ -91,12 +95,13 @@ def test_analytic_bidomain():
     # Compute errors
     v_diff = abs(v_error - v_reference)
     u_diff = abs(u_error - u_reference)
-    tolerance = 1.e-9
+    tolerance = 1.0e-9
     msg = "Maximal %s value does not match reference: diff is %.16e"
     print("v_error = %.16e" % v_error)
     print("u_error = %.16e" % u_error)
-    assert (v_diff < tolerance), msg % ("v", v_diff)
-    assert (u_diff < tolerance), msg % ("u", u_diff)
+    assert v_diff < tolerance, msg % ("v", v_diff)
+    assert u_diff < tolerance, msg % ("u", u_diff)
+
 
 @slow
 def test_spatial_and_temporal_convergence():
@@ -110,8 +115,8 @@ def test_spatial_and_temporal_convergence():
     theta = 0.5
     N = 10
     for level in (0, 1, 2):
-        a = dt/(2**level)
-        (v_error, u_error, h, a, T) = main(N*(2**level), a, T, theta)
+        a = dt / (2**level)
+        (v_error, u_error, h, a, T) = main(N * (2**level), a, T, theta)
         v_errors.append(v_error)
         u_errors.append(u_error)
         dts.append(a)

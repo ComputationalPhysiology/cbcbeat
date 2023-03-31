@@ -8,24 +8,25 @@ check that maximal v/s values do not regress
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["TestBasicSingleCellSolver"]
 
-import pytest
 
-from cbcbeat import Expression, Constant, Parameters, dolfin_adjoint
 from cbcbeat import FitzHughNagumoManual, CardiacCellModel
 from cbcbeat import BasicSingleCellSolver
 import cbcbeat
 
+from dolfin import Expression, Parameters
+
 try:
-    from cbcbeat import UserExpression
+    from dolfin import UserExpression
+
     user_expression = UserExpression
-except:
+except ImportError:
     user_expression = Expression
     pass
 
 from testutils import slow
 
-class TestBasicSingleCellSolver:
 
+class TestBasicSingleCellSolver:
     @slow
     def test_fitzhugh_nagumo_manual(self):
         """Test that the manually written FitzHugh-Nagumo model gives
@@ -33,24 +34,24 @@ class TestBasicSingleCellSolver:
         2006."""
 
         class Stimulus(user_expression):
-            
             def __init__(self, t, **kwargs):
                 self.t = t
                 super().__init__(**kwargs)
-                
+
             def eval(self, value, x):
                 if float(self.t) >= 50 and float(self.t) < 60:
                     v_amp = 125
-                    value[0] = 0.05*v_amp
+                    value[0] = 0.05 * v_amp
                 else:
                     value[0] = 0.0
 
-        if cbcbeat.dolfin_adjoint:
+        if cbcbeat.dolfinimport.has_dolfin_adjoint:
             from dolfin_adjoint import adj_reset
+
             adj_reset()
 
         cell = FitzHughNagumoManual()
-        time = Constant(0.0)
+        time = cbcbeat.backend.Constant(0.0)
         cell.stimulus = Stimulus(t=time, degree=0)
         solver = BasicSingleCellSolver(cell, time)
 
@@ -69,40 +70,41 @@ class TestBasicSingleCellSolver:
 
         # Solve
         solutions = solver.solve(interval, dt=dt)
-        for (timestep, vs) in solutions:
+        for timestep, vs in solutions:
             (t0, t1) = timestep
-            times += [(t0 + t1)/2]
+            times += [(t0 + t1) / 2]
 
             v_values += [vs.vector()[0]]
             s_values += [vs.vector()[1]]
 
         # Regression test
-        v_max_reference = 2.6883308148064152e+01
-        s_max_reference = 6.8660144687023219e+01
-        tolerance = 1.e-14
+        v_max_reference = 2.6883308148064152e01
+        s_max_reference = 6.8660144687023219e01
+        tolerance = 1.0e-14
         print("max(v_values) %.16e" % max(v_values))
         print("max(s_values) %.16e" % max(s_values))
         msg = "Maximal %s value does not match reference: diff is %.16e"
 
         v_diff = abs(max(v_values) - v_max_reference)
         s_diff = abs(max(s_values) - s_max_reference)
-        assert (v_diff < tolerance), msg % ("v", v_diff)
-        assert (s_diff < tolerance), msg % ("s", s_diff)
+        assert v_diff < tolerance, msg % ("v", v_diff)
+        assert s_diff < tolerance, msg % ("s", s_diff)
 
         # Correctness test
         import os
+
         if int(os.environ.get("DOLFIN_NOPLOT", 0)) != 1:
             import pylab
-            pylab.plot(times, v_values, 'b*')
-            pylab.plot(times, s_values, 'r-')
+
+            pylab.plot(times, v_values, "b*")
+            pylab.plot(times, s_values, "r-")
 
     @slow
     def test_fitz_hugh_nagumo_modified(self):
-
         k = 0.00004
-        Vrest = -85.
-        Vthreshold = -70.
-        Vpeak = 40.
+        Vrest = -85.0
+        Vthreshold = -70.0
+        Vpeak = 40.0
         k = 0.00004
         l = 0.63
         b = 0.013
@@ -156,14 +158,14 @@ class TestBasicSingleCellSolver:
                 Vthreshold = self._parameters["Vthreshold"]
                 Vpeak = self._parameters["Vpeak"]
                 ist = self._parameters["ist"]
-                i =  -k*(v-Vrest)*(w+(v-Vthreshold)*(v-Vpeak))-ist;
+                i = -k * (v - Vrest) * (w + (v - Vthreshold) * (v - Vpeak)) - ist
                 return -i
 
             def F(self, v, w, time=None):
                 l = self._parameters["l"]
                 b = self._parameters["b"]
                 Vrest = self._parameters["Vrest"]
-                return l*(v-Vrest) - b*w;
+                return l * (v - Vrest) - b * w
 
             def num_states(self):
                 return 1
@@ -172,24 +174,25 @@ class TestBasicSingleCellSolver:
                 return "Modified FitzHugh-Nagumo cardiac cell model"
 
         def _run(cell):
-            if dolfin_adjoint:
+            if cbcbeat.dolfinimport.has_dolfin_adjoint:
                 from dolfin_adjoint import adj_reset
+
                 adj_reset()
 
-            solver = BasicSingleCellSolver(cell, Constant(0.0))
+            solver = BasicSingleCellSolver(cell, cbcbeat.backend.Constant(0.0))
 
             # Setup initial condition
             (vs_, vs) = solver.solution_fields()
-            vs_.vector()[0] = 30. # Non-resting state
-            vs_.vector()[1] = 0.
+            vs_.vector()[0] = 30.0  # Non-resting state
+            vs_.vector()[1] = 0.0
 
             T = 2
             solutions = solver.solve((0, T), 0.25)
             times = []
             v_values = []
             s_values = []
-            for ((t0, t1), vs) in solutions:
-                times += [0.5*(t0 + t1)]
+            for (t0, t1), vs in solutions:
+                times += [0.5 * (t0 + t1)]
                 v_values.append(vs.vector()[0])
                 s_values.append(vs.vector()[1])
 
@@ -201,27 +204,35 @@ class TestBasicSingleCellSolver:
 
         # Compare with our standard FitzHugh (reparametrized)
         v_amp = Vpeak - Vrest
-        cell_parameters = {"c_1": k*v_amp**2, "c_2": k*v_amp, "c_3": b/l,
-                           "a": (Vthreshold - Vrest)/v_amp, "b": l,
-                           "v_rest": Vrest, "v_peak": Vpeak}
+        cell_parameters = {
+            "c_1": k * v_amp**2,
+            "c_2": k * v_amp,
+            "c_3": b / l,
+            "a": (Vthreshold - Vrest) / v_amp,
+            "b": l,
+            "v_rest": Vrest,
+            "v_peak": Vpeak,
+        }
         cell = FitzHughNagumoManual(cell_parameters)
         (v_values, s_values, times) = _run(cell)
 
         msg = "Mismatch in %s value comparison, diff = %.16e"
         v_diff = abs(v_values[-1] - v_values_mod[-1])
         s_diff = abs(s_values[-1] - s_values_mod[-1])
-        assert (v_diff < 1.e-12), msg % v_diff
-        assert (s_diff < 1.e-12), msg % s_diff
+        assert v_diff < 1.0e-12, msg % v_diff
+        assert s_diff < 1.0e-12, msg % s_diff
 
         # Look at some plots
         import os
+
         if int(os.environ.get("DOLFIN_NOPLOT", 0)) != 1:
             import pylab
+
             pylab.title("Standard FitzHugh-Nagumo")
-            pylab.plot(times, v_values, 'b*')
-            pylab.plot(times, s_values, 'r-')
+            pylab.plot(times, v_values, "b*")
+            pylab.plot(times, s_values, "r-")
 
             pylab.figure()
             pylab.title("Modified FitzHugh-Nagumo")
-            pylab.plot(times_mod, v_values_mod, 'b*')
-            pylab.plot(times_mod, s_values_mod, 'r-')
+            pylab.plot(times_mod, v_values_mod, "b*")
+            pylab.plot(times_mod, s_values_mod, "r-")

@@ -16,8 +16,8 @@ __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["RogersMcCulloch"]
 
 from collections import OrderedDict
-from cbcbeat.dolfinimport import Parameters, Expression
-from cbcbeat.cellmodels import CardiacCellModel
+from cbcbeat.cellmodels.cardiaccellmodel import CardiacCellModel
+
 
 class RogersMcCulloch(CardiacCellModel):
     """The Rogers-McCulloch model is a modified FitzHughNagumo model. This
@@ -46,6 +46,7 @@ class RogersMcCulloch(CardiacCellModel):
           F(v, s) = \eta_2  (v/vp - \eta_3 s)
 
     """
+
     def __init__(self, params=None, init_conditions=None):
         "Create cardiac cell model, optionally from given parameters."
         CardiacCellModel.__init__(self, params, init_conditions)
@@ -53,14 +54,18 @@ class RogersMcCulloch(CardiacCellModel):
     @staticmethod
     def default_parameters():
         "Set-up and return default parameters."
-        params = OrderedDict([("g", 1.5), # S/(cm^2)
-                              ("v_th", 13.), # mV
-                              ("v_p", 100.), # mV
-                              ("eta_1", 4.4), # S/(cm^2)
-                              ("eta_2", 0.012),
-                              ("eta_3", 1.0)])
+        params = OrderedDict(
+            [
+                ("g", 1.5),  # S/(cm^2)
+                ("v_th", 13.0),  # mV
+                ("v_p", 100.0),  # mV
+                ("eta_1", 4.4),  # S/(cm^2)
+                ("eta_2", 0.012),
+                ("eta_3", 1.0),
+            ]
+        )
         # The original parameters of Rogers and McCulloch, 1994.
-        #params = OrderedDict([("a", 0.13),
+        # params = OrderedDict([("a", 0.13),
         #                      ("b", 0.013),
         #                      ("d", 1.),
         #                      ("c_1", 0.26),
@@ -77,13 +82,13 @@ class RogersMcCulloch(CardiacCellModel):
         v_th = self._parameters["v_th"]
         eta_1 = self._parameters["eta_1"]
         # Define current
-        i = g*v*(1 - v/v_th)*(1 - v/v_p) + eta_1*v*s
+        i = g * v * (1 - v / v_th) * (1 - v / v_p) + eta_1 * v * s
 
         # Original R&McC current
-        #a = self._parameters["a"]
-        #c_1 = self._parameters["c_1"]
-        #c_2 = self._parameters["c_2"]
-        #i = - (c_1*v*(v - a)*(1 - v) - c_2*v*s)
+        # a = self._parameters["a"]
+        # c_1 = self._parameters["c_1"]
+        # c_2 = self._parameters["c_2"]
+        # i = - (c_1*v*(v - a)*(1 - v) - c_2*v*s)
 
         return i
 
@@ -94,18 +99,17 @@ class RogersMcCulloch(CardiacCellModel):
         eta_2 = self._parameters["eta_2"]
         eta_3 = self._parameters["eta_3"]
         v_p = self._parameters["v_p"]
-        f = eta_2*(v/v_p - eta_3*s)
+        f = eta_2 * (v / v_p - eta_3 * s)
 
         # The original from R&McC 1994
-        #b = self._parameters["b"]
-        #d = self._parameters["d"]
-        #f = b*(v - d*s)
+        # b = self._parameters["b"]
+        # d = self._parameters["d"]
+        # f = b*(v - d*s)
         return f
 
     @staticmethod
     def default_initial_conditions():
-        ic = OrderedDict([("V", 0.0),
-                          ("S", 0.0)])
+        ic = OrderedDict([("V", 0.0), ("S", 0.0)])
         return ic
 
     def num_states(self):

@@ -10,8 +10,8 @@ __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["FitzHughNagumoManual"]
 
 from collections import OrderedDict
-from cbcbeat.dolfinimport import Parameters, Expression
-from cbcbeat.cellmodels import CardiacCellModel
+from cbcbeat.cellmodels.cardiaccellmodel import CardiacCellModel
+
 
 class FitzHughNagumoManual(CardiacCellModel):
     """
@@ -23,6 +23,7 @@ class FitzHughNagumoManual(CardiacCellModel):
     of the transmembrane potential v and one additional state variable
     s.
     """
+
     def __init__(self, params=None, init_conditions=None):
         "Create cardiac cell model, optionally from given parameters."
         CardiacCellModel.__init__(self, params, init_conditions)
@@ -30,13 +31,17 @@ class FitzHughNagumoManual(CardiacCellModel):
     @staticmethod
     def default_parameters():
         "Set-up and return default parameters."
-        params = OrderedDict([("a", 0.13),
-                              ("b", 0.013),
-                              ("c_1", 0.26),
-                              ("c_2", 0.1),
-                              ("c_3", 1.0),
-                              ("v_peak", 40.0),
-                              ("v_rest", -85.0)])
+        params = OrderedDict(
+            [
+                ("a", 0.13),
+                ("b", 0.013),
+                ("c_1", 0.26),
+                ("c_2", 0.1),
+                ("c_3", 1.0),
+                ("v_peak", 40.0),
+                ("v_rest", -85.0),
+            ]
+        )
         return params
 
     def I(self, v, s, time=None):
@@ -47,12 +52,14 @@ class FitzHughNagumoManual(CardiacCellModel):
         v_rest = self._parameters["v_rest"]
         v_peak = self._parameters["v_peak"]
         v_amp = v_peak - v_rest
-        v_th = v_rest + self._parameters["a"]*v_amp
+        v_th = v_rest + self._parameters["a"] * v_amp
 
         # Define current
-        i = (c_1/(v_amp**2)*(v - v_rest)*(v - v_th)*(v_peak - v)
-             - c_2/(v_amp)*(v - v_rest)*s)
-        return - i
+        i = (
+            c_1 / (v_amp**2) * (v - v_rest) * (v - v_th) * (v_peak - v)
+            - c_2 / (v_amp) * (v - v_rest) * s
+        )
+        return -i
 
     def F(self, v, s, time=None):
         "Return right-hand side for state variable evolution."
@@ -63,12 +70,11 @@ class FitzHughNagumoManual(CardiacCellModel):
         c_3 = self._parameters["c_3"]
 
         # Define model
-        return b*(v - v_rest - c_3*s)
+        return b * (v - v_rest - c_3 * s)
 
     @staticmethod
     def default_initial_conditions():
-        ic = OrderedDict([("V", -85.0),
-                          ("S", 0.0)])
+        ic = OrderedDict([("V", -85.0), ("S", 0.0)])
         return ic
 
     def num_states(self):
@@ -78,4 +84,3 @@ class FitzHughNagumoManual(CardiacCellModel):
     def __str__(self):
         "Return string representation of class."
         return "(Manual) FitzHugh-Nagumo cardiac cell model"
-

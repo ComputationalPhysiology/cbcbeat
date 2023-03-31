@@ -1,15 +1,15 @@
 ---
-title: "cbcbeat: an adjoint-enabled framework for computational cardiac electrophysiology" 
+title: "cbcbeat: an adjoint-enabled framework for computational cardiac electrophysiology"
 tags:
 - finite element method
 - cardiac electrophysiology
 - adjoint
 authors:
-- name: Marie E. Rognes 
+- name: Marie E. Rognes
   orcid: 0000-0002-6872-3710
   affiliation: 1
 - name: Patrick E. Farrell
-  orcid: 
+  orcid:
   affiliation: 2
 - name: Simon W. Funke
   orcid: 0000-0003-4709-8415
@@ -53,4 +53,4 @@ The cbcbeat source code is hosted with Bitbucket
 (https://bitbucket.org/meg/cbcbeat) with documentation on readthedocs
 (http://cbcbeat.readthedocs.io).
 
-# References 
+# References

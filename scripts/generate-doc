@@ -15,7 +15,7 @@ echo "Press return to continue."
 read x
 echo ""
 
-sphinx-apidoc -o doc -H cbcbeat -A cbcbeat-authors -e -V 0.1 cbcbeat/ 
+sphinx-apidoc -o doc -H cbcbeat -A cbcbeat-authors -e -V 0.1 cbcbeat/
 export PYTHONPATH=$PYTHONPATH:`pwd`
 cd doc
 make html

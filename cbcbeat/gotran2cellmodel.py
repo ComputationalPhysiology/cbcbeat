@@ -2,8 +2,6 @@
 # Use and modify at will
 # Last changed: 2014-09-12
 
-__all__ = ["gotran2cellmodel"]
-
 try:
     import gotran
 except Exception as e:
@@ -20,6 +18,7 @@ from gotran.codegeneration.algorithmcomponents import componentwise_derivative
 from gotran.codegeneration.codecomponent import CodeComponent
 
 from cbcbeat.gotran2dolfin import DOLFINCodeGenerator
+from ufl.log import error
 
 _class_template = """
 \"\"\"This module contains a {ModelName} cardiac cell model
@@ -87,32 +86,39 @@ class {ModelName}(CardiacCellModel):
 """
 
 _class_form = dict(
-  ModelName="NOT_IMPLEMENTED",
-  default_parameters="NOT_IMPLEMENTED",
-  I_body="NOT_IMPLEMENTED",
-  F_body="NOT_IMPLEMENTED",
-  num_states="NOT_IMPLEMENTED",
-  initial_conditions="NOT_IMPLEMENTED",
+    ModelName="NOT_IMPLEMENTED",
+    default_parameters="NOT_IMPLEMENTED",
+    I_body="NOT_IMPLEMENTED",
+    F_body="NOT_IMPLEMENTED",
+    num_states="NOT_IMPLEMENTED",
+    initial_conditions="NOT_IMPLEMENTED",
 )
+
+
+__all__ = ["CellModelGenerator"]
+
 
 class CellModelGenerator(DOLFINCodeGenerator):
     """
     Convert a Gotran model to a cbcbeat compatible cell model
     """
-    def __init__(self, ode, membrane_potential):
 
+    def __init__(self, ode, membrane_potential):
         # Init base class
         super(CellModelGenerator, self).__init__()
 
         check_arg(ode, ODE, 0)
         check_arg(membrane_potential, str, 1)
 
-        assert(not ode.is_dae)
+        assert not ode.is_dae
 
         # Capitalize first letter of name
         name = ode.name
-        self.name = name if name[0].isupper() else name[0].upper() + \
-                    (name[1:] if len(name) > 1 else "")
+        self.name = (
+            name
+            if name[0].isupper()
+            else name[0].upper() + (name[1:] if len(name) > 1 else "")
+        )
 
         # Set cbcbeat compatible gotran code generation parameters
         generation_params = gotran_parameters.generation.copy()
@@ -134,48 +140,54 @@ class CellModelGenerator(DOLFINCodeGenerator):
 
         # Check that ode model has the membrane potential state name
         if membrane_potential not in ode.present_ode_objects:
-            gotran_error("Cannot find the membrane potential. ODE does not "\
-                         "contain a state with name '{0}'".format(\
-                             membrane_potential))
+            gotran_error(
+                "Cannot find the membrane potential. ODE does not "
+                "contain a state with name '{0}'".format(membrane_potential)
+            )
 
         state = ode.present_ode_objects[membrane_potential]
         if not isinstance(state, gotran.model.State):
-            gotran_error("Cannot find the membrane potential. ODE does not "\
-                         "contain a state with name '{0}'".format(\
-                             membrane_potential))
+            gotran_error(
+                "Cannot find the membrane potential. ODE does not "
+                "contain a state with name '{0}'".format(membrane_potential)
+            )
 
         # The name of the membrane potential
         self.V_name = state.name
 
         # Get the I and F expressions
-        I_ind = [ind for ind, expr in enumerate(ode.state_expressions) \
-                 if expr.state.name == self.V_name][0]
+        I_ind = [
+            ind
+            for ind, expr in enumerate(ode.state_expressions)
+            if expr.state.name == self.V_name
+        ][0]
 
         # Create gotran code component for I(s,t) (dV/dt)
-        I_comp = componentwise_derivative(ode, I_ind, \
-                                          generation_params.code,
-                                          result_name="current")
+        I_comp = componentwise_derivative(
+            ode, I_ind, generation_params.code, result_name="current"
+        )
 
         # Create gotran code component for F(s,t) (dS/dt)
         F_inds = list(range(ode.num_full_states))
         F_inds.remove(I_ind)
-        F_comp = componentwise_derivative(ode, F_inds, \
-                                          generation_params.code, \
-                                          result_name="F_expressions")
+        F_comp = componentwise_derivative(
+            ode, F_inds, generation_params.code, result_name="F_expressions"
+        )
 
         # Create the class form and start fill it
         self._class_form = _class_form.copy()
-        self._class_form["I_body"] = self.function_code(I_comp, indent=2,
-                                                        include_signature=False)
-        self._class_form["F_body"] = self.function_code(F_comp, indent=2,
-                                                        include_signature=False)
+        self._class_form["I_body"] = self.function_code(
+            I_comp, indent=2, include_signature=False
+        )
+        self._class_form["F_body"] = self.function_code(
+            F_comp, indent=2, include_signature=False
+        )
         self._class_form["num_states"] = ode.num_full_states - 1
         self._class_form["ModelName"] = self.name
         self._class_form["default_parameters"] = self.default_parameters_body(ode)
         self._class_form["initial_conditions"] = self.initial_conditions_body(ode)
 
     def _init_arguments(self, comp, default_arguments=None):
-
         check_arg(comp, CodeComponent)
         params = self.params.code
         default_arguments = default_arguments or params.default_arguments
@@ -184,11 +196,9 @@ class CellModelGenerator(DOLFINCodeGenerator):
         # full_states attribute
         # FIXME: No need for full_states here...
         states = [state.name for state in comp.root.full_states]
-        parameters = comp.root.parameters
         used_parameters = comp.used_parameters
 
         num_states = comp.root.num_full_states
-        num_parameters = comp.root.num_parameters
 
         # Start building body
         body_lines = []
@@ -203,14 +213,15 @@ class CellModelGenerator(DOLFINCodeGenerator):
             if states[0] != "s":
                 body_lines.append("{0} = s".format(states[0]))
         else:
-            body_lines.append("assert(len(s) == {0})".format(num_states-1))
+            body_lines.append("assert(len(s) == {0})".format(num_states - 1))
             body_lines.append(", ".join(state_names) + " = s")
         body_lines.append("")
 
         body_lines.append("# Assign parameters")
         for param in used_parameters:
-            body_lines.append("{0} = self._parameters["\
-                              "\"{1}\"]".format(param.name, param.name))
+            body_lines.append(
+                "{0} = self._parameters[" '"{1}"]'.format(param.name, param.name)
+            )
 
         # If initilizing results
         if comp.results:
@@ -222,8 +233,7 @@ class CellModelGenerator(DOLFINCodeGenerator):
             if len(shape) > 1:
                 error("expected only result expression with rank 1")
 
-            body_lines.append("{0} = [ufl.zero()]*{1}".format(\
-                result_name, shape[0]))
+            body_lines.append("{0} = [ufl.zero()]*{1}".format(result_name, shape[0]))
 
         return body_lines
 
@@ -237,18 +247,24 @@ class CellModelGenerator(DOLFINCodeGenerator):
         """
         Generate code for the default parameter bod
         """
-        if ode.num_parameters>0:
-
+        if ode.num_parameters > 0:
             params = ode.parameters[:]
 
             param = params.pop(0)
 
-            body_lines = ["params = OrderedDict([(\"{}\", {}),".format(\
-                param.name, param.init)]
-            body_lines.extend("                      (\"{}\", {}),".format(\
-                param.name, param.init if isinstance(param.init, (float, int))\
-                                 else param.init[0]) for param in params)
-            body_lines[-1] = body_lines[-1][0:-1]+"])"
+            body_lines = [
+                'params = OrderedDict([("{}", {}),'.format(param.name, param.init)
+            ]
+            body_lines.extend(
+                '                      ("{}", {}),'.format(
+                    param.name,
+                    param.init
+                    if isinstance(param.init, (float, int))
+                    else param.init[0],
+                )
+                for param in params
+            )
+            body_lines[-1] = body_lines[-1][0:-1] + "])"
         else:
             body_lines = ["params = OrderedDict()"]
 
@@ -261,12 +277,18 @@ class CellModelGenerator(DOLFINCodeGenerator):
 
         # First get ic for v
         v_init = ode.present_ode_objects[self.V_name].init
-        s_init, s_names = zip(*[(state.init, state.name) for state in ode.full_states \
-                                if state.name != self.V_name])
-        body_lines = ["ic = OrderedDict([(\"{}\", {}),".format(\
-            self.V_name, v_init)]
-        body_lines.extend("                  (\"{}\", {}),".format(name, value) \
-                          for name, value in zip(s_names, s_init))
-        body_lines[-1] = body_lines[-1][0:-1]+"])"
+        s_init, s_names = zip(
+            *[
+                (state.init, state.name)
+                for state in ode.full_states
+                if state.name != self.V_name
+            ]
+        )
+        body_lines = ['ic = OrderedDict([("{}", {}),'.format(self.V_name, v_init)]
+        body_lines.extend(
+            '                  ("{}", {}),'.format(name, value)
+            for name, value in zip(s_names, s_init)
+        )
+        body_lines[-1] = body_lines[-1][0:-1] + "])"
 
         return "\n".join(self.indent_and_split_lines(body_lines, 2))

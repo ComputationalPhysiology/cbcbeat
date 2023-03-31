@@ -1,11 +1,12 @@
 """This module contains a base class for cardiac cell models."""
-from __future__ import division
-
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["CardiacCellModel", "MultiCellModel"]
 
-from cbcbeat.dolfinimport import Parameters, Expression, error, GenericFunction, VectorFunctionSpace, Function, DirichletBC, TrialFunction, TestFunction, solve, Measure, inner
+from ufl.log import error
+import dolfin
+from cbcbeat.dolfinimport import backend
 from collections import OrderedDict
+
 
 class CardiacCellModel:
     """
@@ -15,7 +16,7 @@ class CardiacCellModel:
     Essentially, a cell model represents a system of ordinary
     differential equations. A cell model is here described by two
     (Python) functions, named F and I. The model describes the
-    behaviour of the transmembrane potential 'v' and a number of state
+    behavior of the transmembrane potential 'v' and a number of state
     variables 's'
 
     The function F gives the right-hand side for the evolution of the
@@ -66,16 +67,18 @@ class CardiacCellModel:
         init_conditions = init_conditions or OrderedDict()
 
         if params:
-            assert isinstance(params, dict), \
-                   "expected a dict or a Parameters, as the params argument"
-            if isinstance(params, Parameters):
+            assert isinstance(
+                params, dict
+            ), "expected a dict or a Parameters, as the params argument"
+            if isinstance(params, dolfin.Parameters):
                 params = params.to_dict()
             self.set_parameters(**params)
 
         if init_conditions:
-            assert isinstance(init_conditions, dict), \
-                "expected a dict or a Parameters, as the init_condition argument"
-            if isinstance(init_conditions, Parameters):
+            assert isinstance(
+                init_conditions, dict
+            ), "expected a dict or a Parameters, as the init_condition argument"
+            if isinstance(init_conditions, dolfin.Parameters):
                 init_conditions = init_conditions.to_dict()
             self.set_initial_conditions(**init_conditions)
 
@@ -95,13 +98,21 @@ class CardiacCellModel:
         "Update parameters in model"
         for param_name, param_value in params.items():
             if param_name not in self._parameters:
-                error("'%s' is not a parameter in %s" %(param_name, self))
-            if (not isinstance(param_value, (float, int))
-                and not isinstance(param_value._cpp_object, GenericFunction)):
-                error("'%s' is not a scalar or a GenericFunction" % param_name)
-                if hasattr(param_value, "_cpp_object") and\
-                   isinstance(param_value._cpp_object, GenericFunction) and \
-                   param_value._cpp_object.value_size() != 1:
+                error("'%s' is not a parameter in %s" % (param_name, self))
+            if not isinstance(param_value, (float, int)) and not isinstance(
+                param_value._cpp_object, dolfin.cpp.function.GenericFunction
+            ):
+                error(
+                    "'%s' is not a scalar or a dolfin.cpp.function.GenericFunction"
+                    % param_name
+                )
+                if (
+                    hasattr(param_value, "_cpp_object")
+                    and isinstance(
+                        param_value._cpp_object, dolfin.cpp.function.GenericFunction
+                    )
+                    and param_value._cpp_object.value_size() != 1
+                ):
                     error("expected the value_size of '%s' to be 1" % param_name)
 
             self._parameters[param_name] = param_value
@@ -110,18 +121,29 @@ class CardiacCellModel:
         "Update initial_conditions in model"
         for init_name, init_value in init.items():
             if init_name not in self._initial_conditions:
-                error("'%s' is not a parameter in %s" %(init_name, self))
-            if not isinstance(init_value, (float, int)) and not isinstance(init_value._cpp_object, GenericFunction):
-                error("'%s' is not a scalar or a GenericFunction" % init_name)
-            if hasattr(init_value, "_cpp_object") and isinstance(init_value._cpp_object, GenericFunction) and \
-               init_value._cpp_object.value_size() != 1:
+                error("'%s' is not a parameter in %s" % (init_name, self))
+            if not isinstance(init_value, (float, int)) and not isinstance(
+                init_value._cpp_object, dolfin.cpp.function.GenericFunction
+            ):
+                error(
+                    "'%s' is not a scalar or a dolfin.cpp.function.GenericFunction"
+                    % init_name
+                )
+            if (
+                hasattr(init_value, "_cpp_object")
+                and isinstance(
+                    init_value._cpp_object, dolfin.cpp.function.GenericFunction
+                )
+                and init_value._cpp_object.value_size() != 1
+            ):
                 error("expected the value_size of '%s' to be 1" % init_name)
             self._initial_conditions[init_name] = init_value
 
     def initial_conditions(self):
         "Return initial conditions for v and s as an Expression."
-        return Expression(list(self._initial_conditions.keys()), degree=1,
-                          **self._initial_conditions)
+        return dolfin.Expression(
+            list(self._initial_conditions.keys()), degree=1, **self._initial_conditions
+        )
 
     def parameters(self):
         "Return the current parameters."
@@ -143,6 +165,7 @@ class CardiacCellModel:
     def __str__(self):
         "Return string representation of class."
         return "Some cardiac cell model"
+
 
 class MultiCellModel(CardiacCellModel):
     """
@@ -204,31 +227,32 @@ class MultiCellModel(CardiacCellModel):
         return self._cell_models[k].I(v, s, time)
 
     def initial_conditions(self):
-        "Return initial conditions for v and s as a dolfin.GenericFunction."
+        "Return initial conditions for v and s as a dolfin.dolfin.cpp.function.GenericFunction."
 
-        n = self.num_states() # (Maximal) Number of states in MultiCellModel
-        VS = VectorFunctionSpace(self.mesh(), "DG", 0, n+1)
-        vs = Function(VS)
+        n = self.num_states()  # (Maximal) Number of states in MultiCellModel
+        VS = dolfin.VectorFunctionSpace(self.mesh(), "DG", 0, n + 1)
+        vs = backend.Function(VS)
 
         markers = self.markers()
-        u = TrialFunction(VS)
-        v = TestFunction(VS)
+        u = dolfin.TrialFunction(VS)
+        v = dolfin.TestFunction(VS)
 
-        dy = Measure("dx", domain=self.mesh(), subdomain_data=markers)
+        dy = dolfin.Measure("dx", domain=self.mesh(), subdomain_data=markers)
 
         # Define projection into multiverse
-        a = inner(u, v)*dy()
+        a = dolfin.inner(u, v) * dy()
 
         Ls = list()
-        for (k, model) in enumerate(self.models()):
-            ic = model.initial_conditions() # Extract initial conditions
-            n_k = model.num_states() # Extract number of local states
-            i_k = self.keys()[k] # Extract domain index of cell model k
-            L_k = sum(ic[j]*v[j]*dy(i_k) for j in range(n_k))
+        for k, model in enumerate(self.models()):
+            ic = model.initial_conditions()  # Extract initial conditions
+            n_k = model.num_states()  # Extract number of local states
+            i_k = self.keys()[k]  # Extract domain index of cell model k
+            L_k = sum(ic[j] * v[j] * dy(i_k) for j in range(n_k))
             Ls.append(L_k)
         L = sum(Ls)
-        solve(a == L, vs)
+        backend.solve(a == L, vs)
         return vs
+
 
 # from dolfin import *
 # from cbcbeat import *

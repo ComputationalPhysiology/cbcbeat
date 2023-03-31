@@ -4,19 +4,26 @@
 
 __all__ = ["Markerwise", "handle_markerwise", "rhs_with_markerwise_field"]
 
-from cbcbeat.dolfinimport import dx, Measure
+from dolfin import dx, Measure
+from ufl.log import error
+
 
 def handle_markerwise(g, classtype):
     # Handle stimulus
-    if (g is None \
-        or isinstance(g, classtype) \
-        or isinstance(g, Markerwise) \
-        or isinstance(g, object)): ## HAHAHA
+    if (
+        g is None
+        or isinstance(g, classtype)
+        or isinstance(g, Markerwise)
+        or isinstance(g, object)
+    ):
         return g
     else:
-        msg = "Expecting stimulus to be a %s or Markerwise, not %r " \
-              % (str(classtype), g)
+        msg = "Expecting stimulus to be a %s or Markerwise, not %r " % (
+            str(classtype),
+            g,
+        )
         error(msg)
+
 
 def rhs_with_markerwise_field(g, mesh, v):
     if g is None:
@@ -25,11 +32,12 @@ def rhs_with_markerwise_field(g, mesh, v):
     elif isinstance(g, Markerwise):
         markers = g.markers()
         dz = Measure("dx", domain=mesh, subdomain_data=markers)
-        rhs = sum([g*v*dz(i) for (i, g) in zip(g.keys(), g.values())])
+        rhs = sum([g * v * dz(i) for (i, g) in zip(g.keys(), g.values())])
     else:
         dz = dx
-        rhs = g*v*dz()
+        rhs = g * v * dz()
     return (dz, rhs)
+
 
 class Markerwise(object):
     """A container class representing an object defined by a number of
@@ -56,12 +64,14 @@ class Markerwise(object):
       g = Markerwise((g0, g1), (2, 5), markers)
 
     """
+
     def __init__(self, objects, keys, markers):
         "Create Markerwise from given input."
 
         # Check input
-        assert len(objects) == len(keys), \
-            "Expecting the number of objects to equal the number of keys"
+        assert len(objects) == len(
+            keys
+        ), "Expecting the number of objects to equal the number of keys"
 
         # Store attributes:
         self._objects = dict(zip(keys, objects))
@@ -82,26 +92,3 @@ class Markerwise(object):
     def __getitem__(self, key):
         "The objects"
         return self._objects[key]
-
-if __name__ == "__main__":
-
-    from dolfin import *
-    g1 = Expression("1.0", degree=1)
-    g5 = Expression("sin(pi*x[0])", degree=3)
-
-    mesh = UnitSquareMesh(16, 16)
-
-    class SampleDomain(SubDomain):
-        def inside(self, x, on_boundary):
-            return all(x <= 0.5 + DOLFIN_EPS)
-
-    markers = MeshFunction("size_t", mesh, mesh.topology().dim(), 1)
-    domain = SampleDomain()
-    domain.mark(markers, 5)
-
-    g = Markerwise((g1, g5), (1, 5), markers)
-
-    plot(g.markers())
-    for v in g.values():
-        plot(v, mesh=mesh)
-    interactive()

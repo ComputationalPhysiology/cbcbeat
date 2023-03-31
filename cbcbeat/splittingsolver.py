@@ -64,19 +64,17 @@ __all__ = [
     "BasicSplittingSolver",
 ]
 
-from cbcbeat.dolfinimport import *
+import dolfin
+from cbcbeat.dolfinimport import backend
 
 from cbcbeat import CardiacModel
 from cbcbeat.cellsolver import BasicCardiacODESolver, CardiacODESolver
 from cbcbeat.bidomainsolver import BasicBidomainSolver, BidomainSolver
 from cbcbeat.monodomainsolver import BasicMonodomainSolver, MonodomainSolver
-from cbcbeat.utils import state_space, TimeStepper, annotate_kwargs
+from cbcbeat.utils import TimeStepper, annotate_kwargs
+from ufl.log import info_blue
 
-try:
-    progress = LogLevel.PROGRESS
-except:
-    progress = PROGRESS
-    pass
+progress = dolfin.LogLevel.PROGRESS
 
 
 class Interpolator:
@@ -94,7 +92,7 @@ def setup_merger(ode_space, vur_space):
     vur_el = vur_space.ufl_element()
 
     if ode_el.family() == vur_el.family():
-        return FunctionAssigner(ode_space, vur_space)
+        return backend.FunctionAssigner(ode_space, vur_space)
 
     return Interpolator()
 
@@ -287,15 +285,14 @@ class BasicSplittingSolver:
 
         """
 
-        params = Parameters("BasicSplittingSolver")
+        params = dolfin.Parameters("BasicSplittingSolver")
         params.add("enable_adjoint", True)
         params.add("theta", 0.5, 0.0, 1.0)
         params.add("apply_stimulus_current_to_pde", False)
         try:
             params.add("pde_solver", "bidomain", set(["bidomain", "monodomain"]))
-        except:
+        except Exception:
             params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
-            pass
 
         # Add default parameters from ODE solver, but update for V
         # space
@@ -362,7 +359,6 @@ class BasicSplittingSolver:
         )
 
         for t0, t1 in time_stepper:
-
             info_blue("Solving on t = (%g, %g)" % (t0, t1))
             self.step((t0, t1))
 
@@ -396,18 +392,18 @@ class BasicSplittingSolver:
         t = t0 + theta * dt
 
         # Compute tentative membrane potential and state (vs_star)
-        begin(progress, "Tentative ODE step")
+        dolfin.begin(progress, "Tentative ODE step")
         # Assumes that its vs_ is in the correct state, gives its vs
         # in the current state
         self.ode_solver.step((t0, t))
-        end()
+        dolfin.end()
 
         # Compute tentative potentials vu = (v, u)
-        begin(progress, "PDE step")
+        dolfin.begin(progress, "PDE step")
         # Assumes that its vs_ is in the correct state, gives vur in
         # the current state
         self.pde_solver.step((t0, t1))
-        end()
+        dolfin.end()
 
         # If first order splitting, we need to ensure that self.vs is
         # up to date, but otherwise we are done.
@@ -419,7 +415,7 @@ class BasicSplittingSolver:
             return
 
         # Otherwise, we do another ode_step:
-        begin(progress, "Corrective ODE step")
+        dolfin.begin(progress, "Corrective ODE step")
 
         # Update vs_ based on vs, the s part of vs and vs_ are now in
         # the correct state.
@@ -433,7 +429,7 @@ class BasicSplittingSolver:
         # the correct state
         self.ode_solver.step((t, t1))
 
-        end()
+        dolfin.end()
 
     def merge(self, solution):
         """
@@ -444,16 +440,16 @@ class BasicSplittingSolver:
           solution (:py:class:`dolfin.Function`)
             Function holding the combined result
         """
-        timer = Timer("Merge step")
+        timer = dolfin.Timer("Merge step")
 
-        begin(progress, "Merging")
+        dolfin.begin(progress, "Merging")
         if self.parameters["pde_solver"] == "bidomain":
             v = self.vur.sub(0)
         else:
             v = self.vur
 
         self.merger.assign(self._extract_V(solution), v, **self._annotate_kwargs)
-        end()
+        dolfin.end()
 
         timer.stop()
 
@@ -507,9 +503,12 @@ class SplittingSolver(BasicSplittingSolver):
       ps["theta"] = 1.0 # Use first order splitting
       ps["CardiacODESolver"]["scheme"] = "GRL1" # Use Generalized Rush-Larsen scheme
 
-      ps["pde_solver"] = "monodomain"                         # Use monodomain equations as the PDE model
-      ps["MonodomainSolver"]["linear_solver_type"] = "direct" # Use direct linear solver of the PDEs
-      ps["MonodomainSolver"]["theta"] = 1.0                   # Use backward Euler for temporal discretization for the PDEs
+      # Use monodomain equations as the PDE model
+      ps["pde_solver"] = "monodomain"
+      # Use direct linear solver of the PDEs
+      ps["MonodomainSolver"]["linear_solver_type"] = "direct"
+      # Use backward Euler for temporal discretization for the PDEs
+      ps["MonodomainSolver"]["theta"] = 1.0
 
       solver = SplittingSolver(cm, params=ps)
 
@@ -544,7 +543,7 @@ class SplittingSolver(BasicSplittingSolver):
           info(SplittingSolver.default_parameters(), True)
         """
 
-        params = Parameters("SplittingSolver")
+        params = dolfin.Parameters("SplittingSolver")
         params.add("enable_adjoint", True)
         params.add("theta", 0.5, 0, 1)
         params.add("apply_stimulus_current_to_pde", False)
@@ -555,7 +554,7 @@ class SplittingSolver(BasicSplittingSolver):
                 "CardiacODESolver",
                 set(["BasicCardiacODESolver", "CardiacODESolver"]),
             )
-        except:
+        except Exception:
             params.add("pde_solver", "bidomain", ["bidomain", "monodomain"])
             params.add(
                 "ode_solver_choice",

@@ -3,34 +3,35 @@ Unit tests for GOSS splitting solver
 """
 
 __author__ = "Cécile Daversin Catty (cecile@simula.no), 2022"
-__all__ = ["TestGOSSplittingSolver"]
+__all__ = ["TestGOSSSplittingSolver"]
 
 import pytest
 from pathlib import Path
 from testutils import assert_almost_equal, medium, parametrize, require_goss
-
-from cbcbeat import *
+import dolfin
+from dolfin import UnitCubeMesh, Expression
+from cbcbeat import backend, FitzHughNagumoManual, CardiacModel, SplittingSolver
 from cbcbeat.gossplittingsolver import GOSSplittingSolver
 
 
 try:
-    set_log_level(LogLevel.WARNING)
-except:
-    set_log_level(WARNING)
+    dolfin.set_log_level(dolfin.LogLevel.WARNING)
+except Exception:
+    dolfin.set_log_level(dolfin.WARNING)
     pass
 
 
 here = Path(__file__).parent.absolute()
 
 
-class TestSplittingSolver(object):
+class TestGOSSSplittingSolver(object):
     "Test functionality for the splitting solvers."
 
     def setup(self):
         self.mesh = UnitCubeMesh(5, 5, 5)
 
         # Create time
-        self.time = Constant(0.0)
+        self.time = backend.Constant(0.0)
 
         # Create stimulus
         self.stimulus = Expression("2.0*t", t=self.time, degree=1)
@@ -100,7 +101,7 @@ class TestSplittingSolver(object):
 
         # Solve
         solutions = solver.solve((self.t0, self.T), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (vs_, vs, vur) = fields
 
         vs_original = vs
@@ -123,7 +124,7 @@ class TestSplittingSolver(object):
 
         # Solve again
         solutions = solver.solve((self.t0, self.T), self.dt)
-        for (interval, fields) in solutions:
+        for interval, fields in solutions:
             (vs_, vs, vur) = fields
         assert_almost_equal(interval[1], self.T, 1e-10)
 

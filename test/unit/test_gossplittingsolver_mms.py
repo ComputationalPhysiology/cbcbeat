@@ -10,12 +10,12 @@ from pathlib import Path
 
 from testutils import medium, require_goss
 from cbcbeat.gossplittingsolver import GOSSplittingSolver
-from cbcbeat.dolfinimport import (
+from dolfin import (
     Expression,
-    Constant,
+    errornorm,
     UnitSquareMesh,
 )
-from cbcbeat import errornorm
+from cbcbeat import backend
 from cbcbeat.utils import convergence_rate
 
 
@@ -37,7 +37,7 @@ def main(N, dt, T, theta=0.5):
     ac_str += " - " + s_exact_str
     # Create data
     mesh = UnitSquareMesh(N, N)
-    time = Constant(0.0)
+    time = backend.Constant(0.0)
     import goss
 
     # We choose the FHN parameters such that s=1 and I_s=v

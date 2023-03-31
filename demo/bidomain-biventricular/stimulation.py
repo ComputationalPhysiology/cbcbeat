@@ -18,7 +18,9 @@ public:
   {
   }
 
-  void eval(Eigen::Ref<Eigen::VectorXd> values, Eigen::Ref<const Eigen::VectorXd> x, const ufc::cell& c) const
+  void eval(Eigen::Ref<Eigen::VectorXd> values,
+            Eigen::Ref<const Eigen::VectorXd> x,
+            const ufc::cell& c) const
   {
     assert(cell_data);
     assert(t);
@@ -79,7 +81,9 @@ public:
   {
   }
 
-  void eval(Eigen::Ref<Eigen::VectorXd> values, Eigen::Ref<const Eigen::VectorXd> x, const ufc::cell& c) const
+  void eval(Eigen::Ref<Eigen::VectorXd> values,
+            Eigen::Ref<const Eigen::VectorXd> x,
+            const ufc::cell& c) const
   {
     assert(cell_data);
     assert(t);
@@ -118,4 +122,3 @@ PYBIND11_MODULE(SIGNATURE, m)
 
 
 """
-

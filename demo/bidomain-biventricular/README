@@ -1,5 +1,5 @@
 In order to run this demo, please first run
- 
+
   python preprocess_conductivities.py
 
 This script will generate conductivity fields in the directory data/.

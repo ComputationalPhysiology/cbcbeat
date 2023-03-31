@@ -59,7 +59,7 @@ build_examples:
 	bin/pylit.py --overwrite yes $(EXAMPLES_IN)/bidomain-biventricular/demo_biventricular.py $(EXAMPLES_OUT)/bidomain-biventricular/demo_biventricular.rst
 
 generate_api_docs:
-	sphinx-apidoc -o . -H cbcbeat -A "M. E. Rognes, J. E. Hake, P. E. Farrell, S. W. Funke" -V 1.0 ../cbcbeat/ 
+	sphinx-apidoc -o . -H cbcbeat -A "M. E. Rognes, J. E. Hake, P. E. Farrell, S. W. Funke" -V 1.0 ../cbcbeat/
 
 html: generate_api_docs
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html

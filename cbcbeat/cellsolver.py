@@ -2,43 +2,63 @@
 
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 
-__all__ = ["BasicSingleCellSolver",
-           "BasicCardiacODESolver",
-           "CardiacODESolver",
-           "SingleCellSolver"]
+__all__ = [
+    "BasicSingleCellSolver",
+    "BasicCardiacODESolver",
+    "CardiacODESolver",
+    "SingleCellSolver",
+]
 
-from cbcbeat.dolfinimport import *
+import dolfin
+from dolfin import (
+    ForwardEuler,  # noqa:F401
+    BackwardEuler,  # noqa:F401
+    CrankNicolson,  # noqa:F401
+    RK4,  # noqa:F401
+    ESDIRK3,  # noqa:F401
+    ESDIRK4,  # noqa:F401
+    RL1,  # noqa:F401
+    RL2,  # noqa:F401
+    GRL1,  # noqa:F401
+    GRL2,  # noqa:F401
+)
+from cbcbeat.dolfinimport import backend
 from cbcbeat import CardiacCellModel, MultiCellModel
-from cbcbeat.markerwisefield import *
+from cbcbeat.markerwisefield import (
+    handle_markerwise,
+    Markerwise,
+    rhs_with_markerwise_field,
+)
 from cbcbeat.utils import state_space, TimeStepper, splat, annotate_kwargs
-from cbcbeat import zero
+import ufl
+import ufl.classes
 import cbcbeat
+from ufl.log import info_blue, error
+
 
 def point_integral_solver_default_parameters():
-
     try:
-        p = PointIntegralSolver.default_parameters()
+        p = backend.PointIntegralSolver.default_parameters()
     except AttributeError:
-        p = Parameters("point_integral_solver")
+        p = dolfin.Parameters("point_integral_solver")
         p.add("reset_stage_solutions", True)
         # Set parameters for NewtonSolver
-        pn = Parameters("newton_solver")
+        pn = dolfin.Parameters("newton_solver")
         pn.add("maximum_iterations", 40)
         pn.add("always_recompute_jacobian", False)
         pn.add("recompute_jacobian_each_solve", True)
-        pn.add("relaxation_parameter", 1., 0., 1.)
-        pn.add("relative_tolerance", 1e-10, 1e-20, 2.)
-        pn.add("absolute_tolerance", 1e-15, 1e-20, 2.)
+        pn.add("relaxation_parameter", 1.0, 0.0, 1.0)
+        pn.add("relative_tolerance", 1e-10, 1e-20, 2.0)
+        pn.add("absolute_tolerance", 1e-15, 1e-20, 2.0)
         pn.add("kappa", 0.1, 0.05, 1.0)
-        pn.add("eta_0", 1., 1e-15, 1.0)
-        pn.add("max_relative_previous_residual", 1e-1, 1e-5, 1.)
+        pn.add("eta_0", 1.0, 1e-15, 1.0)
+        pn.add("max_relative_previous_residual", 1e-1, 1e-5, 1.0)
         pn.add("reset_each_step", True)
         pn.add("report", False)
         pn.add("report_vertex", 0, 0, 32767)
         pn.add("verbose_report", False)
         p.add(pn)
     return p
-
 
 
 class BasicCardiacODESolver(object):
@@ -81,15 +101,15 @@ class BasicCardiacODESolver(object):
         A representation of the cardiac cell model(s)
 
       I_s (optional) A typically time-dependent external stimulus
-        given as a :py:class:`dolfin.GenericFunction` or a
+        given as a :py:class:`dolfin.cpp.function.GenericFunction` or a
         Markerwise. NB: it is assumed that the time dependence of I_s
         is encoded via the 'time' Constant.
 
       params (:py:class:`dolfin.Parameters`, optional)
         Solver parameters
     """
-    def __init__(self, mesh, time, model, I_s=None, params=None):
 
+    def __init__(self, mesh, time, model, I_s=None, params=None):
         # Store input
         self._mesh = mesh
         self._time = time
@@ -101,7 +121,7 @@ class BasicCardiacODESolver(object):
         self._num_states = self._model.num_states()
 
         # Handle stimulus
-        self._I_s = handle_markerwise(I_s, GenericFunction)
+        self._I_s = handle_markerwise(I_s, dolfin.cpp.function.GenericFunction)
 
         # Initialize and update parameters if given
         self.parameters = self.default_parameters()
@@ -114,18 +134,19 @@ class BasicCardiacODESolver(object):
         s_family = self.parameters["S_polynomial_family"]
         s_degree = self.parameters["S_polynomial_degree"]
 
-        if (v_family == s_family and s_degree == v_degree):
-            self.VS = VectorFunctionSpace(self._mesh, v_family, v_degree,
-                                          dim=self._num_states+1)
+        if v_family == s_family and s_degree == v_degree:
+            self.VS = dolfin.VectorFunctionSpace(
+                self._mesh, v_family, v_degree, dim=self._num_states + 1
+            )
         else:
-            V = FunctionSpace(self._mesh, v_family, v_degree)
+            V = dolfin.FunctionSpace(self._mesh, v_family, v_degree)
             S = state_space(self._mesh, self._num_states, s_family, s_degree)
-            Mx = MixedElement(V.ufl_element(), S.ufl_element())
-            self.VS = FunctionSpace(self._mesh, Mx)
+            Mx = dolfin.MixedElement(V.ufl_element(), S.ufl_element())
+            self.VS = dolfin.FunctionSpace(self._mesh, Mx)
 
         # Initialize solution fields
-        self.vs_ = Function(self.VS, name="vs_")
-        self.vs = Function(self.VS, name="vs")
+        self.vs_ = backend.Function(self.VS, name="vs_")
+        self.vs = backend.Function(self.VS, name="vs")
 
     @property
     def time(self):
@@ -139,7 +160,7 @@ class BasicCardiacODESolver(object):
         *Returns*
           A set of parameters (:py:class:`dolfin.Parameters`)
         """
-        params = Parameters("BasicCardiacODESolver")
+        params = dolfin.Parameters("BasicCardiacODESolver")
         params.add("theta", 0.5)
         params.add("V_polynomial_degree", 0)
         params.add("V_polynomial_family", "DG")
@@ -148,8 +169,10 @@ class BasicCardiacODESolver(object):
         params.add("enable_adjoint", True)
 
         # Use iterative solver as default.
-        params.add(NonlinearVariationalSolver.default_parameters())
-        params["nonlinear_variational_solver"]["newton_solver"]["linear_solver"] = "gmres"
+        params.add(backend.NonlinearVariationalSolver.default_parameters())
+        params["nonlinear_variational_solver"]["newton_solver"][
+            "linear_solver"
+        ] = "gmres"
 
         return params
 
@@ -197,13 +220,13 @@ class BasicCardiacODESolver(object):
 
         # Solve on entire interval if no interval is given.
         if dt is None:
-            dt = (T - T0)
+            dt = T - T0
 
         # Create timestepper
-        time_stepper = TimeStepper(interval, dt, \
-                                   annotate=self.parameters["enable_adjoint"])
+        time_stepper = TimeStepper(
+            interval, dt, annotate=self.parameters["enable_adjoint"]
+        )
         for t0, t1 in time_stepper:
-
             info_blue("Solving on t = (%g, %g)" % (t0, t1))
             self.step((t0, t1))
 
@@ -223,56 +246,58 @@ class BasicCardiacODESolver(object):
             The time interval (t0, t1) for the step
         """
 
-        timer = Timer("ODE step")
+        timer = dolfin.Timer("ODE step")
 
         # Check for cell meshs
-        dim = self._mesh.topology().dim()
+        self._mesh.topology().dim()
 
         # Extract time mesh
         (t0, t1) = interval
-        k_n = Constant(t1 - t0)
+        k_n = backend.Constant(t1 - t0)
 
         # Extract previous solution(s)
-        (v_, s_) = splat(self.vs_, self._num_states+1)
+        (v_, s_) = splat(self.vs_, self._num_states + 1)
 
         # Set-up current variables
-        self.vs.assign(self.vs_) # Start with good guess
-        (v, s) = splat(self.vs, self._num_states+1)
-        (w, r) = splat(TestFunction(self.VS), self._num_states+1)
+        self.vs.assign(self.vs_)  # Start with good guess
+        (v, s) = splat(self.vs, self._num_states + 1)
+        (w, r) = splat(dolfin.TestFunction(self.VS), self._num_states + 1)
 
         # Define equation based on cell model
-        Dt_v = (v - v_)/k_n
-        Dt_s = (s - s_)/k_n
+        Dt_v = (v - v_) / k_n
+        Dt_s = (s - s_) / k_n
 
         theta = self.parameters["theta"]
 
         # Set time (propagates to time-dependent variables defined via
         # self.time)
-        t = t0 + theta*(t1 - t0)
+        t = t0 + theta * (t1 - t0)
         self.time.assign(t)
 
-        v_mid = theta*v + (1.0 - theta)*v_
-        s_mid = theta*s + (1.0 - theta)*s_
+        v_mid = theta * v + (1.0 - theta) * v_
+        s_mid = theta * s + (1.0 - theta) * s_
 
         if isinstance(self._model, MultiCellModel):
-            #assert(model.mesh() == self._mesh)
+            # assert(model.mesh() == self._mesh)
 
             model = self._model
             mesh = model.mesh()
-            dy = Measure("dx", domain=mesh, subdomain_data=model.markers())
+            dy = dolfin.Measure("dx", domain=mesh, subdomain_data=model.markers())
 
             # Only allowing trivial forcing functions here
             if isinstance(self._I_s, Markerwise):
                 error("Not implemented")
-            rhs = self._I_s*w*dy()
+            rhs = self._I_s * w * dy()
 
-            n = model.num_states() # Extract number of global states
+            n = model.num_states()  # Extract number of global states
 
             # Collect contributions to lhs by iterating over the different cell models
             domains = self._model.keys()
             lhs = list()
-            for (k, model_k) in enumerate(model.models()):
-                n_k = model_k.num_states() # Extract number of local (non-trivial) states
+            for k, model_k in enumerate(model.models()):
+                n_k = (
+                    model_k.num_states()
+                )  # Extract number of local (non-trivial) states
 
                 # Extract right components of coefficients and test functions
                 # () is not the same as (1,)
@@ -281,21 +306,25 @@ class BasicCardiacODESolver(object):
                     r_k = r[0]
                     Dt_s_k = Dt_s[0]
                 else:
-                    s_mid_k = as_vector(tuple(s_mid[j] for j in range(n_k)))
-                    r_k = as_vector(tuple(r[j] for j in range(n_k)))
-                    Dt_s_k = as_vector(tuple(Dt_s[j] for j in range(n_k)))
+                    s_mid_k = dolfin.as_vector(tuple(s_mid[j] for j in range(n_k)))
+                    r_k = dolfin.as_vector(tuple(r[j] for j in range(n_k)))
+                    Dt_s_k = dolfin.as_vector(tuple(Dt_s[j] for j in range(n_k)))
 
-                i_k = domains[k] # Extract domain index of cell model k
+                i_k = domains[k]  # Extract domain index of cell model k
 
                 # Extract right currents and ion channel expressions
                 F_theta_k = self._F(v_mid, s_mid_k, time=self.time, index=i_k)
                 I_theta_k = -self._I_ion(v_mid, s_mid_k, time=self.time, index=i_k)
 
                 # Variational contribution over the relevant domain
-                a_k = ((Dt_v - I_theta_k)*w + inner(Dt_s_k, r_k) + inner(- F_theta_k, r_k))*dy(i_k)
+                a_k = (
+                    (Dt_v - I_theta_k) * w
+                    + dolfin.inner(Dt_s_k, r_k)
+                    + dolfin.inner(-F_theta_k, r_k)
+                ) * dy(i_k)
 
                 # Add s_trivial = 0 on Omega_{i_k} in variational form:
-                a_k += sum(s[j]*r[j] for j in range(n_k, n))*dy(i_k)
+                a_k += sum(s[j] * r[j] for j in range(n_k, n)) * dy(i_k)
                 lhs.append(a_k)
             lhs = sum(lhs)
 
@@ -304,15 +333,17 @@ class BasicCardiacODESolver(object):
 
             # Evaluate currents at averaged v and s. Note sign for I_theta
             F_theta = self._F(v_mid, s_mid, time=self.time)
-            I_theta = - self._I_ion(v_mid, s_mid, time=self.time)
-            lhs = (Dt_v - I_theta)*w*dz + inner(Dt_s - F_theta, r)*dz
+            I_theta = -self._I_ion(v_mid, s_mid, time=self.time)
+            lhs = (Dt_v - I_theta) * w * dz + dolfin.inner(Dt_s - F_theta, r) * dz
 
         # Set-up system of equations
         G = lhs - rhs
 
         # Solve system
-        pde = NonlinearVariationalProblem(G, self.vs, J=derivative(G, self.vs))
-        solver = NonlinearVariationalSolver(pde)
+        pde = backend.NonlinearVariationalProblem(
+            G, self.vs, J=dolfin.derivative(G, self.vs)
+        )
+        solver = backend.NonlinearVariationalSolver(pde)
         solver_params = self.parameters["nonlinear_variational_solver"]
         solver.parameters.update(solver_params)
         solver.solve()
@@ -363,10 +394,8 @@ class CardiacODESolver(object):
         Solver parameters
 
     """
+
     def __init__(self, mesh, time, model, I_s=None, params=None):
-
-        import ufl.classes
-
         # Store input
         self._mesh = mesh
         self._time = time
@@ -377,11 +406,11 @@ class CardiacODESolver(object):
         self._I_ion = self._model.I
         self._num_states = self._model.num_states()
 
-        self._I_s = handle_markerwise(I_s, GenericFunction)
+        self._I_s = handle_markerwise(I_s, dolfin.cpp.function.GenericFunction)
 
         # Create time if not given, otherwise use given time
         if time is None:
-            self._time = Constant(0.0)
+            self._time = backend.Constant(0.0)
         else:
             self._time = time
 
@@ -391,45 +420,46 @@ class CardiacODESolver(object):
             self.parameters.update(params)
 
         # Create (vector) function space for potential + states
-        self.VS = VectorFunctionSpace(self._mesh, "CG", 1,
-                                      dim=self._num_states+1)
+        self.VS = dolfin.VectorFunctionSpace(
+            self._mesh, "CG", 1, dim=self._num_states + 1
+        )
 
         # Initialize solution field
-        self.vs_ = Function(self.VS, name="vs_")
-        self.vs = Function(self.VS, name="vs")
+        self.vs_ = backend.Function(self.VS, name="vs_")
+        self.vs = backend.Function(self.VS, name="vs")
 
         # Initialize scheme
-        (v, s) = splat(self.vs, self._num_states+1)
-        (w, q) = splat(TestFunction(self.VS), self._num_states+1)
+        (v, s) = splat(self.vs, self._num_states + 1)
+        (w, q) = splat(dolfin.TestFunction(self.VS), self._num_states + 1)
 
         # Workaround to get algorithm in RL schemes working as it only
         # works for scalar expressions
         F_exprs = self._F(v, s, self._time)
 
         # MER: This looks much more complicated than it needs to be!
-        # If we have a as_vector expression
-        F_exprs_q = zero()
+        # If we have a dolfin.as_vector expression
+        F_exprs_q = ufl.zero()
         if isinstance(F_exprs, ufl.classes.ListTensor):
-            #for i, expr_i in enumerate(F_exprs.operands()):
+            # for i, expr_i in enumerate(F_exprs.operands()):
             for i, expr_i in enumerate(F_exprs.ufl_operands):
-                F_exprs_q += expr_i*q[i]
+                F_exprs_q += expr_i * q[i]
         else:
-            F_exprs_q = F_exprs*q
+            F_exprs_q = F_exprs * q
 
-        rhs = F_exprs_q - self._I_ion(v, s, self._time)*w
+        rhs = F_exprs_q - self._I_ion(v, s, self._time) * w
 
         # Handle stimulus: only handle single function case for now
         msg = "Markerwise stimulus not supported by PointIntegralSolver."
-        assert (not isinstance(self._I_s, Markerwise)), msg
+        assert not isinstance(self._I_s, Markerwise), msg
         if self._I_s:
-            rhs += self._I_s*w
+            rhs += self._I_s * w
 
         # FIXME: The application of dP was moved so adding an integral
         # is done just once. Otherwise ufl could not figure out that
         # we had only one integral...
-        self._rhs = rhs*dP()
+        self._rhs = rhs * dolfin.dP()
 
-        #sys.exit()
+        # sys.exit()
         name = self.parameters["scheme"]
         Scheme = self._name_to_scheme(name)
         self._scheme = Scheme(self._rhs, self.vs, self._time)
@@ -438,7 +468,7 @@ class CardiacODESolver(object):
         self._annotate_kwargs = annotate_kwargs(self.parameters)
 
         # Initialize solver and update its parameters
-        self._pi_solver = PointIntegralSolver(self._scheme)
+        self._pi_solver = backend.PointIntegralSolver(self._scheme)
         self._pi_solver.parameters.update(self.parameters["point_integral_solver"])
 
     def _name_to_scheme(self, name):
@@ -460,7 +490,7 @@ class CardiacODESolver(object):
         *Returns*
           A set of parameters (:py:class:`dolfin.Parameters`)
         """
-        params = Parameters("CardiacODESolver")
+        params = dolfin.Parameters("CardiacODESolver")
         params.add("scheme", "BackwardEuler")
         params.add(point_integral_solver_default_parameters())
         params.add("enable_adjoint", True)
@@ -493,14 +523,14 @@ class CardiacODESolver(object):
         # NB: The point integral solver operates on vs directly, map
         # initial condition in vs_ to vs:
 
-        timer = Timer("ODE step")
+        timer = dolfin.Timer("ODE step")
         self.vs.assign(self.vs_)
 
         (t0, t1) = interval
         dt = t1 - t0
 
         self._annotate_kwargs = annotate_kwargs(self.parameters)
-        if cbcbeat.dolfin_adjoint:
+        if cbcbeat.dolfinimport.has_dolfin_adjoint:
             self._pi_solver.step(dt, **self._annotate_kwargs)
         else:
             self._pi_solver.step(dt)
@@ -537,14 +567,14 @@ class CardiacODESolver(object):
 
         # Solve on entire interval if no interval is given.
         if dt is None:
-            dt = (T - T0)
+            dt = T - T0
 
         # Create timestepper
-        time_stepper = TimeStepper(interval, dt, \
-                                   annotate=self.parameters["enable_adjoint"])
+        time_stepper = TimeStepper(
+            interval, dt, annotate=self.parameters["enable_adjoint"]
+        )
 
         for t0, t1 in time_stepper:
-
             info_blue("Solving on t = (%g, %g)" % (t0, t1))
             self.step((t0, t1))
 
@@ -553,6 +583,7 @@ class CardiacODESolver(object):
 
             # FIXME: This eventually breaks in parallel!?
             self.vs_.assign(self.vs)
+
 
 class BasicSingleCellSolver(BasicCardiacODESolver):
     """A basic, non-optimised solver for systems of ODEs typically
@@ -600,43 +631,51 @@ class BasicSingleCellSolver(BasicCardiacODESolver):
     def __init__(self, model, time, params=None):
         "Create solver from given cell model and optional parameters."
 
-        assert isinstance(model, CardiacCellModel), \
+        assert isinstance(model, CardiacCellModel), (
             "Expecting model to be a CardiacCellModel, not %r" % model
-        assert (isinstance(time, Constant)), \
+        )
+        assert isinstance(time, backend.Constant), (
             "Expecting time to be a Constant instance, not %r" % time
-        assert isinstance(params, Parameters) or params is None, \
+        )
+        assert isinstance(params, dolfin.Parameters) or params is None, (
             "Expecting params to be a Parameters (or None), not %r" % params
+        )
 
         # Store model
         self._model = model
 
         # Define carefully chosen dummy mesh
-        mesh = UnitIntervalMesh(1)
+        mesh = dolfin.UnitIntervalMesh(1)
 
         # Extract information from cardiac cell model and ship off to
         # super-class.
-        BasicCardiacODESolver.__init__(self, mesh, time, model,
-                                       I_s=model.stimulus,
-                                       params=params)
+        BasicCardiacODESolver.__init__(
+            self, mesh, time, model, I_s=model.stimulus, params=params
+        )
+
 
 class SingleCellSolver(CardiacODESolver):
     def __init__(self, model, time, params=None):
         "Create solver from given cell model and optional parameters."
 
-        assert isinstance(model, CardiacCellModel), \
+        assert isinstance(model, CardiacCellModel), (
             "Expecting model to be a CardiacCellModel, not %r" % model
-        assert (isinstance(time, Constant)), \
+        )
+        assert isinstance(time, backend.Constant), (
             "Expecting time to be a Constant instance, not %r" % time
-        assert isinstance(params, Parameters) or params is None, \
+        )
+        assert isinstance(params, dolfin.Parameters) or params is None, (
             "Expecting params to be a Parameters (or None), not %r" % params
+        )
 
         # Store model
         self._model = model
 
         # Define carefully chosen dummy mesh
-        mesh = UnitIntervalMesh(1)
+        mesh = dolfin.UnitIntervalMesh(1)
 
         # Extract information from cardiac cell model and ship off to
         # super-class.
-        CardiacODESolver.__init__(self, mesh, time, model,
-                                  I_s=model.stimulus, params=params)
+        CardiacODESolver.__init__(
+            self, mesh, time, model, I_s=model.stimulus, params=params
+        )

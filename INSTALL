@@ -30,10 +30,10 @@ For quick testing, run
 
 See test/README for more details on running the test suite.
 
-Dependencies: 
+Dependencies:
 -------------
 
-cbcbeat depends on the following software 
+cbcbeat depends on the following software
 
 * Python 2
 
@@ -41,7 +41,7 @@ cbcbeat depends on the following software
 
   The FEniCS Project is a collection of software for automated
   solution of partial differential equations using finite element
-  methods. 
+  methods.
 
   cbcbeat is compatible with FEniCS version 2017.1.0 and 2017.2.0 (and
   possibly 2016.1.0, 2016.2.0) or development versions in between
@@ -62,7 +62,7 @@ cbcbeat depends on the following software
   discrete adjoint and tangent linear models from a DOLFIN forward
   model. NB: cbcbeat depends on dolfin-adjoint/libadjoint
 
-* [Optional] gotran: https://bitbucket.org/johanhake/gotran 
+* [Optional] gotran: https://bitbucket.org/johanhake/gotran
 
   Gotran is a general ODE translator.
 
@@ -85,7 +85,7 @@ cbcbeat depends on the following software
 
 * [Optional] py.test (pytest.org)
 
-  This testing tools is used for, well: the tests.   
+  This testing tools is used for, well: the tests.
 
 Installation with docker
 ------------------------
@@ -94,4 +94,3 @@ Installation with docker
        `docker build -t cbcbeat docker/
 3. Start docker container with
        `docker run -i -t cbcbeat`
-
