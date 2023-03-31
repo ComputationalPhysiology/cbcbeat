@@ -9,6 +9,7 @@ except Exception as e:
     raise e
 
 # Gotran imports
+from gotran.model import load_ode
 from gotran.model.ode import ODE
 from modelparameters.logger import error as gotran_error
 from modelparameters.utils import check_arg
@@ -17,7 +18,7 @@ from gotran.common.options import parameters as gotran_parameters
 from gotran.codegeneration.algorithmcomponents import componentwise_derivative
 from gotran.codegeneration.codecomponent import CodeComponent
 
-from cbcbeat.gotran2dolfin import DOLFINCodeGenerator
+from gotran.codegeneration.codegenerators import DOLFINCodeGenerator
 from ufl.log import error
 
 _class_template = """
@@ -292,3 +293,54 @@ class CellModelGenerator(DOLFINCodeGenerator):
         body_lines[-1] = body_lines[-1][0:-1] + "])"
 
         return "\n".join(self.indent_and_split_lines(body_lines, 2))
+
+
+def gotran2beat(filename, params):
+    """
+    Create a beat cell model from a gotran model
+    """
+
+    # Load Gotran model
+    ode = load_ode(filename)
+
+    # Create a Beat Cell model code generator
+    cell_gen = CellModelGenerator(ode, params.membrane_potential)
+
+    output = params.output
+
+    if output:
+        if not (len(output) > 3 and output[-3:] == ".py"):
+            output += ".py"
+    else:
+        output = filename.replace(".ode", "") + ".py"
+
+    f = open(output, "w")
+
+    f.write(cell_gen.generate())
+
+
+def main():
+    import sys
+    import os
+    from modelparameters.parameterdict import ParameterDict, Param
+
+    params = ParameterDict(
+        output=Param("", description="Specify the basename of the output file"),
+        membrane_potential=Param(
+            "V", description="The name of the " "membrane potential state."
+        ),
+    )
+    params.parse_args(usage="usage: %prog FILE [options]")  # sys.argv[2:])
+
+    if len(sys.argv) < 2:
+        raise RuntimeError("Expected a single gotran file argument")
+
+    if not os.path.isfile(sys.argv[1]):
+        raise IOError("Expected the argument to be a file")
+
+    file_name = sys.argv[1]
+    gotran2beat(file_name, params)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

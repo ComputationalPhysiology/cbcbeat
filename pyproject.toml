@@ -40,8 +40,8 @@ all = [
    "cbcbeat[dev]"
 ]
 
-# [project.scripts]
-# drug-db = "scripts.gotran2"
+[project.scripts]
+gotran2beat = "cbcbeat.gotran2cellmodel:main"
 
 [tool.setuptools]
 license-files = ["COPYING"]
