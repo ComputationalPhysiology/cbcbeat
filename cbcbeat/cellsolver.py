@@ -421,7 +421,10 @@ class CardiacODESolver(object):
 
         # Create (vector) function space for potential + states
         self.VS = dolfin.VectorFunctionSpace(
-            self._mesh, "CG", 1, dim=self._num_states + 1
+            self._mesh,
+            "CG",
+            self.parameters["polynomial_degree"],
+            dim=self._num_states + 1,
         )
 
         # Initialize solution field
@@ -492,6 +495,7 @@ class CardiacODESolver(object):
         """
         params = dolfin.Parameters("CardiacODESolver")
         params.add("scheme", "BackwardEuler")
+        params.add("polynomial_degree", 1)
         params.add(point_integral_solver_default_parameters())
         params.add("enable_adjoint", True)
 
