@@ -647,7 +647,10 @@ document.write(`
 
         <span class="c1"># Create (vector) function space for potential + states</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">VS</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">VectorFunctionSpace</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span> <span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mesh</span><span class="p">,</span>
+            <span class="s2">&quot;CG&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;polynomial_degree&quot;</span><span class="p">],</span>
+            <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_states</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Initialize solution field</span>
@@ -718,6 +721,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="n">dolfin</span><span class="o">.</span><span class="n">Parameters</span><span class="p">(</span><span class="s2">&quot;CardiacODESolver&quot;</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;scheme&quot;</span><span class="p">,</span> <span class="s2">&quot;BackwardEuler&quot;</span><span class="p">)</span>
+        <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;polynomial_degree&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">point_integral_solver_default_parameters</span><span class="p">())</span>
         <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;enable_adjoint&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
