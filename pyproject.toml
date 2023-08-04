@@ -5,40 +5,23 @@ requires = ["setuptools>=61.0.0", "wheel"]
 name = "cbcbeat"
 version = "2023.1.0"
 description = "An adjoint-enabled framework for computational cardiac electrophysiology"
-authors = [{name = "M. E. Rognes", email = "meg@simula.no"}, {name = "J.E hake"}, {name = "P.E Farrel"}, {name = "S. W. Funke"}]
-license = {file = "COPYING.LESSSER"}
-readme = "README.md"
-dependencies = [
-    "fenics-dolfin",
-    "numpy",
+authors = [
+    { name = "M. E. Rognes", email = "meg@simula.no" },
+    { name = "J.E hake" },
+    { name = "P.E Farrel" },
+    { name = "S. W. Funke" },
 ]
+license = { file = "COPYING.LESSSER" }
+readme = "README.md"
+dependencies = ["numpy"]
 
 [project.optional-dependencies]
-test = [
-    "pytest",
-    "pytest-cov",
-    "matplotlib",
-]
-goss = [
-    "pygoss",
-]
-gotran = [
-    "gotran",
-]
-pypi = [
-    "twine",
-    "build"
-]
-docs = [
-    "sphinx",
-    "sphinx_book_theme",
-]
-all = [
-   "cbcbeat[test]",
-   "cbcbeat[docs]",
-   "cbcbeat[pypi]",
-   "cbcbeat[dev]"
-]
+test = ["pytest", "pytest-cov", "matplotlib"]
+goss = ["pygoss"]
+gotran = ["gotran"]
+pypi = ["twine", "build"]
+docs = ["sphinx", "sphinx_book_theme"]
+all = ["cbcbeat[test]", "cbcbeat[docs]", "cbcbeat[pypi]", "cbcbeat[dev]"]
 
 [project.scripts]
 gotran2beat = "cbcbeat.gotran2cellmodel:main"
@@ -46,15 +29,15 @@ gotran2beat = "cbcbeat.gotran2cellmodel:main"
 [tool.setuptools]
 license-files = ["COPYING"]
 packages = ["cbcbeat", "cbcbeat.cellmodels"]
-package-dir = {cbcbeat = "cbcbeat"}
+package-dir = { cbcbeat = "cbcbeat" }
 
 
 [tool.pytest.ini_options]
 addopts = [
-   "--cov=cbcbeat",
-   "--cov-report=html",
-   "--cov-report=term-missing",
-   "-v"
+    "--cov=cbcbeat",
+    "--cov-report=html",
+    "--cov-report=term-missing",
+    "-v",
 ]
 markers = [
     "fast: mark a test as fast",
@@ -65,9 +48,7 @@ markers = [
     "xfail: mark test as failing ",
     "goss: mark test as using goss",
 ]
-testpaths = [
-    "test"
-]
+testpaths = ["test"]
 
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
@@ -100,7 +81,7 @@ exclude = [
     "dist",
     "node_modules",
     "venv",
-    "cbcbeat/__init__.py"
+    "cbcbeat/__init__.py",
 ]
 
 # Same as Black.
