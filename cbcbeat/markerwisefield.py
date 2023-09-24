@@ -5,7 +5,11 @@
 __all__ = ["Markerwise", "handle_markerwise", "rhs_with_markerwise_field"]
 
 from dolfin import dx, Measure
-from ufl.log import error
+
+try:
+    from ufl_legacy.log import error
+except ImportError:
+    from ufl.log import error
 
 
 def handle_markerwise(g, classtype):

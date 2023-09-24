@@ -19,7 +19,11 @@ from gotran.codegeneration.algorithmcomponents import componentwise_derivative
 from gotran.codegeneration.codecomponent import CodeComponent
 
 from gotran.codegeneration.codegenerators import DOLFINCodeGenerator
-from ufl.log import error
+
+try:
+    from ufl_legacy.log import error
+except ImportError:
+    from ufl.log import error
 
 _class_template = """
 \"\"\"This module contains a {ModelName} cardiac cell model

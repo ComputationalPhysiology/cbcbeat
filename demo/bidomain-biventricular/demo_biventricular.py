@@ -25,7 +25,10 @@
 #
 
 __author__ = "Marie E. Rognes (meg@simula.no) and Johan E. Hake"
-from ufl.log import info, info_blue, error
+try:
+    from ufl_legacy.log import info, info_blue, error
+except ImportError:
+    from ufl.log import info, info_blue, error
 import dolfin
 from cbcbeat import (
     backend,

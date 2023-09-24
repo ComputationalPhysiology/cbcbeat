@@ -26,12 +26,20 @@ assumes pure homogeneous Neumann boundary conditions for :math:`v`.
 # Last changed: 2013-04-18
 
 __all__ = ["BasicMonodomainSolver", "MonodomainSolver"]
-import ufl
+try:
+    import ufl_legacy as ufl
+except ImportError:
+    import ufl
+
 import dolfin
 from cbcbeat.dolfinimport import backend
 from cbcbeat.markerwisefield import rhs_with_markerwise_field
 from cbcbeat.utils import end_of_time, annotate_kwargs
-from ufl.log import debug, info, error
+
+try:
+    from ufl_legacy.log import error, debug, info
+except ImportError:
+    from ufl.log import error, debug, info
 
 
 class BasicMonodomainSolver:

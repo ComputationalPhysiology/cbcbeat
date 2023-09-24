@@ -2,7 +2,10 @@
 __author__ = "Marie E. Rognes (meg@simula.no), 2012--2013"
 __all__ = ["CardiacCellModel", "MultiCellModel"]
 
-from ufl.log import error
+try:
+    from ufl_legacy.log import error
+except ImportError:
+    from ufl.log import error
 import dolfin
 from cbcbeat.dolfinimport import backend
 from collections import OrderedDict
