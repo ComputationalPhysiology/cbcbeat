@@ -33,12 +33,16 @@ for u.
 
 __all__ = ["BasicBidomainSolver", "BidomainSolver"]
 
-import ufl
+try:
+    import ufl_legacy as ufl
+    from ufl_legacy.log import info, debug, error, warning
+except ImportError:
+    import ufl
+    from ufl.log import info, debug, error, warning
 import dolfin
 from cbcbeat.dolfinimport import backend, has_dolfin_adjoint
 from cbcbeat.markerwisefield import rhs_with_markerwise_field
 from cbcbeat.utils import end_of_time, annotate_kwargs
-from ufl.log import info, debug, error, warning
 
 
 class BasicBidomainSolver(object):

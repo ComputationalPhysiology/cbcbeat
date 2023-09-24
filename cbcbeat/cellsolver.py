@@ -30,10 +30,16 @@ from cbcbeat.markerwisefield import (
     rhs_with_markerwise_field,
 )
 from cbcbeat.utils import state_space, TimeStepper, splat, annotate_kwargs
-import ufl
-import ufl.classes
 import cbcbeat
-from ufl.log import info_blue, error
+
+try:
+    import ufl_legacy as ufl
+    from ufl_legacy import classes
+    from ufl_legacy.log import info_blue, error
+except ImportError:
+    import ufl
+    from ufl import classes
+    from ufl.log import info_blue, error
 
 
 def point_integral_solver_default_parameters():
@@ -442,7 +448,7 @@ class CardiacODESolver(object):
         # MER: This looks much more complicated than it needs to be!
         # If we have a dolfin.as_vector expression
         F_exprs_q = ufl.zero()
-        if isinstance(F_exprs, ufl.classes.ListTensor):
+        if isinstance(F_exprs, classes.ListTensor):
             # for i, expr_i in enumerate(F_exprs.operands()):
             for i, expr_i in enumerate(F_exprs.ufl_operands):
                 F_exprs_q += expr_i * q[i]

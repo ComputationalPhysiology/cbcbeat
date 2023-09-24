@@ -19,7 +19,12 @@
 
 
 # Import the cbcbeat module
-import ufl
+try:
+    import ufl_legacy as ufl
+except ImportError:
+    import ufl
+
+
 import dolfin
 import dolfin_adjoint
 from cbcbeat import (

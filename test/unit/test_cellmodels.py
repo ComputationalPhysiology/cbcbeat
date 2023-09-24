@@ -4,7 +4,11 @@ __author__ = "Marie E. Rognes (meg@simula.no), 2013 -- 2014"
 
 
 import dolfin
-import ufl
+
+try:
+    import ufl_legacy as ufl
+except ImportError:
+    import ufl
 from cbcbeat import backend
 from cbcbeat.utils import state_space
 

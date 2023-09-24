@@ -10,7 +10,11 @@ import types
 import cbcbeat
 from cbcbeat import BasicSingleCellSolver, backend
 import dolfin
-import ufl
+
+try:
+    import ufl_legacy as ufl
+except ImportError:
+    import ufl
 from modelparameters.logger import info_green
 from testutils import assert_true, assert_greater, adjoint, slow, require_dolfin_adjoint
 

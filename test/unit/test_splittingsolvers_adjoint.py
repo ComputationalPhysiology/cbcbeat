@@ -6,10 +6,15 @@ __author__ = "Simon W. Funke (simon@simula.no) \
         and Marie E. Rognes (meg@simula.no), 2014"
 __all__ = ["TestSplittingSolverAdjoint"]
 
-import ufl
+try:
+    import ufl_legacy as ufl
+    from ufl_legacy.log import info_green
+except ImportError:
+    import ufl
+    from ufl.log import info_green
 import dolfin
 from dolfin import UnitCubeMesh, Expression
-from ufl.log import info_green
+
 from cbcbeat import (
     backend,
     FitzHughNagumoManual,

@@ -14,7 +14,11 @@ import dolfin
 from cbcbeat.dolfinimport import backend
 from cbcbeat.markerwisefield import Markerwise, handle_markerwise
 from cbcbeat.cellmodels import CardiacCellModel
-from ufl.log import error
+
+try:
+    from ufl_legacy.log import error
+except ImportError:
+    from ufl.log import error
 
 # ------------------------------------------------------------------------------
 # Cardiac models

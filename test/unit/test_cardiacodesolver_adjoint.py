@@ -8,7 +8,11 @@ __author__ = (
 __all__ = ["TestCardiacODESolverAdjoint"]
 
 import pytest
-import ufl
+
+try:
+    import ufl_legacy as ufl
+except ImportError:
+    import ufl
 from cbcbeat import (
     Tentusscher_2004_mcell,
     Tentusscher_panfilov_2006_epi_cell,

@@ -8,7 +8,11 @@ This demo shows how to:
 """
 
 __author__ = "Marie E. Rognes (meg@simula.no)"
-from ufl.log import info_green
+try:
+    from ufl_legacy.log import info_green
+except ImportError:
+    from ufl.log import info_green
+
 import dolfin
 from cbcbeat import backend, Tentusscher_2004_mcell, CardiacODESolver
 

@@ -8,7 +8,10 @@ __all__ = ["TestBasicSingleCellSolver"]
 import pytest
 from testutils import medium, assert_almost_equal, parametrize
 
-from ufl.log import info_red, info_green
+try:
+    from ufl_legacy.log import info_red, info_green
+except ImportError:
+    from ufl.log import info_red, info_green
 from cbcbeat import (
     supported_cell_models,
     BasicSingleCellSolver,

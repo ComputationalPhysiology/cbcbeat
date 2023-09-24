@@ -9,7 +9,11 @@ import numpy as np
 import os
 
 from dolfin import dof_to_vertex_map, Expression, UnitIntervalMesh, MPI
-from ufl.log import info_green
+
+try:
+    from ufl_legacy.log import info_green
+except ImportError:
+    from ufl.log import info_green
 from cbcbeat import (
     NoCellModel,
     FitzHughNagumoManual,

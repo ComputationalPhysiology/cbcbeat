@@ -2,7 +2,12 @@ import random
 import cbcbeat
 import pytest
 import dolfin
-from ufl import inner, dP
+
+try:
+    from ufl_legacy import inner, dP
+except ImportError:
+    from ufl import inner, dP
+
 from dolfin import UnitSquareMesh, FunctionSpace, MixedElement, split, TestFunctions
 from cbcbeat.utils import state_space
 from cbcbeat import (

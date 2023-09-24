@@ -7,7 +7,10 @@ __author__ = (
 )
 __all__ = ["TestBidomainSolversAdjoint"]
 
-import ufl
+try:
+    import ufl_legacy as ufl
+except ImportError:
+    import ufl
 from cbcbeat import backend, BasicBidomainSolver, BidomainSolver
 from modelparameters.logger import info_green
 from dolfin import parameters, UnitCubeMesh, Expression

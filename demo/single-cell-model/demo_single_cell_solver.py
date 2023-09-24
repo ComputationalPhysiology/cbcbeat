@@ -12,7 +12,11 @@
 __author__ = "Marie E. Rognes (meg@simula.no), 2017"
 
 import math
-from ufl.log import info_green
+
+try:
+    from ufl_legacy.log import info_green
+except ImportError:
+    from ufl.log import info_green
 import pylab
 import cbcbeat
 import dolfin

@@ -52,7 +52,10 @@ from cbcbeat import dolfinimport
 # Various utility functions, mainly for internal use
 
 # NB: Workaround for FEniCS 1.7.0dev
-import ufl as _ufl
+try:
+    import ufl_legacy as _ufl
+except ImportError:
+    import ufl as _ufl
 
 _ufl.algorithms.apply_derivatives.CONDITIONAL_WORKAROUND = True
 import dolfin as _dolfin
@@ -62,10 +65,16 @@ parameters = _dolfin.parameters
 beat_parameters = _dolfin.Parameters("beat-parameters")
 beat_parameters.add("enable_adjoint", True)
 
-import ufl
-import ufl.log
-from ufl import *
-from ufl.log import *
+try:
+    import ufl_legacy as ufl
+    from ufl_legacy import *
+    from ufl_legacy.log import *
+except ImportError:
+    import ufl
+    import ufl.log
+    from ufl import *
+    from ufl.log import *
+
 from dolfin import *
 
 

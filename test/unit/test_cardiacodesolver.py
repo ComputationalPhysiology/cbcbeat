@@ -22,7 +22,11 @@ from cbcbeat import (
     Fenton_karma_1998_MLR1_altered,  # noqa: F401
     Fenton_karma_1998_BR_altered,  # noqa: F401
 )
-from ufl.log import info, info_red, info_green
+
+try:
+    from ufl_legacy.log import info, info_red, info_green
+except ImportError:
+    from ufl.log import info, info_red, info_green
 
 
 supported_schemes = [
