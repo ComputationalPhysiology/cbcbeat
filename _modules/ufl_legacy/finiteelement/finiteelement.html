@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ufl_legacy.finiteelement.finiteelement &#8212; cbcbeat 1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ufl_legacy/finiteelement/finiteelement';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">cbcbeat 1.0 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cbcbeat.html">1. cbcbeat package</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cbcbeat.cellmodels.html">1.1.1. cbcbeat.cellmodels package</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for ufl_legacy.finiteelement.finiteelement</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="s2">&quot;This module defines the UFL finite element classes.&quot;</span>
+
+<span class="c1"># Copyright (C) 2008-2016 Martin Sandve Alnæs</span>
+<span class="c1">#</span>
+<span class="c1"># This file is part of UFL (https://www.fenicsproject.org)</span>
+<span class="c1">#</span>
+<span class="c1"># SPDX-License-Identifier:    LGPL-3.0-or-later</span>
+<span class="c1">#</span>
+<span class="c1"># Modified by Kristian B. Oelgaard</span>
+<span class="c1"># Modified by Marie E. Rognes 2010, 2012</span>
+<span class="c1"># Modified by Anders Logg 2014</span>
+<span class="c1"># Modified by Massimiliano Leoni, 2016</span>
+
+<span class="kn">from</span> <span class="nn">ufl_legacy.log</span> <span class="kn">import</span> <span class="n">error</span>
+<span class="kn">from</span> <span class="nn">ufl_legacy.utils.formatting</span> <span class="kn">import</span> <span class="n">istr</span>
+<span class="kn">from</span> <span class="nn">ufl_legacy.cell</span> <span class="kn">import</span> <span class="n">as_cell</span>
+
+<span class="kn">from</span> <span class="nn">ufl_legacy.cell</span> <span class="kn">import</span> <span class="n">TensorProductCell</span>
+<span class="kn">from</span> <span class="nn">ufl_legacy.finiteelement.elementlist</span> <span class="kn">import</span> <span class="n">canonical_element_description</span><span class="p">,</span> <span class="n">simplices</span>
+<span class="kn">from</span> <span class="nn">ufl_legacy.finiteelement.finiteelementbase</span> <span class="kn">import</span> <span class="n">FiniteElementBase</span>
+
+
+<div class="viewcode-block" id="FiniteElement"><a class="viewcode-back" href="../../../cbcbeat.html#cbcbeat.FiniteElement">[docs]</a><span class="k">class</span> <span class="nc">FiniteElement</span><span class="p">(</span><span class="n">FiniteElementBase</span><span class="p">):</span>
+    <span class="s2">&quot;The basic finite element class for all simple finite elements.&quot;</span>
+    <span class="c1"># TODO: Move these to base?</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;_short_name&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;_sobolev_space&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;_mapping&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;_variant&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span>
+                <span class="n">family</span><span class="p">,</span>
+                <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">degree</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">form_degree</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">quad_scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Intercepts construction to expand CG, DG, RTCE and RTCF</span>
+<span class="sd">        spaces on TensorProductCells.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cell</span> <span class="o">=</span> <span class="n">as_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="n">TensorProductCell</span><span class="p">):</span>
+            <span class="c1"># Delay import to avoid circular dependency at module load time</span>
+            <span class="kn">from</span> <span class="nn">ufl_legacy.finiteelement.tensorproductelement</span> <span class="kn">import</span> <span class="n">TensorProductElement</span>
+            <span class="kn">from</span> <span class="nn">ufl_legacy.finiteelement.enrichedelement</span> <span class="kn">import</span> <span class="n">EnrichedElement</span>
+            <span class="kn">from</span> <span class="nn">ufl_legacy.finiteelement.hdivcurl</span> <span class="kn">import</span> <span class="n">HDivElement</span> <span class="k">as</span> <span class="n">HDiv</span><span class="p">,</span> <span class="n">HCurlElement</span> <span class="k">as</span> <span class="n">HCurl</span>
+
+            <span class="n">family</span><span class="p">,</span> <span class="n">short_name</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">value_shape</span><span class="p">,</span> <span class="n">reference_value_shape</span><span class="p">,</span> <span class="n">sobolev_space</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> \
+                <span class="n">canonical_element_description</span><span class="p">(</span><span class="n">family</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">form_degree</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">family</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;RTCF&quot;</span><span class="p">,</span> <span class="s2">&quot;RTCE&quot;</span><span class="p">]:</span>
+                <span class="n">cell_h</span><span class="p">,</span> <span class="n">cell_v</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">sub_cells</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">cell_h</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is available on TensorProductCell(interval, interval) only.&quot;</span> <span class="o">%</span> <span class="n">family</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">cell_v</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is available on TensorProductCell(interval, interval) only.&quot;</span> <span class="o">%</span> <span class="n">family</span><span class="p">)</span>
+
+                <span class="n">C_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                <span class="n">D_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;DG&quot;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="n">degree</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+
+                <span class="n">CxD_elt</span> <span class="o">=</span> <span class="n">TensorProductElement</span><span class="p">(</span><span class="n">C_elt</span><span class="p">,</span> <span class="n">D_elt</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
+                <span class="n">DxC_elt</span> <span class="o">=</span> <span class="n">TensorProductElement</span><span class="p">(</span><span class="n">D_elt</span><span class="p">,</span> <span class="n">C_elt</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">family</span> <span class="o">==</span> <span class="s2">&quot;RTCF&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">EnrichedElement</span><span class="p">(</span><span class="n">HDiv</span><span class="p">(</span><span class="n">CxD_elt</span><span class="p">),</span> <span class="n">HDiv</span><span class="p">(</span><span class="n">DxC_elt</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">family</span> <span class="o">==</span> <span class="s2">&quot;RTCE&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">EnrichedElement</span><span class="p">(</span><span class="n">HCurl</span><span class="p">(</span><span class="n">CxD_elt</span><span class="p">),</span> <span class="n">HCurl</span><span class="p">(</span><span class="n">DxC_elt</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="n">family</span> <span class="o">==</span> <span class="s2">&quot;NCF&quot;</span><span class="p">:</span>
+                <span class="n">cell_h</span><span class="p">,</span> <span class="n">cell_v</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">sub_cells</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">cell_h</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;quadrilateral&quot;</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is available on TensorProductCell(quadrilateral, interval) only.&quot;</span> <span class="o">%</span> <span class="n">family</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">cell_v</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is available on TensorProductCell(quadrilateral, interval) only.&quot;</span> <span class="o">%</span> <span class="n">family</span><span class="p">)</span>
+
+                <span class="n">Qc_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;RTCF&quot;</span><span class="p">,</span> <span class="s2">&quot;quadrilateral&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                <span class="n">Qd_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;DQ&quot;</span><span class="p">,</span> <span class="s2">&quot;quadrilateral&quot;</span><span class="p">,</span> <span class="n">degree</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+
+                <span class="n">Id_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;DG&quot;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="n">degree</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                <span class="n">Ic_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">EnrichedElement</span><span class="p">(</span><span class="n">HDiv</span><span class="p">(</span><span class="n">TensorProductElement</span><span class="p">(</span><span class="n">Qc_elt</span><span class="p">,</span> <span class="n">Id_elt</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)),</span>
+                                       <span class="n">HDiv</span><span class="p">(</span><span class="n">TensorProductElement</span><span class="p">(</span><span class="n">Qd_elt</span><span class="p">,</span> <span class="n">Ic_elt</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)))</span>
+
+            <span class="k">elif</span> <span class="n">family</span> <span class="o">==</span> <span class="s2">&quot;NCE&quot;</span><span class="p">:</span>
+                <span class="n">cell_h</span><span class="p">,</span> <span class="n">cell_v</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">sub_cells</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">cell_h</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;quadrilateral&quot;</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is available on TensorProductCell(quadrilateral, interval) only.&quot;</span> <span class="o">%</span> <span class="n">family</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">cell_v</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="o">!=</span> <span class="s2">&quot;interval&quot;</span><span class="p">:</span>
+                    <span class="n">error</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> is available on TensorProductCell(quadrilateral, interval) only.&quot;</span> <span class="o">%</span> <span class="n">family</span><span class="p">)</span>
+
+                <span class="n">Qc_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;quadrilateral&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                <span class="n">Qd_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;RTCE&quot;</span><span class="p">,</span> <span class="s2">&quot;quadrilateral&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+
+                <span class="n">Id_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;DG&quot;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="n">degree</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                <span class="n">Ic_elt</span> <span class="o">=</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="s2">&quot;interval&quot;</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">EnrichedElement</span><span class="p">(</span><span class="n">HCurl</span><span class="p">(</span><span class="n">TensorProductElement</span><span class="p">(</span><span class="n">Qc_elt</span><span class="p">,</span> <span class="n">Id_elt</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)),</span>
+                                       <span class="n">HCurl</span><span class="p">(</span><span class="n">TensorProductElement</span><span class="p">(</span><span class="n">Qd_elt</span><span class="p">,</span> <span class="n">Ic_elt</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)))</span>
+
+            <span class="k">elif</span> <span class="n">family</span> <span class="o">==</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">TensorProductElement</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">FiniteElement</span><span class="p">(</span><span class="s2">&quot;CG&quot;</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                                              <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sub_cells</span><span class="p">()],</span>
+                                            <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">family</span> <span class="o">==</span> <span class="s2">&quot;DQ&quot;</span><span class="p">:</span>
+                <span class="k">def</span> <span class="nf">dq_family</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="s2">&quot;DG&quot;</span> <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="ow">in</span> <span class="n">simplices</span> <span class="k">else</span> <span class="s2">&quot;DQ&quot;</span>
+                <span class="k">return</span> <span class="n">TensorProductElement</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">FiniteElement</span><span class="p">(</span><span class="n">dq_family</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">c</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                                              <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sub_cells</span><span class="p">()],</span>
+                                            <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">family</span> <span class="o">==</span> <span class="s2">&quot;DQ L2&quot;</span><span class="p">:</span>
+                <span class="k">def</span> <span class="nf">dq_family_l2</span><span class="p">(</span><span class="n">cell</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="s2">&quot;DG L2&quot;</span> <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="ow">in</span> <span class="n">simplices</span> <span class="k">else</span> <span class="s2">&quot;DQ L2&quot;</span>
+                <span class="k">return</span> <span class="n">TensorProductElement</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">FiniteElement</span><span class="p">(</span><span class="n">dq_family_l2</span><span class="p">(</span><span class="n">c</span><span class="p">),</span> <span class="n">c</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span>
+                                              <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">cell</span><span class="o">.</span><span class="n">sub_cells</span><span class="p">()],</span>
+                                            <span class="n">cell</span><span class="o">=</span><span class="n">cell</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">FiniteElement</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">family</span><span class="p">,</span>
+                 <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">degree</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">form_degree</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">quad_scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create finite element.</span>
+
+<span class="sd">        *Arguments*</span>
+<span class="sd">            family (string)</span>
+<span class="sd">               The finite element family</span>
+<span class="sd">            cell</span>
+<span class="sd">               The geometric cell</span>
+<span class="sd">            degree (int)</span>
+<span class="sd">               The polynomial degree (optional)</span>
+<span class="sd">            form_degree (int)</span>
+<span class="sd">               The form degree (FEEC notation, used when field is</span>
+<span class="sd">               viewed as k-form)</span>
+<span class="sd">            quad_scheme</span>
+<span class="sd">               The quadrature scheme (optional)</span>
+<span class="sd">            variant</span>
+<span class="sd">               Hint for the local basis function variant (optional)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Note: Unfortunately, dolfin sometimes passes None for</span>
+        <span class="c1"># cell. Until this is fixed, allow it:</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cell</span> <span class="o">=</span> <span class="n">as_cell</span><span class="p">(</span><span class="n">cell</span><span class="p">)</span>
+
+        <span class="n">family</span><span class="p">,</span> <span class="n">short_name</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">value_shape</span><span class="p">,</span> <span class="n">reference_value_shape</span><span class="p">,</span> <span class="n">sobolev_space</span><span class="p">,</span> <span class="n">mapping</span> <span class="o">=</span> <span class="n">canonical_element_description</span><span class="p">(</span><span class="n">family</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">form_degree</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Move these to base? Might be better to instead</span>
+        <span class="c1"># simplify base though.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sobolev_space</span> <span class="o">=</span> <span class="n">sobolev_space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span> <span class="o">=</span> <span class="n">mapping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_short_name</span> <span class="o">=</span> <span class="n">short_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variant</span> <span class="o">=</span> <span class="n">variant</span>
+
+        <span class="c1"># Finite elements on quadrilaterals and hexahedrons have an IrreducibleInt as degree</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cell</span><span class="o">.</span><span class="n">cellname</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;quadrilateral&quot;</span><span class="p">,</span> <span class="s2">&quot;hexahedron&quot;</span><span class="p">]:</span>
+                <span class="kn">from</span> <span class="nn">ufl_legacy.algorithms.estimate_degrees</span> <span class="kn">import</span> <span class="n">IrreducibleInt</span>
+                <span class="n">degree</span> <span class="o">=</span> <span class="n">IrreducibleInt</span><span class="p">(</span><span class="n">degree</span><span class="p">)</span>
+
+        <span class="c1"># Type check variant</span>
+        <span class="k">if</span> <span class="n">variant</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variant</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Illegal variant: must be string or None&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Initialize element data</span>
+        <span class="n">FiniteElementBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">family</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">quad_scheme</span><span class="p">,</span>
+                                   <span class="n">value_shape</span><span class="p">,</span> <span class="n">reference_value_shape</span><span class="p">)</span>
+
+        <span class="c1"># Cache repr string</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadrature_scheme</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">qs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">quad_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">quad_str</span> <span class="o">=</span> <span class="s2">&quot;, quad_scheme=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variant</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">var_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">var_str</span> <span class="o">=</span> <span class="s2">&quot;, variant=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_repr</span> <span class="o">=</span> <span class="s2">&quot;FiniteElement(</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s%s%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">family</span><span class="p">()),</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">()),</span> <span class="nb">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">()),</span> <span class="n">quad_str</span><span class="p">,</span> <span class="n">var_str</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="s1">&#39;&quot;&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repr</span>
+
+<div class="viewcode-block" id="FiniteElement.mapping"><a class="viewcode-back" href="../../../cbcbeat.html#cbcbeat.FiniteElement.mapping">[docs]</a>    <span class="k">def</span> <span class="nf">mapping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapping</span></div>
+
+<div class="viewcode-block" id="FiniteElement.sobolev_space"><a class="viewcode-back" href="../../../cbcbeat.html#cbcbeat.FiniteElement.sobolev_space">[docs]</a>    <span class="k">def</span> <span class="nf">sobolev_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Return the underlying Sobolev space.&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sobolev_space</span></div>
+
+<div class="viewcode-block" id="FiniteElement.variant"><a class="viewcode-back" href="../../../cbcbeat.html#cbcbeat.FiniteElement.variant">[docs]</a>    <span class="k">def</span> <span class="nf">variant</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the variant used to initialise the element.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variant</span></div>
+
+<div class="viewcode-block" id="FiniteElement.reconstruct"><a class="viewcode-back" href="../../../cbcbeat.html#cbcbeat.FiniteElement.reconstruct">[docs]</a>    <span class="k">def</span> <span class="nf">reconstruct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">family</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">degree</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quad_scheme</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct a new FiniteElement object with some properties</span>
+<span class="sd">        replaced with new values.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">family</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">family</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">family</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">cell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cell</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">degree</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">degree</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">quad_scheme</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">quad_scheme</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadrature_scheme</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">variant</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">variant</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variant</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">FiniteElement</span><span class="p">(</span><span class="n">family</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">quad_scheme</span><span class="o">=</span><span class="n">quad_scheme</span><span class="p">,</span> <span class="n">variant</span><span class="o">=</span><span class="n">variant</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Format as string for pretty printing.&quot;</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">quadrature_scheme</span><span class="p">()</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">qs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">qs</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variant</span><span class="p">()</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">&quot;(</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="s2">&quot;&lt;</span><span class="si">%s%s%s%s</span><span class="s2"> on a </span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_short_name</span><span class="p">,</span> <span class="n">istr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">()),</span>
+                                       <span class="n">qs</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">())</span>
+
+<div class="viewcode-block" id="FiniteElement.shortstr"><a class="viewcode-back" href="../../../cbcbeat.html#cbcbeat.FiniteElement.shortstr">[docs]</a>    <span class="k">def</span> <span class="nf">shortstr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s2">&quot;Format as string for pretty printing.&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s%s</span><span class="s2">(</span><span class="si">%s</span><span class="s2">,</span><span class="si">%s</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_short_name</span><span class="p">,</span> <span class="n">istr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">()),</span>
+                                <span class="n">istr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">quadrature_scheme</span><span class="p">()),</span> <span class="n">istr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">variant</span><span class="p">()))</span></div>
+
+    <span class="k">def</span> <span class="nf">__getnewargs__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the arguments which pickle needs to recreate the object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">family</span><span class="p">(),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">degree</span><span class="p">(),</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">quadrature_scheme</span><span class="p">(),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">variant</span><span class="p">())</span></div>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2014--2017, ME Rognes, J Hake, PE Farrell, SW Funke.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -33,8 +33,9 @@
     <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
@@ -53,6 +54,15 @@
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -232,10 +242,10 @@
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -243,7 +253,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -411,6 +421,31 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="cbcbeat.html#module-cbcbeat">1.13. Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.AbstractCell"><code class="docutils literal notranslate"><span class="pre">AbstractCell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.AbstractCell.geometric_dimension"><code class="docutils literal notranslate"><span class="pre">AbstractCell.geometric_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.AbstractCell.has_simplex_facets"><code class="docutils literal notranslate"><span class="pre">AbstractCell.has_simplex_facets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.AbstractCell.is_simplex"><code class="docutils literal notranslate"><span class="pre">AbstractCell.is_simplex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.AbstractCell.topological_dimension"><code class="docutils literal notranslate"><span class="pre">AbstractCell.topological_dimension()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.AbstractDomain"><code class="docutils literal notranslate"><span class="pre">AbstractDomain</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.AbstractDomain.geometric_dimension"><code class="docutils literal notranslate"><span class="pre">AbstractDomain.geometric_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.AbstractDomain.topological_dimension"><code class="docutils literal notranslate"><span class="pre">AbstractDomain.topological_dimension()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.And"><code class="docutils literal notranslate"><span class="pre">And()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument"><code class="docutils literal notranslate"><span class="pre">Argument</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">Argument.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument.number"><code class="docutils literal notranslate"><span class="pre">Argument.number()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument.part"><code class="docutils literal notranslate"><span class="pre">Argument.part()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument.ufl_domain"><code class="docutils literal notranslate"><span class="pre">Argument.ufl_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument.ufl_domains"><code class="docutils literal notranslate"><span class="pre">Argument.ufl_domains()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument.ufl_element"><code class="docutils literal notranslate"><span class="pre">Argument.ufl_element()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument.ufl_function_space"><code class="docutils literal notranslate"><span class="pre">Argument.ufl_function_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Argument.ufl_shape"><code class="docutils literal notranslate"><span class="pre">Argument.ufl_shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Arguments"><code class="docutils literal notranslate"><span class="pre">Arguments()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.BasicBidomainSolver"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.BasicBidomainSolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver.default_parameters()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.BasicBidomainSolver.solution_fields"><code class="docutils literal notranslate"><span class="pre">BasicBidomainSolver.solution_fields()</span></code></a></li>
@@ -460,6 +495,12 @@ document.write(`
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.BidomainSolver.variational_forms"><code class="docutils literal notranslate"><span class="pre">BidomainSolver.variational_forms()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.BrokenElement"><code class="docutils literal notranslate"><span class="pre">BrokenElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.BrokenElement.mapping"><code class="docutils literal notranslate"><span class="pre">BrokenElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.BrokenElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">BrokenElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.BrokenElement.shortstr"><code class="docutils literal notranslate"><span class="pre">BrokenElement.shortstr()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.CardiacCellModel"><code class="docutils literal notranslate"><span class="pre">CardiacCellModel</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.CardiacCellModel.F"><code class="docutils literal notranslate"><span class="pre">CardiacCellModel.F()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.CardiacCellModel.I"><code class="docutils literal notranslate"><span class="pre">CardiacCellModel.I()</span></code></a></li>
@@ -490,6 +531,71 @@ document.write(`
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.CardiacODESolver.step"><code class="docutils literal notranslate"><span class="pre">CardiacODESolver.step()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell"><code class="docutils literal notranslate"><span class="pre">Cell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell.cellname"><code class="docutils literal notranslate"><span class="pre">Cell.cellname()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell.facet_types"><code class="docutils literal notranslate"><span class="pre">Cell.facet_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell.has_simplex_facets"><code class="docutils literal notranslate"><span class="pre">Cell.has_simplex_facets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell.is_simplex"><code class="docutils literal notranslate"><span class="pre">Cell.is_simplex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell.num_edges"><code class="docutils literal notranslate"><span class="pre">Cell.num_edges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell.num_facets"><code class="docutils literal notranslate"><span class="pre">Cell.num_facets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell.num_vertices"><code class="docutils literal notranslate"><span class="pre">Cell.num_vertices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Cell.reconstruct"><code class="docutils literal notranslate"><span class="pre">Cell.reconstruct()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.CellDiameter"><code class="docutils literal notranslate"><span class="pre">CellDiameter</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.CellDiameter.name"><code class="docutils literal notranslate"><span class="pre">CellDiameter.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.CellNormal"><code class="docutils literal notranslate"><span class="pre">CellNormal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.CellNormal.name"><code class="docutils literal notranslate"><span class="pre">CellNormal.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.CellNormal.ufl_shape"><code class="docutils literal notranslate"><span class="pre">CellNormal.ufl_shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.CellVolume"><code class="docutils literal notranslate"><span class="pre">CellVolume</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.CellVolume.name"><code class="docutils literal notranslate"><span class="pre">CellVolume.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Circumradius"><code class="docutils literal notranslate"><span class="pre">Circumradius</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Circumradius.name"><code class="docutils literal notranslate"><span class="pre">Circumradius.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficient"><code class="docutils literal notranslate"><span class="pre">Coefficient</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficient.count"><code class="docutils literal notranslate"><span class="pre">Coefficient.count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficient.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">Coefficient.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficient.ufl_domain"><code class="docutils literal notranslate"><span class="pre">Coefficient.ufl_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficient.ufl_domains"><code class="docutils literal notranslate"><span class="pre">Coefficient.ufl_domains()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficient.ufl_element"><code class="docutils literal notranslate"><span class="pre">Coefficient.ufl_element()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficient.ufl_function_space"><code class="docutils literal notranslate"><span class="pre">Coefficient.ufl_function_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficient.ufl_shape"><code class="docutils literal notranslate"><span class="pre">Coefficient.ufl_shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Coefficients"><code class="docutils literal notranslate"><span class="pre">Coefficients()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Constant"><code class="docutils literal notranslate"><span class="pre">Constant</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Constant.count"><code class="docutils literal notranslate"><span class="pre">Constant.count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Constant.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">Constant.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Constant.ufl_domain"><code class="docutils literal notranslate"><span class="pre">Constant.ufl_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Constant.ufl_domains"><code class="docutils literal notranslate"><span class="pre">Constant.ufl_domains()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Constant.ufl_shape"><code class="docutils literal notranslate"><span class="pre">Constant.ufl_shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Dn"><code class="docutils literal notranslate"><span class="pre">Dn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Dx"><code class="docutils literal notranslate"><span class="pre">Dx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.EnrichedElement"><code class="docutils literal notranslate"><span class="pre">EnrichedElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.EnrichedElement.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">EnrichedElement.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.EnrichedElement.shortstr"><code class="docutils literal notranslate"><span class="pre">EnrichedElement.shortstr()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.FacetArea"><code class="docutils literal notranslate"><span class="pre">FacetArea</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FacetArea.name"><code class="docutils literal notranslate"><span class="pre">FacetArea.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.FacetElement"><code class="docutils literal notranslate"><span class="pre">FacetElement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.FacetNormal"><code class="docutils literal notranslate"><span class="pre">FacetNormal</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FacetNormal.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">FacetNormal.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FacetNormal.name"><code class="docutils literal notranslate"><span class="pre">FacetNormal.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FacetNormal.ufl_shape"><code class="docutils literal notranslate"><span class="pre">FacetNormal.ufl_shape</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Fenton_karma_1998_BR_altered"><code class="docutils literal notranslate"><span class="pre">Fenton_karma_1998_BR_altered</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Fenton_karma_1998_BR_altered.F"><code class="docutils literal notranslate"><span class="pre">Fenton_karma_1998_BR_altered.F()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Fenton_karma_1998_BR_altered.I"><code class="docutils literal notranslate"><span class="pre">Fenton_karma_1998_BR_altered.I()</span></code></a></li>
@@ -506,6 +612,35 @@ document.write(`
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Fenton_karma_1998_MLR1_altered.num_states"><code class="docutils literal notranslate"><span class="pre">Fenton_karma_1998_MLR1_altered.num_states()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElement"><code class="docutils literal notranslate"><span class="pre">FiniteElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElement.mapping"><code class="docutils literal notranslate"><span class="pre">FiniteElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">FiniteElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElement.shortstr"><code class="docutils literal notranslate"><span class="pre">FiniteElement.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElement.sobolev_space"><code class="docutils literal notranslate"><span class="pre">FiniteElement.sobolev_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElement.variant"><code class="docutils literal notranslate"><span class="pre">FiniteElement.variant()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.cell"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.cell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.degree"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.degree()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.extract_component"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.extract_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.extract_reference_component"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.extract_reference_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.extract_subelement_component"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.extract_subelement_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.extract_subelement_reference_component"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.extract_subelement_reference_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.family"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.family()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.mapping"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.num_sub_elements"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.num_sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.quadrature_scheme"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.quadrature_scheme()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.reference_value_shape"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.reference_value_shape()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.reference_value_size"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.reference_value_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.sub_elements"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.symmetry"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.symmetry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.value_shape"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.value_shape()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.value_size"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.value_size()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FiniteElementBase.variant"><code class="docutils literal notranslate"><span class="pre">FiniteElementBase.variant()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.FitzHughNagumoManual"><code class="docutils literal notranslate"><span class="pre">FitzHughNagumoManual</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FitzHughNagumoManual.F"><code class="docutils literal notranslate"><span class="pre">FitzHughNagumoManual.F()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FitzHughNagumoManual.I"><code class="docutils literal notranslate"><span class="pre">FitzHughNagumoManual.I()</span></code></a></li>
@@ -514,10 +649,185 @@ document.write(`
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FitzHughNagumoManual.num_states"><code class="docutils literal notranslate"><span class="pre">FitzHughNagumoManual.num_states()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form"><code class="docutils literal notranslate"><span class="pre">Form</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.arguments"><code class="docutils literal notranslate"><span class="pre">Form.arguments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.coefficient_numbering"><code class="docutils literal notranslate"><span class="pre">Form.coefficient_numbering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.coefficients"><code class="docutils literal notranslate"><span class="pre">Form.coefficients()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.constant_numbering"><code class="docutils literal notranslate"><span class="pre">Form.constant_numbering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.constants"><code class="docutils literal notranslate"><span class="pre">Form.constants()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.domain_numbering"><code class="docutils literal notranslate"><span class="pre">Form.domain_numbering()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.empty"><code class="docutils literal notranslate"><span class="pre">Form.empty()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.equals"><code class="docutils literal notranslate"><span class="pre">Form.equals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.geometric_dimension"><code class="docutils literal notranslate"><span class="pre">Form.geometric_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.integrals"><code class="docutils literal notranslate"><span class="pre">Form.integrals()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.integrals_by_domain"><code class="docutils literal notranslate"><span class="pre">Form.integrals_by_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.integrals_by_type"><code class="docutils literal notranslate"><span class="pre">Form.integrals_by_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.max_subdomain_ids"><code class="docutils literal notranslate"><span class="pre">Form.max_subdomain_ids()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.signature"><code class="docutils literal notranslate"><span class="pre">Form.signature()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.subdomain_data"><code class="docutils literal notranslate"><span class="pre">Form.subdomain_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.ufl_cell"><code class="docutils literal notranslate"><span class="pre">Form.ufl_cell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.ufl_domain"><code class="docutils literal notranslate"><span class="pre">Form.ufl_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Form.ufl_domains"><code class="docutils literal notranslate"><span class="pre">Form.ufl_domains()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.FunctionSpace"><code class="docutils literal notranslate"><span class="pre">FunctionSpace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FunctionSpace.ufl_domain"><code class="docutils literal notranslate"><span class="pre">FunctionSpace.ufl_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FunctionSpace.ufl_domains"><code class="docutils literal notranslate"><span class="pre">FunctionSpace.ufl_domains()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FunctionSpace.ufl_element"><code class="docutils literal notranslate"><span class="pre">FunctionSpace.ufl_element()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.FunctionSpace.ufl_sub_spaces"><code class="docutils literal notranslate"><span class="pre">FunctionSpace.ufl_sub_spaces()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.HCurlElement"><code class="docutils literal notranslate"><span class="pre">HCurlElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.HCurlElement.mapping"><code class="docutils literal notranslate"><span class="pre">HCurlElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.HCurlElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">HCurlElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.HCurlElement.shortstr"><code class="docutils literal notranslate"><span class="pre">HCurlElement.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.HCurlElement.sobolev_space"><code class="docutils literal notranslate"><span class="pre">HCurlElement.sobolev_space()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.HDivElement"><code class="docutils literal notranslate"><span class="pre">HDivElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.HDivElement.mapping"><code class="docutils literal notranslate"><span class="pre">HDivElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.HDivElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">HDivElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.HDivElement.shortstr"><code class="docutils literal notranslate"><span class="pre">HDivElement.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.HDivElement.sobolev_space"><code class="docutils literal notranslate"><span class="pre">HDivElement.sobolev_space()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Identity"><code class="docutils literal notranslate"><span class="pre">Identity</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Identity.evaluate"><code class="docutils literal notranslate"><span class="pre">Identity.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Identity.ufl_shape"><code class="docutils literal notranslate"><span class="pre">Identity.ufl_shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Index"><code class="docutils literal notranslate"><span class="pre">Index</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Index.count"><code class="docutils literal notranslate"><span class="pre">Index.count()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Integral"><code class="docutils literal notranslate"><span class="pre">Integral</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Integral.integral_type"><code class="docutils literal notranslate"><span class="pre">Integral.integral_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Integral.integrand"><code class="docutils literal notranslate"><span class="pre">Integral.integrand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Integral.metadata"><code class="docutils literal notranslate"><span class="pre">Integral.metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Integral.reconstruct"><code class="docutils literal notranslate"><span class="pre">Integral.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Integral.subdomain_data"><code class="docutils literal notranslate"><span class="pre">Integral.subdomain_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Integral.subdomain_id"><code class="docutils literal notranslate"><span class="pre">Integral.subdomain_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Integral.ufl_domain"><code class="docutils literal notranslate"><span class="pre">Integral.ufl_domain()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.InteriorElement"><code class="docutils literal notranslate"><span class="pre">InteriorElement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Jacobian"><code class="docutils literal notranslate"><span class="pre">Jacobian</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Jacobian.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">Jacobian.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Jacobian.name"><code class="docutils literal notranslate"><span class="pre">Jacobian.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Jacobian.ufl_shape"><code class="docutils literal notranslate"><span class="pre">Jacobian.ufl_shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.JacobianDeterminant"><code class="docutils literal notranslate"><span class="pre">JacobianDeterminant</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.JacobianDeterminant.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">JacobianDeterminant.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.JacobianDeterminant.name"><code class="docutils literal notranslate"><span class="pre">JacobianDeterminant.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.JacobianInverse"><code class="docutils literal notranslate"><span class="pre">JacobianInverse</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.JacobianInverse.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">JacobianInverse.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.JacobianInverse.name"><code class="docutils literal notranslate"><span class="pre">JacobianInverse.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.JacobianInverse.ufl_shape"><code class="docutils literal notranslate"><span class="pre">JacobianInverse.ufl_shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.add_indent"><code class="docutils literal notranslate"><span class="pre">Logger.add_indent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.add_logfile"><code class="docutils literal notranslate"><span class="pre">Logger.add_logfile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.begin"><code class="docutils literal notranslate"><span class="pre">Logger.begin()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.debug"><code class="docutils literal notranslate"><span class="pre">Logger.debug()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.deprecate"><code class="docutils literal notranslate"><span class="pre">Logger.deprecate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.end"><code class="docutils literal notranslate"><span class="pre">Logger.end()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.error"><code class="docutils literal notranslate"><span class="pre">Logger.error()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.get_handler"><code class="docutils literal notranslate"><span class="pre">Logger.get_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.get_logfile_handler"><code class="docutils literal notranslate"><span class="pre">Logger.get_logfile_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.get_logger"><code class="docutils literal notranslate"><span class="pre">Logger.get_logger()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.info"><code class="docutils literal notranslate"><span class="pre">Logger.info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.info_blue"><code class="docutils literal notranslate"><span class="pre">Logger.info_blue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.info_green"><code class="docutils literal notranslate"><span class="pre">Logger.info_green()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.info_red"><code class="docutils literal notranslate"><span class="pre">Logger.info_red()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.log"><code class="docutils literal notranslate"><span class="pre">Logger.log()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.pop_level"><code class="docutils literal notranslate"><span class="pre">Logger.pop_level()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.push_level"><code class="docutils literal notranslate"><span class="pre">Logger.push_level()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.set_handler"><code class="docutils literal notranslate"><span class="pre">Logger.set_handler()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.set_indent"><code class="docutils literal notranslate"><span class="pre">Logger.set_indent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.set_level"><code class="docutils literal notranslate"><span class="pre">Logger.set_level()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.set_prefix"><code class="docutils literal notranslate"><span class="pre">Logger.set_prefix()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.warning"><code class="docutils literal notranslate"><span class="pre">Logger.warning()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.warning_blue"><code class="docutils literal notranslate"><span class="pre">Logger.warning_blue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.warning_green"><code class="docutils literal notranslate"><span class="pre">Logger.warning_green()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Logger.warning_red"><code class="docutils literal notranslate"><span class="pre">Logger.warning_red()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Markerwise"><code class="docutils literal notranslate"><span class="pre">Markerwise</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Markerwise.keys"><code class="docutils literal notranslate"><span class="pre">Markerwise.keys()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Markerwise.markers"><code class="docutils literal notranslate"><span class="pre">Markerwise.markers()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Markerwise.values"><code class="docutils literal notranslate"><span class="pre">Markerwise.values()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Max"><code class="docutils literal notranslate"><span class="pre">Max()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.MaxCellEdgeLength"><code class="docutils literal notranslate"><span class="pre">MaxCellEdgeLength</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MaxCellEdgeLength.name"><code class="docutils literal notranslate"><span class="pre">MaxCellEdgeLength.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.MaxFacetEdgeLength"><code class="docutils literal notranslate"><span class="pre">MaxFacetEdgeLength</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MaxFacetEdgeLength.name"><code class="docutils literal notranslate"><span class="pre">MaxFacetEdgeLength.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Measure"><code class="docutils literal notranslate"><span class="pre">Measure</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Measure.integral_type"><code class="docutils literal notranslate"><span class="pre">Measure.integral_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Measure.metadata"><code class="docutils literal notranslate"><span class="pre">Measure.metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Measure.reconstruct"><code class="docutils literal notranslate"><span class="pre">Measure.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Measure.subdomain_data"><code class="docutils literal notranslate"><span class="pre">Measure.subdomain_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Measure.subdomain_id"><code class="docutils literal notranslate"><span class="pre">Measure.subdomain_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Measure.ufl_domain"><code class="docutils literal notranslate"><span class="pre">Measure.ufl_domain()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Mesh"><code class="docutils literal notranslate"><span class="pre">Mesh</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Mesh.is_piecewise_linear_simplex_domain"><code class="docutils literal notranslate"><span class="pre">Mesh.is_piecewise_linear_simplex_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Mesh.ufl_cargo"><code class="docutils literal notranslate"><span class="pre">Mesh.ufl_cargo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Mesh.ufl_cell"><code class="docutils literal notranslate"><span class="pre">Mesh.ufl_cell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Mesh.ufl_coordinate_element"><code class="docutils literal notranslate"><span class="pre">Mesh.ufl_coordinate_element()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Mesh.ufl_id"><code class="docutils literal notranslate"><span class="pre">Mesh.ufl_id()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.MeshView"><code class="docutils literal notranslate"><span class="pre">MeshView</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MeshView.is_piecewise_linear_simplex_domain"><code class="docutils literal notranslate"><span class="pre">MeshView.is_piecewise_linear_simplex_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MeshView.ufl_cell"><code class="docutils literal notranslate"><span class="pre">MeshView.ufl_cell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MeshView.ufl_id"><code class="docutils literal notranslate"><span class="pre">MeshView.ufl_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MeshView.ufl_mesh"><code class="docutils literal notranslate"><span class="pre">MeshView.ufl_mesh()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Min"><code class="docutils literal notranslate"><span class="pre">Min()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.MinCellEdgeLength"><code class="docutils literal notranslate"><span class="pre">MinCellEdgeLength</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MinCellEdgeLength.name"><code class="docutils literal notranslate"><span class="pre">MinCellEdgeLength.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.MinFacetEdgeLength"><code class="docutils literal notranslate"><span class="pre">MinFacetEdgeLength</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MinFacetEdgeLength.name"><code class="docutils literal notranslate"><span class="pre">MinFacetEdgeLength.name</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement"><code class="docutils literal notranslate"><span class="pre">MixedElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.degree"><code class="docutils literal notranslate"><span class="pre">MixedElement.degree()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.extract_component"><code class="docutils literal notranslate"><span class="pre">MixedElement.extract_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.extract_reference_component"><code class="docutils literal notranslate"><span class="pre">MixedElement.extract_reference_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.extract_subelement_component"><code class="docutils literal notranslate"><span class="pre">MixedElement.extract_subelement_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.extract_subelement_reference_component"><code class="docutils literal notranslate"><span class="pre">MixedElement.extract_subelement_reference_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">MixedElement.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.mapping"><code class="docutils literal notranslate"><span class="pre">MixedElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.num_sub_elements"><code class="docutils literal notranslate"><span class="pre">MixedElement.num_sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">MixedElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.reconstruct_from_elements"><code class="docutils literal notranslate"><span class="pre">MixedElement.reconstruct_from_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.shortstr"><code class="docutils literal notranslate"><span class="pre">MixedElement.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.sub_elements"><code class="docutils literal notranslate"><span class="pre">MixedElement.sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedElement.symmetry"><code class="docutils literal notranslate"><span class="pre">MixedElement.symmetry()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedFunctionSpace"><code class="docutils literal notranslate"><span class="pre">MixedFunctionSpace</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedFunctionSpace.num_sub_spaces"><code class="docutils literal notranslate"><span class="pre">MixedFunctionSpace.num_sub_spaces()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedFunctionSpace.ufl_domain"><code class="docutils literal notranslate"><span class="pre">MixedFunctionSpace.ufl_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedFunctionSpace.ufl_domains"><code class="docutils literal notranslate"><span class="pre">MixedFunctionSpace.ufl_domains()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedFunctionSpace.ufl_element"><code class="docutils literal notranslate"><span class="pre">MixedFunctionSpace.ufl_element()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedFunctionSpace.ufl_elements"><code class="docutils literal notranslate"><span class="pre">MixedFunctionSpace.ufl_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedFunctionSpace.ufl_sub_space"><code class="docutils literal notranslate"><span class="pre">MixedFunctionSpace.ufl_sub_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.MixedFunctionSpace.ufl_sub_spaces"><code class="docutils literal notranslate"><span class="pre">MixedFunctionSpace.ufl_sub_spaces()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.MonodomainSolver"><code class="docutils literal notranslate"><span class="pre">MonodomainSolver</span></code></a><ul>
@@ -546,6 +856,32 @@ document.write(`
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.NoCellModel.num_states"><code class="docutils literal notranslate"><span class="pre">NoCellModel.num_states()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.NodalEnrichedElement"><code class="docutils literal notranslate"><span class="pre">NodalEnrichedElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.NodalEnrichedElement.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">NodalEnrichedElement.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.NodalEnrichedElement.shortstr"><code class="docutils literal notranslate"><span class="pre">NodalEnrichedElement.shortstr()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Not"><code class="docutils literal notranslate"><span class="pre">Not()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Or"><code class="docutils literal notranslate"><span class="pre">Or()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.PermutationSymbol"><code class="docutils literal notranslate"><span class="pre">PermutationSymbol</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.PermutationSymbol.evaluate"><code class="docutils literal notranslate"><span class="pre">PermutationSymbol.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.PermutationSymbol.ufl_shape"><code class="docutils literal notranslate"><span class="pre">PermutationSymbol.ufl_shape</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement"><code class="docutils literal notranslate"><span class="pre">RestrictedElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.mapping"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.num_restricted_sub_elements"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.num_restricted_sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.num_sub_elements"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.num_sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.restricted_sub_elements"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.restricted_sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.restriction_domain"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.restriction_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.shortstr"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.sub_element"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.sub_element()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.sub_elements"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RestrictedElement.symmetry"><code class="docutils literal notranslate"><span class="pre">RestrictedElement.symmetry()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.RogersMcCulloch"><code class="docutils literal notranslate"><span class="pre">RogersMcCulloch</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RogersMcCulloch.F"><code class="docutils literal notranslate"><span class="pre">RogersMcCulloch.F()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.RogersMcCulloch.I"><code class="docutils literal notranslate"><span class="pre">RogersMcCulloch.I()</span></code></a></li>
@@ -555,8 +891,55 @@ document.write(`
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.SingleCellSolver"><code class="docutils literal notranslate"><span class="pre">SingleCellSolver</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.SpatialCoordinate"><code class="docutils literal notranslate"><span class="pre">SpatialCoordinate</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.SpatialCoordinate.count"><code class="docutils literal notranslate"><span class="pre">SpatialCoordinate.count()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.SpatialCoordinate.evaluate"><code class="docutils literal notranslate"><span class="pre">SpatialCoordinate.evaluate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.SpatialCoordinate.is_cellwise_constant"><code class="docutils literal notranslate"><span class="pre">SpatialCoordinate.is_cellwise_constant()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.SpatialCoordinate.name"><code class="docutils literal notranslate"><span class="pre">SpatialCoordinate.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.SpatialCoordinate.ufl_shape"><code class="docutils literal notranslate"><span class="pre">SpatialCoordinate.ufl_shape</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.SplittingSolver"><code class="docutils literal notranslate"><span class="pre">SplittingSolver</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.SplittingSolver.default_parameters"><code class="docutils literal notranslate"><span class="pre">SplittingSolver.default_parameters()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorConstant"><code class="docutils literal notranslate"><span class="pre">TensorConstant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorElement"><code class="docutils literal notranslate"><span class="pre">TensorElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorElement.extract_subelement_component"><code class="docutils literal notranslate"><span class="pre">TensorElement.extract_subelement_component()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorElement.flattened_sub_element_mapping"><code class="docutils literal notranslate"><span class="pre">TensorElement.flattened_sub_element_mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorElement.mapping"><code class="docutils literal notranslate"><span class="pre">TensorElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">TensorElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorElement.shortstr"><code class="docutils literal notranslate"><span class="pre">TensorElement.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorElement.symmetry"><code class="docutils literal notranslate"><span class="pre">TensorElement.symmetry()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorElement.variant"><code class="docutils literal notranslate"><span class="pre">TensorElement.variant()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell"><code class="docutils literal notranslate"><span class="pre">TensorProductCell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell.cellname"><code class="docutils literal notranslate"><span class="pre">TensorProductCell.cellname()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell.has_simplex_facets"><code class="docutils literal notranslate"><span class="pre">TensorProductCell.has_simplex_facets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell.is_simplex"><code class="docutils literal notranslate"><span class="pre">TensorProductCell.is_simplex()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell.num_edges"><code class="docutils literal notranslate"><span class="pre">TensorProductCell.num_edges()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell.num_facets"><code class="docutils literal notranslate"><span class="pre">TensorProductCell.num_facets()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell.num_vertices"><code class="docutils literal notranslate"><span class="pre">TensorProductCell.num_vertices()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell.reconstruct"><code class="docutils literal notranslate"><span class="pre">TensorProductCell.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductCell.sub_cells"><code class="docutils literal notranslate"><span class="pre">TensorProductCell.sub_cells()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductElement"><code class="docutils literal notranslate"><span class="pre">TensorProductElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductElement.mapping"><code class="docutils literal notranslate"><span class="pre">TensorProductElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductElement.num_sub_elements"><code class="docutils literal notranslate"><span class="pre">TensorProductElement.num_sub_elements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">TensorProductElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductElement.shortstr"><code class="docutils literal notranslate"><span class="pre">TensorProductElement.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductElement.sobolev_space"><code class="docutils literal notranslate"><span class="pre">TensorProductElement.sobolev_space()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductElement.sub_elements"><code class="docutils literal notranslate"><span class="pre">TensorProductElement.sub_elements()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductMesh"><code class="docutils literal notranslate"><span class="pre">TensorProductMesh</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductMesh.is_piecewise_linear_simplex_domain"><code class="docutils literal notranslate"><span class="pre">TensorProductMesh.is_piecewise_linear_simplex_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductMesh.ufl_cell"><code class="docutils literal notranslate"><span class="pre">TensorProductMesh.ufl_cell()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductMesh.ufl_coordinate_element"><code class="docutils literal notranslate"><span class="pre">TensorProductMesh.ufl_coordinate_element()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductMesh.ufl_id"><code class="docutils literal notranslate"><span class="pre">TensorProductMesh.ufl_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.TensorProductMesh.ufl_meshes"><code class="docutils literal notranslate"><span class="pre">TensorProductMesh.ufl_meshes()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.Tentusscher_2004_mcell"><code class="docutils literal notranslate"><span class="pre">Tentusscher_2004_mcell</span></code></a><ul>
@@ -583,8 +966,149 @@ document.write(`
 <li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.Tentusscher_panfilov_2006_epi_cell.num_states"><code class="docutils literal notranslate"><span class="pre">Tentusscher_panfilov_2006_epi_cell.num_states()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TestFunction"><code class="docutils literal notranslate"><span class="pre">TestFunction()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TestFunctions"><code class="docutils literal notranslate"><span class="pre">TestFunctions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TrialFunction"><code class="docutils literal notranslate"><span class="pre">TrialFunction()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.TrialFunctions"><code class="docutils literal notranslate"><span class="pre">TrialFunctions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.UFLException"><code class="docutils literal notranslate"><span class="pre">UFLException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.VectorConstant"><code class="docutils literal notranslate"><span class="pre">VectorConstant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.VectorElement"><code class="docutils literal notranslate"><span class="pre">VectorElement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.VectorElement.mapping"><code class="docutils literal notranslate"><span class="pre">VectorElement.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.VectorElement.reconstruct"><code class="docutils literal notranslate"><span class="pre">VectorElement.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.VectorElement.shortstr"><code class="docutils literal notranslate"><span class="pre">VectorElement.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.VectorElement.variant"><code class="docutils literal notranslate"><span class="pre">VectorElement.variant()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.WithMapping"><code class="docutils literal notranslate"><span class="pre">WithMapping</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.WithMapping.mapping"><code class="docutils literal notranslate"><span class="pre">WithMapping.mapping()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.WithMapping.reconstruct"><code class="docutils literal notranslate"><span class="pre">WithMapping.reconstruct()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.WithMapping.reference_value_shape"><code class="docutils literal notranslate"><span class="pre">WithMapping.reference_value_shape()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.WithMapping.shortstr"><code class="docutils literal notranslate"><span class="pre">WithMapping.shortstr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="cbcbeat.html#cbcbeat.WithMapping.value_shape"><code class="docutils literal notranslate"><span class="pre">WithMapping.value_shape()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.acos"><code class="docutils literal notranslate"><span class="pre">acos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.action"><code class="docutils literal notranslate"><span class="pre">action()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.add_indent"><code class="docutils literal notranslate"><span class="pre">add_indent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.add_logfile"><code class="docutils literal notranslate"><span class="pre">add_logfile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.adjoint"><code class="docutils literal notranslate"><span class="pre">adjoint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.as_cell"><code class="docutils literal notranslate"><span class="pre">as_cell()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.as_domain"><code class="docutils literal notranslate"><span class="pre">as_domain()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.as_matrix"><code class="docutils literal notranslate"><span class="pre">as_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.as_tensor"><code class="docutils literal notranslate"><span class="pre">as_tensor()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.as_ufl"><code class="docutils literal notranslate"><span class="pre">as_ufl()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.as_vector"><code class="docutils literal notranslate"><span class="pre">as_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.asin"><code class="docutils literal notranslate"><span class="pre">asin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.atan"><code class="docutils literal notranslate"><span class="pre">atan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.atan_2"><code class="docutils literal notranslate"><span class="pre">atan_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.avg"><code class="docutils literal notranslate"><span class="pre">avg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.begin"><code class="docutils literal notranslate"><span class="pre">begin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.bessel_I"><code class="docutils literal notranslate"><span class="pre">bessel_I()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.bessel_J"><code class="docutils literal notranslate"><span class="pre">bessel_J()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.bessel_K"><code class="docutils literal notranslate"><span class="pre">bessel_K()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.bessel_Y"><code class="docutils literal notranslate"><span class="pre">bessel_Y()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cell_avg"><code class="docutils literal notranslate"><span class="pre">cell_avg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cofac"><code class="docutils literal notranslate"><span class="pre">cofac()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.conditional"><code class="docutils literal notranslate"><span class="pre">conditional()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.conj"><code class="docutils literal notranslate"><span class="pre">conj()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cos"><code class="docutils literal notranslate"><span class="pre">cos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cosh"><code class="docutils literal notranslate"><span class="pre">cosh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.cross"><code class="docutils literal notranslate"><span class="pre">cross()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.curl"><code class="docutils literal notranslate"><span class="pre">curl()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.debug"><code class="docutils literal notranslate"><span class="pre">debug()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.deprecate"><code class="docutils literal notranslate"><span class="pre">deprecate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.derivative"><code class="docutils literal notranslate"><span class="pre">derivative()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.det"><code class="docutils literal notranslate"><span class="pre">det()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.dev"><code class="docutils literal notranslate"><span class="pre">dev()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.diag"><code class="docutils literal notranslate"><span class="pre">diag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.diag_vector"><code class="docutils literal notranslate"><span class="pre">diag_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.diff"><code class="docutils literal notranslate"><span class="pre">diff()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.div"><code class="docutils literal notranslate"><span class="pre">div()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.dot"><code class="docutils literal notranslate"><span class="pre">dot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.elem_div"><code class="docutils literal notranslate"><span class="pre">elem_div()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.elem_mult"><code class="docutils literal notranslate"><span class="pre">elem_mult()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.elem_op"><code class="docutils literal notranslate"><span class="pre">elem_op()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.elem_pow"><code class="docutils literal notranslate"><span class="pre">elem_pow()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.end"><code class="docutils literal notranslate"><span class="pre">end()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.energy_norm"><code class="docutils literal notranslate"><span class="pre">energy_norm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.eq"><code class="docutils literal notranslate"><span class="pre">eq()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.erf"><code class="docutils literal notranslate"><span class="pre">erf()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.error"><code class="docutils literal notranslate"><span class="pre">error()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.exp"><code class="docutils literal notranslate"><span class="pre">exp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.exterior_derivative"><code class="docutils literal notranslate"><span class="pre">exterior_derivative()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.extract_blocks"><code class="docutils literal notranslate"><span class="pre">extract_blocks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.facet_avg"><code class="docutils literal notranslate"><span class="pre">facet_avg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.functional"><code class="docutils literal notranslate"><span class="pre">functional()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.ge"><code class="docutils literal notranslate"><span class="pre">ge()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.get_handler"><code class="docutils literal notranslate"><span class="pre">get_handler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.get_logger"><code class="docutils literal notranslate"><span class="pre">get_logger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.grad"><code class="docutils literal notranslate"><span class="pre">grad()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.gt"><code class="docutils literal notranslate"><span class="pre">gt()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.handle_markerwise"><code class="docutils literal notranslate"><span class="pre">handle_markerwise()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.imag"><code class="docutils literal notranslate"><span class="pre">imag()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.indices"><code class="docutils literal notranslate"><span class="pre">indices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.info"><code class="docutils literal notranslate"><span class="pre">info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.info_blue"><code class="docutils literal notranslate"><span class="pre">info_blue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.info_green"><code class="docutils literal notranslate"><span class="pre">info_green()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.info_red"><code class="docutils literal notranslate"><span class="pre">info_red()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.inner"><code class="docutils literal notranslate"><span class="pre">inner()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.integral_types"><code class="docutils literal notranslate"><span class="pre">integral_types()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.inv"><code class="docutils literal notranslate"><span class="pre">inv()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.jump"><code class="docutils literal notranslate"><span class="pre">jump()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.le"><code class="docutils literal notranslate"><span class="pre">le()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.lhs"><code class="docutils literal notranslate"><span class="pre">lhs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.ln"><code class="docutils literal notranslate"><span class="pre">ln()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.log"><code class="docutils literal notranslate"><span class="pre">log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.lt"><code class="docutils literal notranslate"><span class="pre">lt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.max_value"><code class="docutils literal notranslate"><span class="pre">max_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.min_value"><code class="docutils literal notranslate"><span class="pre">min_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.nabla_div"><code class="docutils literal notranslate"><span class="pre">nabla_div()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.nabla_grad"><code class="docutils literal notranslate"><span class="pre">nabla_grad()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.ne"><code class="docutils literal notranslate"><span class="pre">ne()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.outer"><code class="docutils literal notranslate"><span class="pre">outer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.perp"><code class="docutils literal notranslate"><span class="pre">perp()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.pop_level"><code class="docutils literal notranslate"><span class="pre">pop_level()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.product"><code class="docutils literal notranslate"><span class="pre">product()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.push_level"><code class="docutils literal notranslate"><span class="pre">push_level()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.rank"><code class="docutils literal notranslate"><span class="pre">rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.real"><code class="docutils literal notranslate"><span class="pre">real()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.register_element"><code class="docutils literal notranslate"><span class="pre">register_element()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.register_integral_type"><code class="docutils literal notranslate"><span class="pre">register_integral_type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.relabel"><code class="docutils literal notranslate"><span class="pre">relabel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.replace"><code class="docutils literal notranslate"><span class="pre">replace()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.replace_integral_domains"><code class="docutils literal notranslate"><span class="pre">replace_integral_domains()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.rhs"><code class="docutils literal notranslate"><span class="pre">rhs()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.rhs_with_markerwise_field"><code class="docutils literal notranslate"><span class="pre">rhs_with_markerwise_field()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.rot"><code class="docutils literal notranslate"><span class="pre">rot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.sensitivity_rhs"><code class="docutils literal notranslate"><span class="pre">sensitivity_rhs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.set_handler"><code class="docutils literal notranslate"><span class="pre">set_handler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.set_indent"><code class="docutils literal notranslate"><span class="pre">set_indent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.set_level"><code class="docutils literal notranslate"><span class="pre">set_level()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.set_prefix"><code class="docutils literal notranslate"><span class="pre">set_prefix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.shape"><code class="docutils literal notranslate"><span class="pre">shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.show_elements"><code class="docutils literal notranslate"><span class="pre">show_elements()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.sign"><code class="docutils literal notranslate"><span class="pre">sign()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.sin"><code class="docutils literal notranslate"><span class="pre">sin()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.sinh"><code class="docutils literal notranslate"><span class="pre">sinh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.skew"><code class="docutils literal notranslate"><span class="pre">skew()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.split"><code class="docutils literal notranslate"><span class="pre">split()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.sqrt"><code class="docutils literal notranslate"><span class="pre">sqrt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.sym"><code class="docutils literal notranslate"><span class="pre">sym()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.system"><code class="docutils literal notranslate"><span class="pre">system()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.tan"><code class="docutils literal notranslate"><span class="pre">tan()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.tanh"><code class="docutils literal notranslate"><span class="pre">tanh()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.tr"><code class="docutils literal notranslate"><span class="pre">tr()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.transpose"><code class="docutils literal notranslate"><span class="pre">transpose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.unit_matrices"><code class="docutils literal notranslate"><span class="pre">unit_matrices()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.unit_matrix"><code class="docutils literal notranslate"><span class="pre">unit_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.unit_vector"><code class="docutils literal notranslate"><span class="pre">unit_vector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.unit_vectors"><code class="docutils literal notranslate"><span class="pre">unit_vectors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.variable"><code class="docutils literal notranslate"><span class="pre">variable()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.warning"><code class="docutils literal notranslate"><span class="pre">warning()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.warning_blue"><code class="docutils literal notranslate"><span class="pre">warning_blue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.warning_green"><code class="docutils literal notranslate"><span class="pre">warning_green()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.warning_red"><code class="docutils literal notranslate"><span class="pre">warning_red()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="cbcbeat.html#cbcbeat.zero"><code class="docutils literal notranslate"><span class="pre">zero()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -599,16 +1123,12 @@ document.write(`
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -653,8 +1173,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>
